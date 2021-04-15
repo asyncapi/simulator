@@ -1,0 +1,127 @@
+@import url("https://fonts.googleapis.com/css2?family=Petit+Formal+Script&family=Roboto:ital@1&family=Shippori+Mincho+B1&display=swap");
+.normal {
+  font-family: "Petit Formal Script", cursive;
+}
+
+.easily-readable {
+  font-family: "Petit Formal Script", cursive;
+}
+
+.title1 {
+  font-family: "Petit Formal Script", cursive;
+}
+
+.title2 {
+  font-family: "Shippori Mincho B1", serif;
+}
+
+.formal {
+  font-family: "Shippori Mincho B1", serif;
+}
+
+.normalribbon-highlight, .easily-readableribbon-highlight, .title1ribbon-highlight, .title2ribbon-highlight, .formalribbon-highlight {
+  position: relative;
+  margin: 0.1em;
+}
+.normalribbon-highlight:before, .easily-readableribbon-highlight:before, .title1ribbon-highlight:before, .title2ribbon-highlight:before, .formalribbon-highlight:before {
+  content: "";
+  z-index: -1;
+  left: -0.5em;
+  top: 0.1em;
+  border-width: 0.5em;
+  border-style: solid;
+  border-color: lightgreen;
+  position: absolute;
+  width: 100%;
+  border-left-color: transparent;
+  border-right-color: transparent;
+}
+.normalarrow-highlight, .easily-readablearrow-highlight, .title1arrow-highlight, .title2arrow-highlight, .formalarrow-highlight {
+  position: relative;
+  margin: 0 0.5em;
+  padding: 0 0.2em;
+}
+.normalarrow-highlight:before, .easily-readablearrow-highlight:before, .title1arrow-highlight:before, .title2arrow-highlight:before, .formalarrow-highlight:before {
+  content: "";
+  z-index: -1;
+  left: -0.5em;
+  top: 0.1em;
+  border-width: 0.5em;
+  border-style: solid;
+  border-color: orange;
+  position: absolute;
+  width: calc(100% - 0.5em);
+  border-left-color: transparent;
+}
+.normalarrow-highlight:after, .easily-readablearrow-highlight:after, .title1arrow-highlight:after, .title2arrow-highlight:after, .formalarrow-highlight:after {
+  content: "";
+  z-index: -1;
+  right: 0;
+  top: 0.1em;
+  border-width: 0.5em;
+  border-style: solid;
+  border-color: orange;
+  position: absolute;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+  transform: rotate(180deg);
+  transform-origin: center;
+}
+.normalborder-highlight, .easily-readableborder-highlight, .title1border-highlight, .title2border-highlight, .formalborder-highlight {
+  border: 2px dashed red;
+  padding: 0.03em 0.25em;
+}
+.normalsketch-highlight, .easily-readablesketch-highlight, .title1sketch-highlight, .title2sketch-highlight, .formalsketch-highlight {
+  position: relative;
+}
+.normalsketch-highlight:before, .easily-readablesketch-highlight:before, .title1sketch-highlight:before, .title2sketch-highlight:before, .formalsketch-highlight:before {
+  content: "";
+  z-index: -1;
+  left: 0em;
+  top: 0em;
+  border-width: 2px;
+  border-style: solid;
+  border-color: darkblue;
+  position: absolute;
+  border-right-color: transparent;
+  width: 100%;
+  height: 1em;
+  transform: rotate(2deg);
+  opacity: 0.5;
+  border-radius: 0.25em;
+}
+.normalsketch-highlight:after, .easily-readablesketch-highlight:after, .title1sketch-highlight:after, .title2sketch-highlight:after, .formalsketch-highlight:after {
+  content: "";
+  z-index: -1;
+  left: 0em;
+  top: 0em;
+  border-width: 2px;
+  border-style: solid;
+  border-color: darkblue;
+  border-left-color: transparent;
+  border-top-color: transparent;
+  position: absolute;
+  width: 100%;
+  height: 1em;
+  transform: rotate(-1deg);
+  opacity: 0.5;
+  border-radius: 0.25em;
+}
+.normalmarker, .easily-readablemarker, .title1marker, .title2marker, .formalmarker {
+  position: relative;
+}
+.normalmarker:before, .easily-readablemarker:before, .title1marker:before, .title2marker:before, .formalmarker:before {
+  content: "";
+  background-color: #ff6db7;
+  width: 100%;
+  height: 1em;
+  position: absolute;
+  z-index: -1;
+  filter: url(#marker-shape);
+  left: -0.25em;
+  top: 0.1em;
+  padding: 0 0.25em;
+}
+
+/*# sourceMappingURL=TextStyles.css.map */
