@@ -1,0 +1,39 @@
+{
+  "name": "@asyncapi/performance_tester",
+  "version": "1.0.0",
+  "description": "The asyncapi command line library to test your backend api at scale.",
+  "main": "src/index.js",
+  "scripts": {
+    "manager": "node scripts/ProgramManager",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "asyncapi"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@asyncapi/parser": "^1.4.1",
+    "@babel/cli": "^7.13.10",
+    "@babel/core": "^7.13.13",
+    "@babel/preset-typescript": "^7.13.0",
+    "asyncapi-parser": "^0.15.0",
+    "chalk": "^4.1.0",
+    "clear": "^0.1.0",
+    "clui": "^0.3.6",
+    "commander": "^7.2.0",
+    "configstore": "^5.0.1",
+    "fastify": "^3.14.1",
+    "socket.io": "^4.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.22.0",
+    "prettier": "^2.2.1"
+  },
+  "bin": {
+    "apitester": "src/bin/cli.js"
+  },
+  "files": [
+    "lib"
+  ]
+}
