@@ -20,9 +20,10 @@
     "jsx": "react"
   },
   "include": [
-    "src"
+    "src",
+    "../../../.cache/JetBrains/WebStorm2020.3/javascript/typings/node/14.14.41/node_modules/@types/node/globals.d.ts"
   ],
   "exclude": [
-    "node_modules/**/*",
+    "node_modules/**/*"
   ]
 }

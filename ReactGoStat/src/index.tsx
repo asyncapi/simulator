@@ -3,17 +3,15 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { GeistProvider, CssBaseline } from '@geist-ui/react';
 
 if (module.hot) {
     module.hot.accept();
 }
 ReactDOM.render(
     <React.StrictMode>
-        <GeistProvider>
-            <CssBaseline />
-            <App />
-        </GeistProvider>
+
+    <App />
+
     </React.StrictMode>,
     document.getElementById('root'),
 );
