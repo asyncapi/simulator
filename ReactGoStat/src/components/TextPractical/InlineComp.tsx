@@ -1,8 +1,5 @@
-import React, { memo, ReactElement, ReactNode, useMemo } from 'react';
-import { ComponentWithDefaults } from '../UtilityModules';
-import { TextCompProps } from './TextComp';
-import { InlineAttributesE } from '../UtilityModules/Types/Properties_Types';
-import { filterPropsWithGroup } from '@geist-ui/react/dist/button/utils';
+import React from 'react';
+import {ComponentWithDefaults} from '../UtilityModules';
 
 //
 interface CompProps {
@@ -12,6 +9,7 @@ interface CompProps {
     ribbon?: boolean;
     arrow?: boolean;
 }
+
 const defaults: CompProps = {
     normal: false,
 };
@@ -39,7 +37,7 @@ function marker(props: React.PropsWithChildren<CompAttributes>) {
 
     let tag;
 
-    console.log(PassedProps);
+
     for (const [key, value] of Object.entries(PassedProps)) {
         if (value && !tag && tag != 'normal') tag = String(key);
     }
