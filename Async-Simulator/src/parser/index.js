@@ -1,5 +1,5 @@
 const asyncParser = require('@asyncapi/parser/lib/index')
-const filesystem = require('fs')
+const filesystem = require('fs').promises
 
 
 /**
@@ -11,14 +11,10 @@ const filesystem = require('fs')
  */
 const AsyncParser = async (filepath) => {
     var result = null;
-    const apiFileContent = filesystem.readFileSync(String(filepath))
-    const parsed = asyncParser.parse(apiFileContent.toString());
-    await parsed.then((res) => {
-        result = res
-    }).catch((err) => {
-        throw Error('Failed to parse provided file url make sure the file exists and complies to async-api spec')
-    })
-    return result;
+    const  apiFileContent = filesystem.readFile(String(filepath)).catch((err)=>{console.log('Error Reading spec file'+err)})
+    const res = await apiFileContent
+    const parsed =  asyncParser.parse(res.toString());
+    return parsed;
 }
 
 module.exports = {AsyncParser}

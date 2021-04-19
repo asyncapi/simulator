@@ -15,8 +15,8 @@ const setup = async (interface, file) => {
     const handleFilepath = async (filepath = '') => {
         if (filepath === '') promtForFilepath(true)
 
-        const apiFileContent = filesystem.readFileSync(String(filepath))
-        console.log(await AsyncParser(apiFileContent))
+        interface.write()
+        console.log(await AsyncParser(filepath))
     }
 
     const promtForFilepath = async (i = true) => {
