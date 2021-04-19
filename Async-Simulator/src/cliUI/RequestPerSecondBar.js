@@ -23,5 +23,3 @@ setInterval(()=>{
     reqsPerSec = reqsPerSec.slice(reqsPerSec.length-3)
     clearInterval()
 },9000)
-
-

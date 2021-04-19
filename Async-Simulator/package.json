@@ -1,8 +1,8 @@
 {
   "name": "@asyncapi/performance_tester",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "The asyncapi command line library to test your backend api at scale.",
-  "main": "src/index.js",
+  "main": "src/bin/cli.js",
   "scripts": {
     "manager": "node scripts/ProgramManager",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -31,7 +31,7 @@
     "prettier": "^2.2.1"
   },
   "bin": {
-    "apitester": "src/bin/cli.js"
+    "Simulator": "node src/index.js"
   },
   "files": [
     "lib"

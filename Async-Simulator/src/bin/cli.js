@@ -3,7 +3,62 @@
 const {Command} = require('commander');
 const program = new Command();
 const readline = require('readline')
-const {setup} = require('../index')
+const chalk = require("chalk");
+const filesystem = require('fs')
+const  {AsyncParser} = require('../parser')
+
+const setup = async (interface, file) => {
+    var filepath;
+
+
+
+    const handleFilepath = async (filepath = '') => {
+        if (filepath === '') promtForFilepath(true)
+
+        const apiFileContent = filesystem.readFileSync(String(filepath))
+        console.log(await AsyncParser(apiFileContent))
+    }
+
+    const promtForFilepath = async (i = true) => {
+
+        // if(i==true){
+        //
+        //     interface.question('Welcome to async api stress tester\nPlease provide a' +
+        //         ' json or yml file with the api.\n',(path = '') => {
+        //        filepath = path
+        //     })}
+        interface.question('test', () => {
+            if (!String(file).match(RegExp(/^.*\.(json|yaml)/, 'gm'))) {
+                interface.write("\nPlease provide a proper filepath ex:'./myAsyncApi.json ./myAsyncApi.yaml'\n")
+                promtForFilepath(false)
+            } else {
+                filesystem.stat(filepath, (err, stats) => {
+                    if (err) {
+                        interface.write('\nFile non Existent\n')
+                        promtForFilepath(false)
+                    }
+                })
+                interface.close()
+            }
+        })
+
+    }
+
+
+    console.log(chalk.blueBright('Welcome to async api stress tester'))
+
+    if (!file)
+        interface.question('\nPlease provide a' +
+            ' json or yml file with the api.\n', (path = '') => {
+
+            handleFilepath(path)
+        })
+    else handleFilepath(file)
+}
+
+
+
+
 program.version('0.0.1', 'v', 'async-api performance tester cli version');
 
 program

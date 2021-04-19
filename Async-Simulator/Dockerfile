@@ -1,18 +1,18 @@
 FROM node:14
 
 
-WORKDIR /src
+WORKDIR ./
 
 
 
-COPY .  .
+COPY .  ./app
 
-RUN npm install
+RUN cd /app && npm install
 
-EXPOSE 8080
+EXPOSE 8084
 
 
-CMD [ "node", "index.js" ]
+CMD [ "node", "app/src/bin/dockerCli.js" ]
 
 
 #UBUNTU IMAGE
