@@ -10,7 +10,7 @@ class LoadingBar {
 
         process.stdout.write("\x1B[?25l")
         for (let i = 0; i < this.size; i++) {
-              process.stdout.write("\u2591")
+             process.stdout.write("\u2591")
 
 
         }

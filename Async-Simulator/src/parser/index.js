@@ -1,4 +1,5 @@
-const asyncParser = require('@asyncapi/parser/lib/index')
+const parser = require('@asyncapi/parser/lib/index')
+
 const filesystem = require('fs').promises
 
 
@@ -10,10 +11,9 @@ const filesystem = require('fs').promises
  * @constructor
  */
 const AsyncParser = async (filepath) => {
-    var result = null;
     const  apiFileContent = filesystem.readFile(String(filepath)).catch((err)=>{console.log('Error Reading spec file'+err)})
     const res = await apiFileContent
-    const parsed =  asyncParser.parse(res.toString());
+    const parsed =  parser.parse(res.toString());
     return parsed;
 }
 

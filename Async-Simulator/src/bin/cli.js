@@ -13,10 +13,9 @@ const setup = async (interface, file) => {
 
 
     const handleFilepath = async (filepath = '') => {
-        if (filepath === '') promtForFilepath(true)
+        if (filepath === '') await promtForFilepath(true)
 
-        interface.write()
-        console.log(await AsyncParser(filepath))
+        const ParsedObject = await  AsyncParser(filepath)
     }
 
     const promtForFilepath = async (i = true) => {

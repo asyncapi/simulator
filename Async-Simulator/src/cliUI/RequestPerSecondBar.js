@@ -10,6 +10,8 @@ const interface = readline.createInterface({
     input:process.stdin,
     output:process.stdout
 })
+
+
 process.stdout.write("\x1B[?25l")
 process.stdout.write("\x1B[?25h")
 setInterval(() => {
