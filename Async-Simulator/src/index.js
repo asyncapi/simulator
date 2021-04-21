@@ -1,1 +1,1 @@
-exports.AsyncParser = require('./parser').AsyncParser
+exports.AsyncParser = require('./parser').AsyncParser;

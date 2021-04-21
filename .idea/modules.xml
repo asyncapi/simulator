@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../artillery/.idea/artillery.iml" filepath="$PROJECT_DIR$/../artillery/.idea/artillery.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/fluffy-robot.iml" filepath="$PROJECT_DIR$/.idea/fluffy-robot.iml" />
       <module fileurl="file://$PROJECT_DIR$/../parser-js/.idea/parser-js.iml" filepath="$PROJECT_DIR$/../parser-js/.idea/parser-js.iml" />
     </modules>

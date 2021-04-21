@@ -2,11 +2,10 @@
   "name": "@asyncapi/async-simulator",
   "version": "0.0.1",
   "type": "commonjs",
-  "description": "The asyncapi command line library to test your backend api at scale.",
+  "description": "The asyncapi command line library to test your app at scale.",
   "main": "src/index.js",
   "scripts": {
-    "manager": "node scripts/ProgramManager",
-    "test": "echo \"Error: no test specified\" && exit 1"
+
   },
   "keywords": [
     "asyncapi"
