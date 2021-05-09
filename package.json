@@ -1,0 +1,44 @@
+{
+  "name": "@asyncapi/async-simulator",
+  "version": "0.0.1",
+  "type": "module",
+  "description": "The asyncapi command line library to test your app at scale.",
+  "main": "src/index.js",
+  "scripts": {},
+  "keywords": [
+    "asyncapi"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@asyncapi/parser": "^1.4.1",
+    "@babel/preset-typescript": "^7.13.0",
+    "ajv": "^8.1.0",
+    "ajv-formats": "^2.0.2",
+    "asyncapi-parser": "^0.15.0",
+    "chalk": "^4.1.0",
+    "clear": "^0.1.0",
+    "clui": "^0.3.6",
+    "commander": "^7.2.0",
+    "configstore": "^5.0.1",
+    "fastify": "^3.15.0",
+    "socket.io": "^4.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.13.16",
+    "@babel/core": "^7.14.0",
+    "@types/node": "^14.14.41",
+    "eslint": "^7.22.0",
+    "eslint-plugin-mocha": "^8.1.0",
+    "eslint-plugin-security": "^1.4.0",
+    "eslint-plugin-sonarjs": "^0.6.0",
+    "prettier": "^2.2.1",
+    "typescript": "^4.1.5"
+  },
+  "bin": {
+    "Simulator": "node src/index.js"
+  },
+  "files": [
+    "lib"
+  ]
+}
