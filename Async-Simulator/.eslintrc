@@ -1,7 +1,9 @@
+
 env:
   node: true
   es6: true
-  mocha: true
+  mocha: false
+
 
 plugins:
   - sonarjs
@@ -15,6 +17,8 @@ extends:
 
 parserOptions:
   ecmaVersion: 2018
+  ecmaFeatures:
+    experimentalObjectRestSpread: true
 
 rules:
   # Ignore Rules

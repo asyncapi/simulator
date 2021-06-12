@@ -13,8 +13,8 @@ to production mode?
 Usage
 
 ```
-apitester -f ./my_api.yaml 
-apitester -f ../subdirectory/my_api.json
+simulator.sh -f ./my_api.yaml 
+simulator.sh -f ../subdirectory/my_api.json
 ```
 
 

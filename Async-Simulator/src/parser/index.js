@@ -1,4 +1,3 @@
 
+module.exports.asyncParser = require('./AsyncParser').AsyncParser;
 
-
-exports.asyncParser = require('./AsyncParser');

@@ -1,58 +1,70 @@
 #!/usr/bin/env node
-
 const {Command} = require('commander');
 const program = new Command();
 const readline = require('readline');
 const chalk = require('chalk');
 const filesystem = require('fs');
-const  {AsyncParser} = require('../parser');
+const path = require('path');
+const  {asyncParser} = require('../parser/index');
 
-const setup = async (interface, file) => {
+const filepathHandling = async (interface, file) => {
   let filepath;
 
-  const handleFilepath = async (filepath = '') => {
-    if (filepath === '') await promtForFilepath(true);
-
-    const ParsedObject = await  AsyncParser(filepath);
-  };
-
-  const promtForFilepath = async (i = true) => {
-    // if(i==true){
-    //
-    //     interface.question('Welcome to async api stress tester\nPlease provide a' +
-    //         ' json or yml file with the api.\n',(path = '') => {
-    //        filepath = path
-    //     })}
-    interface.question('test', () => {
-      if (!String(file).match(RegExp(/^.*\.(json|yaml)/, 'gm'))) {
-        interface.write('\nPlease provide a proper filepath ex:\'./myAsyncApi.json ./myAsyncApi.yaml\'\n');
-        promtForFilepath(false);
+  const promtForFilepath = async () => {
+    interface.question('\nPlease provide a  filepath for a yaml asyncApiFile', (answr) => {
+      if (!String(answr).match(RegExp(/^.*\.(json|yaml)/, 'gm'))) {
+        interface.write('\nPlease provide a proper filepath ex:\'./myAsyncApi.json ./myAsyncApi.yaml\':\n');
+        promtForFilepath();
       } else {
         filesystem.stat(filepath, (err, stats) => {
           if (err) {
-            interface.write('\nFile non Existent\n');
-            promtForFilepath(false);
+            interface.write('\nFile non Existent');
+            promtForFilepath();
+          } else {
+            return  answr;
           }
         });
-        interface.close();
       }
     });
   };
 
-  console.log(chalk.blueBright('Welcome to async api stress tester'));
+  const handleFilepath = async (filepath = '') => {
+    const ParserInstance = await  asyncParser(filepath);
+    ParserInstance.Parse();
+    ParserInstance.mapAsyncApiToHandler();
+  };
 
-  if (!file)
-    interface.question('\nPlease provide a' +
-            ' json or yml file with the api.\n', (path = '') => {
-      handleFilepath(path);
+  console.log(chalk.blueBright(`
+  Async api traffic simulator
+  `));
+  if (!!file) {
+    interface.write('\nWelcome to async api stress tester.');
+    filesystem.access(file , 1 , (err) => {
+      if (err) {
+        console.log(`\nError in accessing provided file \nDetails:${err}`);
+        file = promtForFilepath();
+      }
     });
-  else handleFilepath(file);
+  } else {
+    interface.question('Welcome to async api stress tester\nPlease provide a' +
+        ' json or yml file with the api.\n',(path = '') => {
+      file = path;
+    });
+    filesystem.access(file , 1 , (err) => {
+      if (err) {
+        console.log(`\nError in accessing provided file \nDetails:${err}`);
+        file = promtForFilepath();
+      }
+    });
+  }
+  await handleFilepath(await file);
 };
-exports.test = () => {
+const run = () => {
   program.version('0.0.1', 'v', 'async-api performance tester cli version');
 
   program
-    .requiredOption('-f, --filepath <type>', 'The filepath of a async-api specification yaml or json file');
+    .option('-f, --filepath <type>', 'The filepath of a async-api specification yaml or json file')
+    .option('-b, --basedir <type>', 'The basepath from which relative paths are computed.');
 
   program.parse(process.argv);
 
@@ -62,7 +74,7 @@ exports.test = () => {
   });
 
   const options = program.opts();
-  setup(cliInterface, options.filepath);
+  filepathHandling(cliInterface, path.resolve(options.filepath));
 
   cliInterface.on('SIGINT', () => {
     console.log('\nShutting down');
@@ -77,3 +89,5 @@ exports.test = () => {
     process.exit();
   });
 };
+
+run();
