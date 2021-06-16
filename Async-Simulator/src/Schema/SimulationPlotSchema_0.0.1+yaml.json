@@ -12,7 +12,7 @@
           "type": "integer"
         },
         "priority" : {
-          "type": "string",
+          "type": "integer",
           "description": "This determines whether it should be prioritized in case the resources to emit events is insufficient."
         }
       }
@@ -25,7 +25,7 @@
           "type": "integer"
         },
         "priority" : {
-          "type": "string",
+          "type": "integer",
           "description": "This determines whether it should be prioritized in case the resources to emit events is insufficient "
         }
       }
