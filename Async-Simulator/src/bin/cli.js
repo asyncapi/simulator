@@ -63,8 +63,8 @@ const run = () => {
   program.version('0.0.1', 'v', 'async-api performance tester cli version');
 
   program
-    .option('-f, --filepath <type>', 'The filepath of a async-api specification yaml or json file')
-    .option('-b, --basedir <type>', 'The basepath from which relative paths are computed.');
+    .requiredOption('-f, --filepath <type>', 'The filepath of a async-api specification yaml or json file')
+    .option('-b, --basedir <type>', 'The basepath from which relative paths are computed.\nDefaults to the directory where simulator.sh resides.');
 
   program.parse(process.argv);
 

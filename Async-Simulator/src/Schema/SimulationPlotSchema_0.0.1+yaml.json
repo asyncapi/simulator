@@ -1,68 +1,33 @@
 {
-  "title": "Simulation Plot 0.0.2 schema",
+  "title": "Simulation Plot 0.0.1 schema",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "description": "AsyncApi Api Simulator. Define routes and settings regarding traffic Simulated",
   "patternProperties": {
-    "^(\\/[\\w\\d]+)*$": {
-      "anyOf": [
-        {      "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "requestMethod": {
-            "type": "string",
-            "anyOf": [
-              {
-                "const": "GET"
-              },
-              {
-                "const": "POST"
-              }
-            ]
-          },
-          "headers": {
-            "type": "object"
-          },
-          "body": {
-            "type": "object"
-          },
-          "averageRps": {
-            "type": "integer",
-            "maximum": 10
-          }}
+    "^group-(\\d)+$": {
+      "properties": {
+        "eps": {
+          "description": "Events per second being emitted",
+          "type": "integer"
         },
-        {
-          "type": "object",
-          "additionalItems": false,
-          "properties": {
-            "group": {
-              "type": "array",
-              "maxItems": 10
-            },
-            "headers": {
-              "type": "object"
-            },
-            "body": {
-              "type": "object"
-
-            },
-            "averageRps": {
-              "type": "integer",
-              "maximum": 10
-            },
-            "requestMethod": {
-              "type": "string",
-              "anyOf": [
-                {
-                  "const": "GET"
-                },
-                {
-                  "const": "POST"
-                }
-              ]
-            }
-          }
-        }]
+        "priority" : {
+          "type": "string",
+          "description": "This determines whether it should be prioritized in case the resources to emit events is insufficient."
+        }
+      }
+    },
+    "^plot-[\\w\\d]+$": {
+      "additionalProperties": false,
+      "properties": {
+        "eps": {
+          "description": "Events per second being emitted",
+          "type": "integer"
+        },
+        "priority" : {
+          "type": "string",
+          "description": "This determines whether it should be prioritized in case the resources to emit events is insufficient "
+        }
+      }
     }
   },
   "additionalProperties": false,
@@ -70,17 +35,10 @@
     "version":{
       "type": "string"
 
-    },
-    "domainUrl": {
-      "anyOf": [
-        {
-          "description": "Domain url beginning either with www. , http , https",
-          "type": "string",
-          "pattern": "^(?:https?:\\/\\/)?(?:[^@\\/\\n]+@)?(?:www\\.)?([^:\\/?\\n]+)"
-        }
-      ]
-
     }
+
+
+
 
 
 

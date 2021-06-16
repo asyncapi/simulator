@@ -9,29 +9,34 @@ const filesystem = require('fs');
  * @constructor
  */
 const AsyncParser  =  (filepath, opts) => {
-  const that = this;
-  that.ready = false;
+  const parserContext = this;
+  parserContext.ready = false;
 
   async function Parse() {
     try {
-      that.content = filesystem.readFileSync(filepath).toString();
+      parserContext.content = filesystem.readFileSync(filepath).toString();
     } catch (err) {
       console.log(`\nError in parsing the file. Details: ${err}`);
     }
   }
 
   async function mapAsyncApiToHandler() {
-    const parsed =await parser.parse(that.content);
-    that.ready = true;
-    that.serverUrl = parsed._json.servers['production'].url;
-    that.productionServerInfo = parsed.servers();
-    that.PublishOperations = {};
-    that.SubscribeOperations = {};
+    const parsed =await parser.parse(parserContext.content);
+    parserContext.ready = true;
+    parserContext.serverUrl = parsed._json.servers['production'].url;
+    parserContext.productionServerInfo = parsed.servers();
+    parserContext.PublishOperations = {};
+    parserContext.SubscribeOperations = {};
     for (const [key,value] of Object.entries(parsed.channels())) {
-      if (value.publish())  Object.assign(that.PublishOperations ,{ [key]: value.publish()});
-      if (value.subscribe())  Object.assign(that.SubscribeOperations ,{ [key]: value.subscribe()});
+      if (value.publish())  Object.assign(parserContext.PublishOperations ,{ [key]: value.publish()._json,
+        ['plot-id']: value._json['x-plot'],
+        ['plot-group']: value._json['x-group']});
+      if (value.subscribe())  Object.assign(parserContext.SubscribeOperations ,{ [key]: value.subscribe()._json,
+        ['plot-id']: value._json['x-plot'],
+        ['plot-group']: value._json['x-group']});
     }
-    console.log(`\nFound ${Object.keys(that.PublishOperations).length} testable Operations`);
+    console.log(`\nFound ${Object.keys(parserContext.PublishOperations).length} testable Operations`);
+    return parserContext;
   }
 
   return {
