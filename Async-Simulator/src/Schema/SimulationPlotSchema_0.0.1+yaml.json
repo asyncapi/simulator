@@ -5,6 +5,7 @@
   "description": "AsyncApi Api Simulator. Define routes and settings regarding traffic Simulated",
   "patternProperties": {
     "^group-(\\d)+$": {
+      "additionalItems": false,
       "properties": {
         "eps": {
           "description": "Events per second being emitted",
@@ -36,12 +37,6 @@
       "type": "string"
 
     }
-
-
-
-
-
-
   },
-  "required": ["domainUrl"]
+  "required": ["version"]
 }
