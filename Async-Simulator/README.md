@@ -13,8 +13,8 @@ to production mode?
 Usage
 
 ```
-simulator.sh -f ./my_api.yaml 
-simulator.sh -f ../subdirectory/my_api.json
+simulator -f ./my_api.yaml 
+simulator -f ../subdirectory/my_api.json
 ```
 
 

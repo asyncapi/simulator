@@ -14,6 +14,6 @@ Usage
 
 ```
 cd Async-Simulator
-simulator.sh -f ./my_api.yaml 
-simulator.sh -f ../subdirectory/my_api.yaml
+simulator -f ./my_api.yaml 
+simulator -f ../subdirectory/my_api.yaml
 ```

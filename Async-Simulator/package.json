@@ -3,8 +3,12 @@
   "version": "0.0.1",
   "type": "commonjs",
   "description": "The asyncapi command line library to test your app at scale.",
-  "main": "src/bin/simulator.sh",
-  "scripts": {},
+  "main": "src/bin/cli.js",
+  "engines": {
+    "node": "14.15.5"
+  },
+  "scripts": {
+  },
   "keywords": [
     "asyncapi"
   ],
@@ -37,10 +41,7 @@
     "prettier": "^2.2.1",
     "typescript": "^4.1.5"
   },
-  "files": [
-    "lib"
-  ],
   "bin": {
-    "simulator" : "node ./src/bin/cli.js"
+    "simulator": "src/bin/cli.js"
   }
 }
