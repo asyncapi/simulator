@@ -53,7 +53,7 @@ const filepathHandling1 =  (rd, file) => {
   function parseAsyncApi() {
     const parser = asyncParser(handlingContext.file);
     parser.Parse();
-    parser.mapAsyncApiToHandler().then((res) => {handlingContext.parsedAndFormated = res});
+    parser.mapAsyncApiToHandler().then((res) => {handlingContext.ParsedAndFormated = res});
   }
   return {
     getFile,
@@ -76,8 +76,8 @@ const run = () => {
 
   const options = program.opts();
 
-  const fileHandlingInstance = filepathHandling1(cliInterface, path.resolve(options.filepath));
-  fileHandlingInstance.parseAsyncApi()
+  const HandlingInstance = filepathHandling1(cliInterface, path.resolve(options.filepath));
+  HandlingInstance.parseAsyncApi()
 
   cliInterface.on('SIGINT', () => {
     console.log('\nShutting down');

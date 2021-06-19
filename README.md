@@ -1,7 +1,7 @@
 # AsyncApi Performance Tester
 ___
 
-Ever wondered what it would feel like your application to
+Ever wondered what it would feel like your application to 
 be the center of interest?
 
 Does it seem distant or difficult to switch from development mode
@@ -13,7 +13,10 @@ to production mode?
 Usage
 
 ```
-cd Async-Simulator
 simulator -f ./my_api.yaml 
-simulator -f ../subdirectory/my_api.yaml
+simulator -f ../subdirectory/my_api.json
 ```
+
+
+
+
