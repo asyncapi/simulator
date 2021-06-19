@@ -9,9 +9,21 @@
   },
   "scripts": {},
   "keywords": [
-    "asyncapi"
+    "asyncapi",
+    "kafka"
   ],
-  "author": "",
+
+  "publishConfig": {
+    "access": "public"
+  },
+
+  "author": {
+    "email": "nektariosfifes12@gmail.com",
+    "name": "NektariosFifes",
+    "url": "https://github.com/NektariosFifes"
+  },
+
+
   "license": "Apache-2.0",
   "dependencies": {
     "@asyncapi/parser": "^1.4.1",
