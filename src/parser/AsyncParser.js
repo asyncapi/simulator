@@ -21,7 +21,7 @@ const AsyncParser  =  (filepath, opts) => {
   }
 
   async function mapAsyncApiToHandler() {
-    const parsed =await parser.parse(parserContext.content);
+    const parsed = await parser.parse(parserContext.content);
     parserContext.ready = true;
     parserContext.serverUrl = parsed._json.servers['production'].url;
     parserContext.productionServerInfo = parsed.servers();
