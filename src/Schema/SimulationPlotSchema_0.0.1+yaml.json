@@ -34,8 +34,10 @@
   "additionalProperties": false,
   "properties": {
     "version":{
-      "type": "string"
-
+      "type": "string",
+      "enum": [
+        "0.0.1"
+      ]
     }
   },
   "required": ["version"]

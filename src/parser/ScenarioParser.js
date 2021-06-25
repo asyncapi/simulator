@@ -2,13 +2,14 @@ const parser = require('@asyncapi/parser');
 const filesystem = require('fs');
 
 /**
- * Asynchronously Parses the provided yaml or json file .
+ * Asynchronously parses the provided YAML or JSON file.
  *
  *
  * @param filepath The path of the async-api spec file.
+ * @param opts Options regarding logging and error output
  * @constructor
  */
-const AsyncParser  =  (filepath, opts) => {
+const scenarioParser  =  (filepath, opts) => {
   const parserContext = this;
   parserContext.ready = false;
 
@@ -41,5 +42,5 @@ const AsyncParser  =  (filepath, opts) => {
   };
 };
 
-module.exports = {AsyncParser};
+module.exports = { scenarioParser};
 

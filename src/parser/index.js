@@ -1,3 +1,3 @@
 
-module.exports.asyncParser = require('./AsyncParser').AsyncParser;
+module.exports.scenarioParser = require('./ScenarioParser').scenarioParser;
 

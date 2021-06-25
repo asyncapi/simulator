@@ -5,11 +5,10 @@ const readline = require('readline');
 const chalk = require('chalk');
 const filesystem = require('fs');
 const path = require('path');
-const  {asyncParser} = require('../parser/index');
+const  {scenarioParser} = require('../parser/index');
 
 /**
- * Verifies the command line arguments , repromts in case of error. ParsesFile and return a object
- * to be provided to the event Handler.
+ * Verifies the command line arguments, re-prompts in case of error. Parses file and returns the object representation.
  * @param rd
  * @param file
  * @returns {{getParsedData: (function(): any | null)}}
@@ -59,7 +58,7 @@ const verifyInput_ParseFile =  (rd, file) => {
 
   function parseAsyncApi() {
     if (handlingContext.ready) {
-      const parser = asyncParser(handlingContext.file);
+      const parser = scenarioParser(handlingContext.file);
       parser.mapAsyncApiToHandler().then((res) => {
         handlingContext.ParsedAndFormated = res;
       }).catch((err) => {
@@ -74,7 +73,7 @@ const verifyInput_ParseFile =  (rd, file) => {
   /**
    * Returns the formated parsed data that is ready to be provided
    * to event handler.
-   * @returns {*|null}
+   * @returns {*}
    */
   function getParsedData () {
     return handlingContext.ready? handlingContext.ParsedAndFormated : null;
@@ -92,15 +91,11 @@ program
   .option('-b, --basedir <type>', 'The basepath from which relative paths are computed.\nDefaults to the directory where simulator.sh resides.');
 
 program.parse(process.argv);
-
+///Interface , SignalsHandling
 const cliInterface = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
-
-const options = program.opts();
-
-const HandlingInstance = verifyInput_ParseFile(cliInterface, path.resolve(options.filepath));
 
 cliInterface.on('SIGINT', () => {
   console.log('\nShutting down');
@@ -114,4 +109,8 @@ process.on('uncaughtException', (err) => {
   console.log(err);
   process.exit();
 });
+///
+const options = program.opts();
+
+const HandlingInstance = verifyInput_ParseFile(cliInterface, path.resolve(options.filepath));
 
