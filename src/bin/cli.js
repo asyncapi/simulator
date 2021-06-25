@@ -13,15 +13,15 @@ const  {scenarioParser} = require('../parser/index');
  * @param file
  * @returns {{getParsedData: (function(): any | null)}}
  */
-const verifyInput_ParseFile =  (rd, file) => {
+const verifyInput_ParseFile =  async (rd, file) => {
   const handlingContext = this;
   handlingContext.ready = false;
   handlingContext.rd = rd;
   handlingContext.file = file;
   const yamlJsonRegex = RegExp(/^.*\.(json|yaml)$/, 'gm');
   const inputLoop = () => {
-    handlingContext.rd.question('\nEnter a proper asyncApi document filepath:',(filepath) => {
-      filesystem.access(filepath , 1 , (err) => {
+    handlingContext.rd.question('\nEnter a proper asyncApi document filepath:', (filepath) => {
+      filesystem.access(filepath, 1, (err) => {
         if (err) {
           rd.write(`\nError in accessing provided file \nDetails:${err}\n\n`);
           inputLoop();
@@ -58,13 +58,7 @@ const verifyInput_ParseFile =  (rd, file) => {
 
   function parseAsyncApi() {
     if (handlingContext.ready) {
-      const parser = scenarioParser(handlingContext.file);
-      parser.mapAsyncApiToHandler().then((res) => {
-        handlingContext.ParsedAndFormated = res;
-      }).catch((err) => {
-        rd.write('\nError Parsing Content:');
-        rd.write(err);
-      });
+      handlingContext.ParsedAndFormated = scenarioParser(handlingContext.file);
     } else {
       rd.write('\nUnable to complete AsyncApi File parsing. The file is either non-Existent or there was an unknown Error.\nPress Ctrl + c to terminate');
     }
@@ -75,42 +69,37 @@ const verifyInput_ParseFile =  (rd, file) => {
    * to event handler.
    * @returns {*}
    */
-  function getParsedData () {
-    return handlingContext.ready? handlingContext.ParsedAndFormated : null;
-  }
-
-  return {
-    getParsedData
-  };
+  return handlingContext.ready ? await handlingContext.ParsedAndFormated : null;
 };
 
-program.version('0.0.1', 'v', 'async-api performance tester cli version');
+(async function Main ()  {
+  program.version('0.0.1', 'v', 'async-api performance tester cli version');
 
-program
-  .requiredOption('-f, --filepath <type>', 'The filepath of a async-api specification yaml or json file')
-  .option('-b, --basedir <type>', 'The basepath from which relative paths are computed.\nDefaults to the directory where simulator.sh resides.');
+  program
+    .requiredOption('-f, --filepath <type>', 'The filepath of a async-api specification yaml or json file')
+    .option('-b, --basedir <type>', 'The basepath from which relative paths are computed.\nDefaults to the directory where simulator.sh resides.');
 
-program.parse(process.argv);
-///Interface , SignalsHandling
-const cliInterface = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
+  program.parse(process.argv);
+  ///Interface , SignalsHandling
+  const cliInterface = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
 
-cliInterface.on('SIGINT', () => {
-  console.log('\nShutting down');
-  process.exit();
-});
-cliInterface.on('close', () => {
-  console.log('\nAsync-api performance tester instance closed');
-  process.exit();
-});
-process.on('uncaughtException', (err) => {
-  console.log(err);
-  process.exit();
-});
-///
-const options = program.opts();
+  cliInterface.on('SIGINT', () => {
+    console.log('\nShutting down');
+    process.exit();
+  });
+  cliInterface.on('close', () => {
+    console.log('\nAsync-api performance tester instance closed');
+    process.exit();
+  });
+  cliInterface.on('uncaughtException', (err) => {
+    console.log(err);
+    process.exit();
+  });
 
-const HandlingInstance = verifyInput_ParseFile(cliInterface, path.resolve(options.filepath));
+  const options = program.opts();
 
+  const ParserResult = await verifyInput_ParseFile(cliInterface, path.resolve(options.filepath));
+}());
