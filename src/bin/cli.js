@@ -14,24 +14,24 @@ const  {asyncParser} = require('../parser/index');
  * @param file
  * @returns {{getParsedData: (function(): any | null)}}
  */
-const verifyInput_ParseApi =  (rd, file) => {
+const verifyInput_ParseFile =  (rd, file) => {
   const handlingContext = this;
   handlingContext.ready = false;
   handlingContext.rd = rd;
   handlingContext.file = file;
   const yamlJsonRegex = RegExp(/^.*\.(json|yaml)$/, 'gm');
   const inputLoop = () => {
-    handlingContext.rd.question('\nEnter a proper asyncApi document filepath:',(answer) => {
-      filesystem.access(answer , 1 , (err) => {
+    handlingContext.rd.question('\nEnter a proper asyncApi document filepath:',(filepath) => {
+      filesystem.access(filepath , 1 , (err) => {
         if (err) {
           rd.write(`\nError in accessing provided file \nDetails:${err}\n\n`);
           inputLoop();
-        } else if (!String(answer).match(yamlJsonRegex)) {
+        } else if (!String(filepath).match(yamlJsonRegex)) {
           rd.write('\nPlease provide a proper filepath ex:\'./myAsyncApi.json ./myAsyncApi.yaml\':\n');
           inputLoop();
         } else {
           handlingContext.ready = true;
-          handlingContext.file = answer;
+          handlingContext.file = filepath;
           parseAsyncApi();
         }
       });
@@ -100,7 +100,7 @@ const cliInterface = readline.createInterface({
 
 const options = program.opts();
 
-const HandlingInstance = verifyInput_ParseApi(cliInterface, path.resolve(options.filepath));
+const HandlingInstance = verifyInput_ParseFile(cliInterface, path.resolve(options.filepath));
 
 cliInterface.on('SIGINT', () => {
   console.log('\nShutting down');
