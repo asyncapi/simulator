@@ -12,18 +12,14 @@
     "asyncapi",
     "kafka"
   ],
-
   "publishConfig": {
     "access": "public"
   },
-
   "author": {
     "email": "nektariosfifes12@gmail.com",
     "name": "NektariosFifes",
     "url": "https://github.com/NektariosFifes"
   },
-
-
   "license": "Apache-2.0",
   "dependencies": {
     "@asyncapi/parser": "^1.4.1",
@@ -34,9 +30,6 @@
     "clui": "^0.3.6",
     "commander": "^7.2.0",
     "configstore": "^5.0.1",
-    "eslint-plugin-mocha": "^9.0.0",
-    "eslint-plugin-security": "^1.4.0",
-    "eslint-plugin-sonarjs": "^0.8.0-125",
     "fastify": "^3.14.1",
     "install": "^0.13.0",
     "npm": "^7.17.0",
@@ -53,9 +46,11 @@
     "@semantic-release/release-notes-generator": "^9.0.1",
     "all-contributors-cli": "^6.14.2",
     "conventional-changelog-conventionalcommits": "^4.4.0",
-    "semantic-release": "^17.2.2"
+    "semantic-release": "^17.2.2",
+    "eslint-plugin-mocha": "^9.0.0",
+    "eslint-plugin-security": "^1.4.0",
+    "eslint-plugin-sonarjs": "^0.8.0-125"
   },
-
   "bin": {
     "simulator": "src/bin/cli.js"
   }

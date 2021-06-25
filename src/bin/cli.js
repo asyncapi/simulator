@@ -7,6 +7,13 @@ const filesystem = require('fs');
 const path = require('path');
 const  {asyncParser} = require('../parser/index');
 
+/**
+ * Verifies the command line arguments , repromts in case of error. ParsesFile and return a object
+ * to be provided to the event Handler.
+ * @param rd
+ * @param file
+ * @returns {{getParsedData: (function(): any | null)}}
+ */
 const verifyInput_ParseApi =  (rd, file) => {
   const handlingContext = this;
   handlingContext.ready = false;
@@ -17,10 +24,10 @@ const verifyInput_ParseApi =  (rd, file) => {
     handlingContext.rd.question('\nEnter a proper asyncApi document filepath:',(answer) => {
       filesystem.access(answer , 1 , (err) => {
         if (err) {
-          console.log(`\nError in accessing provided file \nDetails:${err}\n\n`);
+          rd.write(`\nError in accessing provided file \nDetails:${err}\n\n`);
           inputLoop();
         } else if (!String(answer).match(yamlJsonRegex)) {
-          console.log('\nPlease provide a proper filepath ex:\'./myAsyncApi.json ./myAsyncApi.yaml\':\n');
+          rd.write('\nPlease provide a proper filepath ex:\'./myAsyncApi.json ./myAsyncApi.yaml\':\n');
           inputLoop();
         } else {
           handlingContext.ready = true;
@@ -38,8 +45,12 @@ const verifyInput_ParseApi =  (rd, file) => {
 
   if (!!file) {
     if (!String(file).match(yamlJsonRegex)) {
-      console.log('\nPlease provide a correctly formatted filepath ex:\'./myAsyncApi.json ./myAsyncApi.yaml\':\n');
+      rd.write('\nPlease provide a correctly formatted filepath ex:\'./myAsyncApi.json ./myAsyncApi.yaml\':\n');
       inputLoop();
+    } else {
+      handlingContext.file = file;
+      handlingContext.ready = true;
+      parseAsyncApi();
     }
   } else {
     rd.write('\nFilepath not provided');
@@ -49,15 +60,22 @@ const verifyInput_ParseApi =  (rd, file) => {
   function parseAsyncApi() {
     if (handlingContext.ready) {
       const parser = asyncParser(handlingContext.file);
-      parser.Parse();
       parser.mapAsyncApiToHandler().then((res) => {
         handlingContext.ParsedAndFormated = res;
+      }).catch((err) => {
+        rd.write('\nError Parsing Content:');
+        rd.write(err);
       });
     } else {
       rd.write('\nUnable to complete AsyncApi File parsing. The file is either non-Existent or there was an unknown Error.\nPress Ctrl + c to terminate');
     }
   }
 
+  /**
+   * Returns the formated parsed data that is ready to be provided
+   * to event handler.
+   * @returns {*|null}
+   */
   function getParsedData () {
     return handlingContext.ready? handlingContext.ParsedAndFormated : null;
   }

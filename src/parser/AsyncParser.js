@@ -1,4 +1,4 @@
-const parser = require('@asyncapi/parser/lib/index');
+const parser = require('@asyncapi/parser');
 const filesystem = require('fs');
 
 /**
@@ -12,15 +12,12 @@ const AsyncParser  =  (filepath, opts) => {
   const parserContext = this;
   parserContext.ready = false;
 
-  async function Parse() {
+  async function mapAsyncApiToHandler() {
     try {
       parserContext.content = filesystem.readFileSync(filepath).toString();
     } catch (err) {
       console.log(`\nError in parsing the file. Details: ${err}`);
     }
-  }
-
-  async function mapAsyncApiToHandler() {
     const parsed = await parser.parse(parserContext.content);
     parserContext.ready = true;
     parserContext.serverUrl = parsed._json.servers['production'].url;
@@ -40,7 +37,6 @@ const AsyncParser  =  (filepath, opts) => {
   }
 
   return {
-    Parse,
     mapAsyncApiToHandler
   };
 };
