@@ -64,11 +64,6 @@ const verifyInput_ParseFile =  async (rd, file) => {
     }
   }
 
-  /**
-   * Returns the formated parsed data that is ready to be provided
-   * to event handler.
-   * @returns {*}
-   */
   return handlingContext.ready ? await handlingContext.ParsedAndFormated : null;
 };
 
