@@ -11,7 +11,7 @@ const  {scenarioParser} = require('../parser/index');
  * Verifies the command line arguments, re-prompts in case of error. Parses file and returns the object representation.
  * @param rd
  * @param file
- * @returns {{getParsedData: (function(): any | null)}}
+ * @returns {Promise<*|null>}
  */
 const verifyInput_ParseFile =  async (rd, file) => {
   const handlingContext = this;
