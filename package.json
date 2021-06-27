@@ -34,9 +34,7 @@
     "@asyncapi/parser": "^1.4.1",
     "ajv": "^8.6.0",
     "chalk": "^4.1.0",
-    "commander": "^7.2.0",
-    "install": "^0.13.0",
-    "npm": "^7.17.0"
+    "commander": "^7.2.0"
   },
   "devDependencies": {
     "@types/node": "^14.17.3",
