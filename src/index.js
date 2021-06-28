@@ -1,1 +1,1 @@
-exports.AsyncParser = require('./parser').scenarioParser;
+exports.scenarioParser = require('./parser').scenarioParser;
