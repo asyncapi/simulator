@@ -1,0 +1,13 @@
+{
+  "include": ["src/exposedLibraryInterfaces/test.ts"],
+  "compilerOptions": {
+    "module": "commonjs",
+    "allowJs": true,
+    "declaration": true,
+    "target": "es5",
+    "sourceMap": true
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}

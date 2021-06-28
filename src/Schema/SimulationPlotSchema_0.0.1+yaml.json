@@ -1,0 +1,44 @@
+{
+  "title": "Simulation Plot 0.0.1 schema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "description": "AsyncApi Api Simulator. Define routes and settings regarding traffic Simulated",
+  "patternProperties": {
+    "^group-(\\d)+$": {
+      "additionalItems": false,
+      "properties": {
+        "eps": {
+          "description": "Events per second being emitted",
+          "type": "integer"
+        },
+        "priority" : {
+          "type": "integer",
+          "description": "This determines whether it should be prioritized in case the resources to emit events is insufficient."
+        }
+      }
+    },
+    "^plot-[\\w\\d]+$": {
+      "additionalProperties": false,
+      "properties": {
+        "eps": {
+          "description": "Events per second being emitted",
+          "type": "integer"
+        },
+        "priority" : {
+          "type": "integer",
+          "description": "This determines whether it should be prioritized in case the resources to emit events is insufficient "
+        }
+      }
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "version":{
+      "type": "string",
+      "enum": [
+        "0.0.1"
+      ]
+    }
+  },
+  "required": ["version"]
+}

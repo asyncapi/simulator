@@ -1,0 +1,79 @@
+{
+  "name": "@asyncapi/fluffy-robot",
+  "version": "0.0.1",
+  "type": "commonjs",
+  "description": "The asyncapi command line library to test your app at scale.",
+  "main": "src/bin/cli.js",
+  "engines": {
+    "node": "14.15.5"
+  },
+  "scripts": {
+    "test": "echo \"No test specified\"",
+    "release": "semantic-release",
+    "docker:build": "docker build -t asyncapi/fluffy-robot:latest .",
+    "get:version": "echo $npm_package_version",
+    "get:name": "echo $npm_package_name",
+    "lint": "eslint --max-warnings 0 --config .eslintrc .",
+    "generate:assets": "echo \"Nothing to generate\"",
+    "bump:version": "npm --no-git-tag-version --allow-same-version version $VERSION"
+  },
+  "keywords": [
+    "asyncapi",
+    "simulation"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": {
+    "email": "nektariosfifes12@gmail.com",
+    "name": "NektariosFifes",
+    "url": "https://github.com/NektariosFifes"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@asyncapi/parser": "^1.4.1",
+    "ajv": "^8.6.0",
+    "chalk": "^4.1.0",
+    "commander": "^7.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^14.17.3",
+    "eslint": "^7.29.0",
+    "kafkajs": "^1.15.0",
+    "prettier": "^2.2.1",
+    "@semantic-release/commit-analyzer": "^8.0.1",
+    "@semantic-release/github": "^7.0.4",
+    "@semantic-release/npm": "^7.0.6",
+    "@semantic-release/release-notes-generator": "^9.0.1",
+    "all-contributors-cli": "^6.14.2",
+    "conventional-changelog-conventionalcommits": "^4.4.0",
+    "semantic-release": "^17.2.2",
+    "eslint-plugin-mocha": "^9.0.0",
+    "eslint-plugin-security": "^1.4.0",
+    "eslint-plugin-sonarjs": "^0.8.0-125"
+  },
+  "bin": {
+    "simulator": "src/bin/cli.js"
+  },
+  "release": {
+    "branches": [
+      "master"
+    ],
+    "plugins": [
+      [
+        "@semantic-release/commit-analyzer",
+        {
+          "preset": "conventionalcommits"
+        }
+      ],
+      [
+        "@semantic-release/release-notes-generator",
+        {
+          "preset": "conventionalcommits"
+        }
+      ],
+      "@semantic-release/npm",
+      "@semantic-release/github"
+    ]
+  }
+}
