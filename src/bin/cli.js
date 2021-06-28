@@ -96,5 +96,5 @@ const verifyInput_ParseFile =  async (rd, file) => {
 
   const options = program.opts();
 
-  const ParserResult = await verifyInput_ParseFile(cliInterface, path.resolve(options.filepath));
+  await verifyInput_ParseFile(cliInterface, path.resolve(options.filepath));
 }());
