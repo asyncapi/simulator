@@ -14,6 +14,7 @@ const scenarioParser  = async (filepath, opts) => {
   parserContext.ready = false;
 
   try {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     parserContext.content = filesystem.readFileSync(filepath).toString();
   } catch (err) {
     console.log(`\nError in parsing the file. Details: ${err}`);
