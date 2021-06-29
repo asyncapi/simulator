@@ -1,3 +1,3 @@
 
-module.exports.scenarioParser = require('./ScenarioParser').scenarioParser;
+module.exports.scenarioParserAndConnector = require('./scenarioParserAndConnector').scenarioParserAndConnector;
 
