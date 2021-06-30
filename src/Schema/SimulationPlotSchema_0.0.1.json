@@ -4,9 +4,9 @@
   "type": "object",
   "description": "AsyncApi Api Simulator. Define routes and settings regarding traffic Simulated",
   "patternProperties": {
-    "^group-(\\d)+$": {
+    "^group-[\\w\\d]+$": {
       "type": "object",
-      "additionalItems": false,
+      "additionalProperties": false,
       "properties": {
         "eps": {
           "description": "Events per second being emitted",
