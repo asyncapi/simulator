@@ -42,14 +42,21 @@ const verifyInput_ParseFile =  async (rd, file,scenarioFile) => {
   const inputLoopAsyncApi = () => {
     rd.question('\nEnter a proper asyncApi document filepath:', (filepath) => {
       filesystem.access(filepath, 1, (err) => {
-        console.log(`Error cannot access provided asyncApi fill.Details:${err}`);
-        if (!scenarioFile) {
-          inputLoopScenario();
+        if (err) {
+          console.log(`\nError in accessing provided file \nDetails:${err}\n\n`);
+          inputLoopAsyncApi();
         } else if (!String(filepath).match(yamlJsonRegex)) {
-          inputLoopScenario();
+          console.log('\nPlease provide a proper filepath ex:\'./myAsyncApi.json ./myAsyncApi.yaml\':\n');
+          inputLoopAsyncApi();
         } else {
-          handlingContext.scenarioReady = true;
-          parseAsyncApi();
+          handlingContext.ready = true;
+          handlingContext.file = filepath;
+          if (!scenarioFile) {
+            inputLoopScenario();
+          } else {
+            handlingContext.scenarioReady = true;
+            parseAsyncApi();
+          }
         }
       });
     });
