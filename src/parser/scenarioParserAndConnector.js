@@ -33,10 +33,10 @@ const scenarioParserAndConnector  = async (filepathAsyncApi, filepathScenario,op
     }
     const valid = validate(scenarioParsed);
     if (!valid) {
-      throw console.log(validate.errors);
+      console.log(validate.errors);
     }
   } catch (err) {
-    console.log('\nError in parsing the scenario file. Details:');
+    console.log(`\nError in parsing the scenario file. Details:${err}`);
   }
 
   parserContext.ready = true;
