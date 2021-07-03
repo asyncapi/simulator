@@ -14,7 +14,12 @@ const  {scenarioParserAndConnector} = require('../parser/index');
  * @param scenarioFile
  * @returns {Promise<*|null>}
  */
-const verifyInput_ParseFile =  async (rd, file,scenarioFile) => {
+
+const filePathCheck = (type,filepath) => {
+
+};
+
+const verifyInput_ParseAndLinkFiles =  async (rd, file,scenarioFile) => {
   const handlingContext = this;
   handlingContext.ready = false;
   handlingContext.rd = rd;
@@ -29,7 +34,7 @@ const verifyInput_ParseFile =  async (rd, file,scenarioFile) => {
           console.log(`\nError in accessing provided scenario file \nDetails:${err}\n\n`);
           inputLoopScenario();
         } else if (!String(scenarioFile).match(yamlJsonRegex)) {
-          console.log('\nPlease provide a proper scenario filepath ex:\'./myAsyncApi.json ./myAsyncApi.yaml\':\n');
+          console.log('\nPlease provide a proper scenario filepath ex: ./myAsyncApi.json ./myAsyncApi.yaml:');
           inputLoopScenario();
         } else {
           handlingContext.scenarioFile = scenarioFile;
@@ -47,17 +52,29 @@ const verifyInput_ParseFile =  async (rd, file,scenarioFile) => {
           console.log(`\nError in accessing provided file \nDetails:${err}\n\n`);
           inputLoopAsyncApi();
         } else if (!String(filepath).match(yamlJsonRegex)) {
-          console.log('\nPlease provide a proper filepath ex:\'./myAsyncApi.json ./myAsyncApi.yaml\':\n');
+          console.log('\nPlease provide a proper filepath ex: ./myAsyncApi.json ./myAsyncApi.yaml:');
           inputLoopAsyncApi();
         } else {
           handlingContext.ready = true;
           handlingContext.file = filepath;
           if (!scenarioFile) {
             inputLoopScenario();
-          } else {
-            handlingContext.scenarioReady = true;
-            parseAsyncApi();
           }
+          // eslint-disable-next-line sonarjs/no-identical-functions
+          filesystem.access(scenarioFile, 1, (err) => {
+            if (err) {
+              console.log(`\nError in accessing provided scenario file \nDetails:${err}\n\n`);
+              inputLoopScenario();
+            } else if (!String(scenarioFile).match(yamlJsonRegex)) {
+              console.log('\nPlease provide a proper scenario filepath ex: ./myAsyncApi.json ./myAsyncApi.yaml:');
+              inputLoopScenario();
+            } else {
+              handlingContext.scenarioFile = scenarioFile;
+              handlingContext.scenarioReady = true;
+              parseAsyncApi();
+            }
+          }
+          );
         }
       });
     });
@@ -70,7 +87,7 @@ const verifyInput_ParseFile =  async (rd, file,scenarioFile) => {
 
   if (!!file) {
     if (!String(file).match(yamlJsonRegex)) {
-      console.log('\nPlease provide a correctly formatted filepath ex:\'./myAsyncApi.json ./myAsyncApi.yaml\':\n');
+      console.log('\nPlease provide a correctly formatted filepath ex: ./myAsyncApi.json ./myAsyncApi.yaml:');
       inputLoopAsyncApi();
     } else {
       handlingContext.file = file;
@@ -131,5 +148,5 @@ const verifyInput_ParseFile =  async (rd, file,scenarioFile) => {
 
   const options = program.opts();
 
-  await verifyInput_ParseFile(cliInterface, path.resolve(options.filepath),path.resolve(options.scenario));
+  await verifyInput_ParseAndLinkFiles(cliInterface, path.resolve(options.filepath),path.resolve(options.scenario));
 }());
