@@ -25,13 +25,13 @@ const scenarioParserAndConnector  = async (filepathAsyncApi, filepathScenario,op
   const asyncApiParsed = await parser.parse(parserContext.content);
 
   try {
-    parserContext.scenario = filesystem.readFileSync(filepathScenario).toString();
-    const scenarioParsed = yamlParser.load(parserContext.scenario);
-    const validate = ajv.compile(scenarioSpecs[scenarioParsed.version]);
+    parserContext.scenario = filesystem.readFileSync(filepathScenario,{encoding: 'utf-8',flag: 'r'});
+    parserContext.scenarioParsed = yamlParser.load(parserContext.scenario);
+    const validate = ajv.compile(scenarioSpecs[parserContext.scenarioParsed.version]);
     if (!validate) {
       throw Error('\nWrong or unavailable schema version be sure to check the spec for more info.');
     }
-    const valid = validate(scenarioParsed);
+    const valid = validate(parserContext.scenarioParsed);
     if (!valid) {
       console.log(validate.errors);
     }
@@ -76,6 +76,22 @@ const scenarioParserAndConnector  = async (filepathAsyncApi, filepathScenario,op
           parserContext.SubscribeOperations.groupOps[value._json['x-group']] = {};
         }
         Object.assign(parserContext.SubscribeOperations.groupOps[value._json['x-group']], {[key]: value.subscribe()._json});
+      }
+    }
+  }
+  
+  for (const [key,value] of Object.entries(parserContext.scenarioParsed)) {
+    if (key.match(RegExp(/^group-[\w\d]+$/),'g')) {
+      const groupId = key.match(RegExp(/[\w\d]+$/),'g');
+      const eps = value.eps;
+      if (parserContext.PublishOperations.groupOps.hasOwnProperty(groupId[0])) {
+        Object.assign(parserContext.PublishOperations.groupOps[groupId[0]],{eventsPsec: eps});
+      }
+    } else if (key.match(RegExp(/^plot-[\w\d]+$/),'g')) {
+      const plotId = key.match(RegExp(/[\w\d]+$/,'g'));
+      const eps = value.eps;
+      if (parserContext.PublishOperations.soloOps.hasOwnProperty(plotId[0])) {
+        Object.assign(parserContext.PublishOperations.soloOps[plotId[0]],{eventsPsec: eps});
       }
     }
   }
