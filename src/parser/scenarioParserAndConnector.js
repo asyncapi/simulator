@@ -18,6 +18,7 @@ const scenarioParserAndConnector  = async (filepathAsyncApi, filepathScenario,op
   const ajv = new Ajv();
 
   try {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     parserContext.content = filesystem.readFileSync(filepathAsyncApi).toString();
   } catch (err) {
     console.log(`\nError in reading the asyncApi file. Details: ${err}`);
@@ -25,11 +26,12 @@ const scenarioParserAndConnector  = async (filepathAsyncApi, filepathScenario,op
   const asyncApiParsed = await parser.parse(parserContext.content);
 
   try {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     parserContext.scenario = filesystem.readFileSync(filepathScenario,{encoding: 'utf-8',flag: 'r'});
     parserContext.scenarioParsed = yamlParser.load(parserContext.scenario);
     const validate = ajv.compile(scenarioSpecs[parserContext.scenarioParsed.version]);
     if (!validate) {
-      throw Error('\nWrong or unavailable schema version be sure to check the spec for more info.');
+      console.log('\nWrong or unavailable schema version be sure to check the spec for more info.');
     }
     const valid = validate(parserContext.scenarioParsed);
     if (!valid) {
