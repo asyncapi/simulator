@@ -3,16 +3,79 @@ const filesystem = require('fs');
 const Ajv = require('ajv');
 const scenarioSpecs = require('../Schema');
 const yamlParser  = require('js-yaml');
+
+const getPubScenariosFromAsyncFile = (parserContext,key,value) => {
+  if (value._json['x-plot']) {
+    parserContext.PublishOperations.soloOps[value._json['x-plot']] = Object.assign({}, value.publish()._json, {route: key});
+  }
+  if (value._json['x-group']) {
+    if (!parserContext.PublishOperations.groupOps[value._json['x-group']]) {
+      parserContext.PublishOperations.groupOps[value._json['x-group']] = {};
+    }
+    Object.assign(parserContext.PublishOperations.groupOps[value._json['x-group']], {[key]: value.publish()._json});
+  }
+  return parserContext;
+};
+
+const getSubScenariosFromAsyncFile = (parserContext,key,value) => {
+  if (value._json['x-plot']) {
+    parserContext.SubscribeOperations.soloOps[value._json['x-plot']] = Object.assign({}, value.subscribe()._json, {route: key});
+  }
+  if (value._json['x-group']) {
+    if (!parserContext.SubscribeOperations.groupOps[value._json['x-group']]) {
+      parserContext.SubscribeOperations.groupOps[value._json['x-group']] = {};
+    }
+    Object.assign(parserContext.SubscribeOperations.groupOps[value._json['x-group']], {[key]: value.subscribe()._json});
+  }
+  return parserContext;
+};
+
+const structureDataAsyncApi = (parserContext,asyncApiParsed) => {
+  let contextWithOperation;
+  for (const [key, value] of Object.entries(asyncApiParsed.channels())) {
+    if (!!parserContext.PublishOperations.soloOps[value._json['x-plot']] ||
+        !!parserContext.SubscribeOperations.soloOps[value._json['x-plot']]) {
+      console.log(`\nError solo scenario key: ${key} was specified more than one times.\nNon-group scenario keys (x-scenario) should be
+      different in each channel`);
+    }
+    if (!!value.publish()) {
+      contextWithOperation = getPubScenariosFromAsyncFile(parserContext,key,value);
+    } else if (!!value.subscribe()) {
+      contextWithOperation = getSubScenariosFromAsyncFile(parserContext,key,value);
+    }
+  }
+  return contextWithOperation;
+};
+
+const structureDataScenario = (parserContext) => {
+  for (const [key,value] of Object.entries(parserContext.scenarioParsed)) {
+    if (key.match(RegExp(/^group-[\w\d]+$/),'g')) {
+      const groupId = key.match(RegExp(/[\w\d]+$/),'g');
+      const eps = value.eps;
+      if (parserContext.PublishOperations.groupOps.hasOwnProperty(groupId[0])) {
+        Object.assign(parserContext.PublishOperations.groupOps[groupId[0]],{eventsPsec: eps});
+      }
+    } else if (key.match(RegExp(/^plot-[\w\d]+$/),'g')) {
+      const plotId = key.match(RegExp(/[\w\d]+$/,'g'));
+      const eps = value.eps;
+      if (parserContext.PublishOperations.soloOps.hasOwnProperty(plotId[0])) {
+        Object.assign(parserContext.PublishOperations.soloOps[plotId[0]],{eventsPsec: eps});
+      }
+    }
+  }
+  return parserContext;
+};
+
 /**
- * Asynchronously parses the provided YAML or JSON file.
+ * Asynchronously parses the provided YAML or JSON file, creates object containing details about the operations
+ * that can be executed.
  *
  *
- * @param filepathAsyncApi The path of the async-api spec file.
- * @param filepathScenario
- * @param opts Options regarding logging and error output
  * @constructor
+ * @param filepathAsyncApi
+ * @param filepathScenario
  */
-const scenarioParserAndConnector  = async (filepathAsyncApi, filepathScenario,opts) => {
+const scenarioParserAndConnector  = async (filepathAsyncApi, filepathScenario) => {
   const parserContext = this;
   parserContext.ready = false;
   const ajv = new Ajv();
@@ -35,7 +98,8 @@ const scenarioParserAndConnector  = async (filepathAsyncApi, filepathScenario,op
     }
     const valid = validate(parserContext.scenarioParsed);
     if (!valid) {
-      console.log(validate.errors);
+      console.log(`\nError the provided scenario file does does not comply with the spec of version ${parserContext.scenarioParsed.version}\nDetails: `,validate.errors);
+      process.emit('SIGINT');
     }
   } catch (err) {
     console.log(`\nError in parsing the scenario file. Details:${err}`);
@@ -53,53 +117,13 @@ const scenarioParserAndConnector  = async (filepathAsyncApi, filepathScenario,op
     groupOps: {}
   };
 
-  for (const [key, value] of Object.entries(asyncApiParsed.channels())) {
-    if (!!parserContext.PublishOperations.soloOps[value._json['x-plot']] ||
-        parserContext.SubscribeOperations.soloOps[value._json['x-plot']]) {
-      console.log(`\nError scenario key: ${key} was specified more than one times.\nNon-group scenario keys (x-scenario) should be
-      different in each channel`);
-    }
-    if (!!value.publish()) {
-      if (value._json['x-plot']) {
-        parserContext.PublishOperations.soloOps[value._json['x-plot']] = Object.assign({}, value.publish()._json, {route: key});
-      }
-      if (value._json['x-group']) {
-        if (!parserContext.PublishOperations.groupOps[value._json['x-group']]) {
-          parserContext.PublishOperations.groupOps[value._json['x-group']] = {};
-        }
-        Object.assign(parserContext.PublishOperations.groupOps[value._json['x-group']], {[key]: value.publish()._json});
-      }
-    } else if (!!value.subscribe()) {
-      if (value._json['x-plot']) {
-        parserContext.SubscribeOperations.soloOps[value._json['x-plot']] = Object.assign({}, value.subscribe()._json, {route: key});
-      }
-      if (value._json['x-group']) {
-        if (!parserContext.SubscribeOperations.groupOps[value._json['x-group']]) {
-          parserContext.SubscribeOperations.groupOps[value._json['x-group']] = {};
-        }
-        Object.assign(parserContext.SubscribeOperations.groupOps[value._json['x-group']], {[key]: value.subscribe()._json});
-      }
-    }
-  }
+  const parserContextNew = structureDataAsyncApi(parserContext,asyncApiParsed);
   
-  for (const [key,value] of Object.entries(parserContext.scenarioParsed)) {
-    if (key.match(RegExp(/^group-[\w\d]+$/),'g')) {
-      const groupId = key.match(RegExp(/[\w\d]+$/),'g');
-      const eps = value.eps;
-      if (parserContext.PublishOperations.groupOps.hasOwnProperty(groupId[0])) {
-        Object.assign(parserContext.PublishOperations.groupOps[groupId[0]],{eventsPsec: eps});
-      }
-    } else if (key.match(RegExp(/^plot-[\w\d]+$/),'g')) {
-      const plotId = key.match(RegExp(/[\w\d]+$/,'g'));
-      const eps = value.eps;
-      if (parserContext.PublishOperations.soloOps.hasOwnProperty(plotId[0])) {
-        Object.assign(parserContext.PublishOperations.soloOps[plotId[0]],{eventsPsec: eps});
-      }
-    }
-  }
+  const parserContextNew2 = structureDataScenario(parserContextNew);
+
   console.log(`\nFound ${Object.keys(parserContext.PublishOperations.soloOps).length +
   Object.keys(parserContext.PublishOperations.groupOps).length} testable Operations`);
-  return parserContext;
+  return parserContextNew2;
 };
 module.exports = { scenarioParserAndConnector};
 

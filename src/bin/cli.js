@@ -7,12 +7,6 @@ const filesystem = require('fs');
 const path = require('path');
 const  {scenarioParserAndConnector} = require('../parser/index');
 
-/**
- * Verifies the command line arguments, re-prompts in case of error. Parses file and returns the object representation.
- * @returns {Promise<*|null>}
- * @param handlingContext
- */
-
 function parseAsyncApi(handlingContext) {
   if (handlingContext.ready && handlingContext.scenarioReady) {
     handlingContext.ParsedAndFormated = scenarioParserAndConnector(handlingContext.file,handlingContext.scenarioFile);
@@ -22,13 +16,13 @@ function parseAsyncApi(handlingContext) {
 }
 
 const inputLoopScenario = (handlingContext) => {
-  handlingContext.rd.question('\nEnter a proper scenario document filepath:', (scenarioFile) => {
+  handlingContext.rd.question(`\nEnter a proper ${chalk.blueBright('scenario')} document filepath:`, (scenarioFile) => {
     filesystem.access(scenarioFile, 1, (err) => {
       if (err) {
-        console.log(`\nError in accessing provided scenario file \nDetails:${err}\n\n`);
+        console.log(`\nError in accessing provided ${chalk.blueBright('scenario')} file \nDetails:${err}\n\n`);
         inputLoopScenario(handlingContext);
       } else if (!String(scenarioFile).match(handlingContext.yamlJsonRegex)) {
-        console.log('\nPlease provide a proper scenario filepath ex: ./myAsyncApi.json ./myAsyncApi.yaml:');
+        console.log(`\nPlease provide a proper ${chalk.blueBright('scenario')} filepath ex: ./myAsyncApi.json ./myAsyncApi.yaml:`);
         inputLoopScenario(handlingContext);
       } else {
         handlingContext.scenarioFile = scenarioFile;
@@ -40,7 +34,7 @@ const inputLoopScenario = (handlingContext) => {
 };
 
 const inputLoopAsyncApi = (handlingContext) => {
-  handlingContext.rd.question('\nEnter a proper asyncApi document filepath:', (filepath) => {
+  handlingContext.rd.question(`\nEnter a proper ${chalk.green('asyncApi')} document filepath:`, (filepath) => {
     filesystem.access(filepath, 1, (err) => {
       if (err) {
         console.log(`\nError in accessing provided file \nDetails:${err}\n\n`);
@@ -57,10 +51,10 @@ const inputLoopAsyncApi = (handlingContext) => {
         // eslint-disable-next-line sonarjs/no-identical-functions
         filesystem.access(handlingContext.scenarioFile, 1, (err) => {
           if (err) {
-            console.log(`\nError in accessing provided scenario file \nDetails:${err}\n\n`);
+            console.log(`\nError in accessing provided ${chalk.blueBright('scenario')} file \nDetails:${err}\n\n`);
             inputLoopScenario(handlingContext);
           } else if (!String(handlingContext.scenarioFile).match(handlingContext.yamlJsonRegex)) {
-            console.log('\nPlease provide a proper scenario filepath ex: ./myAsyncApi.json ./myAsyncApi.yaml:');
+            console.log(`\nPlease provide a proper ${chalk.blueBright('scenario')} filepath ex: ./myAsyncApi.json ./myAsyncApi.yaml:`);
             inputLoopScenario(handlingContext);
           } else {
             //handlingContext.scenarioFile = handlingContext.scenarioFile;
@@ -74,6 +68,13 @@ const inputLoopAsyncApi = (handlingContext) => {
   });
 };
 
+/**
+ * Verifies the command line arguments, re-prompts in case of error. Parses file and returns the object representation.
+ * @returns {Promise<*|null>}
+ * @param rd
+ * @param file
+ * @param scenarioFile
+ */
 const verifyInput_ParseAndLinkFiles =  async (rd, file,scenarioFile) => {
   const handlingContext = this;
   handlingContext.ready = false;
@@ -137,6 +138,18 @@ const verifyInput_ParseAndLinkFiles =  async (rd, file,scenarioFile) => {
     process.exit();
   });
   cliInterface.on('uncaughtException', (err) => {
+    console.log(err);
+    process.exit();
+  });
+  process.on('SIGINT', () => {
+    console.log('\nShutting down');
+    process.exit();
+  });
+  process.on('close', () => {
+    console.log('\nAsync-api performance tester instance closed');
+    process.exit();
+  });
+  process.on('uncaughtException', (err) => {
     console.log(err);
     process.exit();
   });
