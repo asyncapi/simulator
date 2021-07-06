@@ -1,6 +1,6 @@
 {
   "name": "@asyncapi/fluffy-robot",
-  "version": "0.2.0",
+  "version": "0.1.0",
   "type": "commonjs",
   "description": "The asyncapi command line library to test your app at scale.",
   "main": "src/bin/cli.js",
