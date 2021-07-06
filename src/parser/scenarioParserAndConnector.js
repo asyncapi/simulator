@@ -30,6 +30,12 @@ const getSubScenariosFromAsyncFile = (parserContext,key,value) => {
   return parserContext;
 };
 
+/**
+ * Based on provided object generates a new one with information from the asyncApi file essential for executing the operations.
+ * @param parserContext
+ * @param asyncApiParsed
+ * @returns {*}
+ */
 const structureDataAsyncApi = (parserContext,asyncApiParsed) => {
   let contextWithOperation;
   for (const [key, value] of Object.entries(asyncApiParsed.channels())) {
@@ -47,6 +53,11 @@ const structureDataAsyncApi = (parserContext,asyncApiParsed) => {
   return contextWithOperation;
 };
 
+/**
+ * Based on provided object generates a new one with information from the scenario file essential for executing the operations.
+ * @param parserContext
+ * @returns {*}
+ */
 const structureDataScenario = (parserContext) => {
   for (const [key,value] of Object.entries(parserContext.scenarioParsed)) {
     if (key.match(RegExp(/^group-[\w\d]+$/),'g')) {
@@ -76,8 +87,7 @@ const structureDataScenario = (parserContext) => {
  * @param filepathScenario
  */
 const scenarioParserAndConnector  = async (filepathAsyncApi, filepathScenario) => {
-  const parserContext = this;
-  parserContext.ready = false;
+  const parserContext = {};
   const ajv = new Ajv();
 
   try {
@@ -106,8 +116,7 @@ const scenarioParserAndConnector  = async (filepathAsyncApi, filepathScenario) =
   }
 
   parserContext.ready = true;
-  parserContext.serverUrl = asyncApiParsed._json.servers['production'].url;
-  parserContext.productionServerInfo = asyncApiParsed.servers();
+  parserContext.servers = asyncApiParsed._json.servers;
   parserContext.PublishOperations = {
     soloOps: {},
     groupOps: {}
@@ -117,13 +126,13 @@ const scenarioParserAndConnector  = async (filepathAsyncApi, filepathScenario) =
     groupOps: {}
   };
 
-  const parserContextNew = structureDataAsyncApi(parserContext,asyncApiParsed);
-  
-  const parserContextNew2 = structureDataScenario(parserContextNew);
+  const contextWithChannels = structureDataAsyncApi(parserContext,asyncApiParsed);
+
+  const contextWithScenarioConfig = structureDataScenario(contextWithChannels);
 
   console.log(`\nFound ${Object.keys(parserContext.PublishOperations.soloOps).length +
   Object.keys(parserContext.PublishOperations.groupOps).length} testable Operations`);
-  return parserContextNew2;
+  return contextWithScenarioConfig;
 };
 module.exports = { scenarioParserAndConnector};
 
