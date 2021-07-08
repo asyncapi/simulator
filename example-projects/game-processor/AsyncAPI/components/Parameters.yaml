@@ -1,0 +1,12 @@
+serverId:
+  description: The id of the server
+  schema: 
+    type: string
+playerId:
+  description: The id of the player who performed the action
+  schema: 
+    type: string
+itemId:
+  description: The id of item
+  schema: 
+    type: string

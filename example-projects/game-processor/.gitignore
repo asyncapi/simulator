@@ -1,0 +1,4 @@
+node_modules
+.DS_Store
+mosquitto/data
+mosquitto/logs
