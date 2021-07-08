@@ -1,1 +1,1 @@
-exports.scenarioParser = require('./parser').scenarioParser;
+exports.scenarioParserAndConnector = require('./parser').scenarioParserAndConnector;
