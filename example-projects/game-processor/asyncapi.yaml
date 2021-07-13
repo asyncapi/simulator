@@ -16,51 +16,51 @@ channels:
     description: Channel used when a player picks up an item in-game
     parameters:
       serverId: 
-        $ref: "./components/Parameters.yaml#/serverId"
+        $ref: "./AsyncAPI/components/Parameters.yaml#/serverId"
       playerId: 
-        $ref: "./components/Parameters.yaml#/playerId"
+        $ref: "./AsyncAPI/components/Parameters.yaml#/playerId"
       itemId: 
-        $ref: "./components/Parameters.yaml#/itemId"
+        $ref: "./AsyncAPI/components/Parameters.yaml#/itemId"
     publish: 
       message:
-        $ref: './components/messages/PlayerItemPickup.yaml'
+        $ref: './AsyncAPI/components/messages/PlayerItemPickup.yaml'
   game/server/{serverId}/events/player/{playerId}/connect:
     description: Channel used when a player joins (connect to) the game server
     parameters:
       serverId: 
-        $ref: "./components/Parameters.yaml#/serverId"
+        $ref: "./AsyncAPI/components/Parameters.yaml#/serverId"
       playerId: 
-        $ref: "./components/Parameters.yaml#/playerId"
+        $ref: "./AsyncAPI/components/Parameters.yaml#/playerId"
     publish: 
       message:
-        $ref: './components/messages/PlayerConnected.yaml'
+        $ref: './AsyncAPI/components/messages/PlayerConnected.yaml'
   game/server/{serverId}/events/player/{playerId}/disconnect:
     description: Channel used when a player leaves (disconnects from) the game server
     parameters:
       serverId: 
-        $ref: "./components/Parameters.yaml#/serverId"
+        $ref: "./AsyncAPI/components/Parameters.yaml#/serverId"
       playerId: 
-        $ref: "./components/Parameters.yaml#/playerId"
+        $ref: "./AsyncAPI/components/Parameters.yaml#/playerId"
     publish: 
       message:
-        $ref: './components/messages/PlayerDisconnected.yaml'
+        $ref: './AsyncAPI/components/messages/PlayerDisconnected.yaml'
   game/server/{serverId}/events/player/{playerId}/chat: 
     description: Channel used when a player writes something in chat
     parameters:
       serverId: 
-        $ref: "./components/Parameters.yaml#/serverId"
+        $ref: "./AsyncAPI/components/Parameters.yaml#/serverId"
       playerId: 
-        $ref: "./components/Parameters.yaml#/playerId"
+        $ref: "./AsyncAPI/components/Parameters.yaml#/playerId"
     publish: 
       message:
-        $ref: './components/messages/PlayerUsedChat.yaml'
+        $ref: './AsyncAPI/components/messages/PlayerUsedChat.yaml'
   game/server/{serverId}/events/player/{playerId}/hit: 
     description: Channel used when a player hit another player in-game
     parameters:
       serverId: 
-        $ref: "./components/Parameters.yaml#/serverId"
+        $ref: "./AsyncAPI/components/Parameters.yaml#/serverId"
       playerId: 
-        $ref: "./components/Parameters.yaml#/playerId"
+        $ref: "./AsyncAPI/components/Parameters.yaml#/playerId"
     publish: 
       message:
-        $ref: './components/messages/PlayerHit.yaml'
+        $ref: './AsyncAPI/components/messages/PlayerHit.yaml'
