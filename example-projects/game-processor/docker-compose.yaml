@@ -1,0 +1,45 @@
+version: "3.8"
+services:
+  mongodb:
+    image : mongo:4.4.5
+    volumes:
+      - mongodb_data_container:/data/db
+    ports:
+      - 27017:27017
+    restart: unless-stopped
+    command: mongod --auth
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: auth
+  processor:
+    build: ./
+    environment:
+      mongodbHost: mongodb:27017
+      mqttHost: mqtt://mosquitto:1883
+    depends_on:
+      - "mosquitto"
+      - "mongodb"
+  mosquitto:
+    image: eclipse-mosquitto
+    ports:
+      - 1883:1883
+    volumes:
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/logs:/mosquitto/logs
+      - ./mosquitto/config:/mosquitto/config
+    restart: unless-stopped
+  mongo-express:
+    image: mongo-express
+    restart: always
+    depends_on:
+      - mongodb
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongodb
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      VCAP_APP_HOST: 0.0.0.0
+volumes:
+  mongodb_data_container:

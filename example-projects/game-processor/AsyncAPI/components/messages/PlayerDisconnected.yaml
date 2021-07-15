@@ -1,0 +1,9 @@
+payload:
+  type: object
+  $id: PlayerDisconnectedPayload
+  additionalProperties: false
+  properties:
+    disconnectTimestamp:
+      type: string
+      format: date-time
+      description: The timestamp the player disconnected from the game server

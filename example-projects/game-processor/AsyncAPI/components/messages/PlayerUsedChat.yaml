@@ -1,0 +1,12 @@
+payload:
+  type: object
+  $id: PlayerUsedChatPayload
+  additionalProperties: false
+  properties:
+    chatTimestamp:
+      type: string
+      format: date-time
+      description: The timestamp the player send the message in-game
+    message:
+      type: string
+      description: The message the player send
