@@ -6,11 +6,50 @@ const chalk = require('chalk');
 const filesystem = require('fs');
 const path = require('path');
 const  {scenarioParserAndConnector} = require('../parser/index');
+const rdInterface = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
 
-function parseAsyncApi(handlingContext) {
+const enumerateOptions = (serv) => {
+  let res = '';
+  serv.forEach((value,i) => {
+    res += `\n${i}: ${value}`;
+  });
+
+  return res;
+};
+
+const inputLoopServer =  (availableServers,structuredData,firstLoop) =>  {
+  let ready = false;
+  return new Promise((resolve, reject) => {
+    rdInterface.question('\nSelect the server you want to target\n' + 'Options' + `\n${enumerateOptions(availableServers)}\nSelect:` , (selectedServer) => {
+      const questionloop = (availableServers) => {
+        rdInterface.question('\nPlease select one server id number from the list\n' + 'Options:' + `\n${enumerateOptions(availableServers)}\nSelect:` , (selectedServer) => {
+          if (selectedServer < 0 || selectedServer > availableServers.length, false) {
+            questionloop(availableServers);
+          } else {
+            structuredData.targetedServer = selectedServer;
+          }
+        });
+      //return structuredData.targetedServer;
+      };
+
+      if (selectedServer < 0 || selectedServer > availableServers.length) {
+        questionloop(availableServers);
+      } else {
+        structuredData.targetedServer = selectedServer;
+        resolve(selectedServer);
+        ready = true;
+      }
+    });
+  });
+};
+
+function  parseAsyncApi(handlingContext) {
   if (handlingContext.ready && handlingContext.scenarioReady) {
     handlingContext.ParsedAndFormated = scenarioParserAndConnector(handlingContext.file,handlingContext.scenarioFile);
-  } else  {
+  } else {
     console.log('\nUnable to complete AsyncApi File parsing. The file is either non-Existent or there was an unknown Error.\nPress Ctrl + c to terminate');
   }
 }
@@ -75,7 +114,7 @@ const inputLoopAsyncApi = (handlingContext) => {
  * @param file
  * @param scenarioFile
  */
-const verifyInput_ParseAndLinkFiles =  async (rd, file,scenarioFile) => {
+const verifyInput_getData =  async (rd, file,scenarioFile) => {
   const handlingContext = this;
   handlingContext.ready = false;
   handlingContext.rd = rd;
@@ -110,8 +149,12 @@ const verifyInput_ParseAndLinkFiles =  async (rd, file,scenarioFile) => {
     console.log('\nFilepath not provided');
     inputLoopAsyncApi(handlingContext);
   }
+  const structuredData = await handlingContext.ParsedAndFormated;
+  const availableServers = Object.keys(structuredData.servers);
 
-  return handlingContext.ready ? await handlingContext.ParsedAndFormated : null;
+  structuredData.targetedServer = await inputLoopServer(availableServers,structuredData,true);
+
+  return   structuredData;
 };
 
 (async function Main ()  {
@@ -120,24 +163,20 @@ const verifyInput_ParseAndLinkFiles =  async (rd, file,scenarioFile) => {
   program
     .requiredOption('-f, --filepath <type>', 'The filepath of a async-api specification yaml or json file')
     .requiredOption('-s, --scenario <type>', 'The filepath of a file defining a scenario based on the spec.')
-    .option('-b, --basedir <type>', 'The basepath from which relative paths are computed.\nDefaults to the directory where simulator.sh resides.');
+    .option('-b, --basedir <type>', 'The basepath from which relative paths are computed.\nDefaults to t he directory where simulator.sh resides.');
 
   program.parse(process.argv);
   ///Interface , SignalsHandling
-  const cliInterface = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-  });
 
-  cliInterface.on('SIGINT', () => {
+  rdInterface.on('SIGINT', () => {
     console.log('\nShutting down');
     process.exit();
   });
-  cliInterface.on('close', () => {
+  rdInterface.on('close', () => {
     console.log('\nAsync-api performance tester instance closed');
     process.exit();
   });
-  cliInterface.on('uncaughtException', (err) => {
+  rdInterface.on('uncaughtException', (err) => {
     console.log(err);
     process.exit();
   });
@@ -156,5 +195,5 @@ const verifyInput_ParseAndLinkFiles =  async (rd, file,scenarioFile) => {
 
   const options = program.opts();
 
-  await verifyInput_ParseAndLinkFiles(cliInterface, path.resolve(options.filepath),path.resolve(options.scenario));
+  const structuredData = await verifyInput_getData(rdInterface, path.resolve(options.filepath),path.resolve(options.scenario));
 }());
