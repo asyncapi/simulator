@@ -6,6 +6,7 @@ const chalk = require('chalk');
 const filesystem = require('fs');
 const path = require('path');
 const  {scenarioParserAndConnector} = require('../parser/index');
+const {RequestManager} = require('../RequestHandler/RequestManager');
 const rdInterface = readline.createInterface({
   input: process.stdin,
   output: process.stdout
@@ -20,27 +21,23 @@ const enumerateOptions = (serv) => {
   return res;
 };
 
-const inputLoopServer =  (availableServers,structuredData,firstLoop) =>  {
-  let ready = false;
+const inputLoopServer =  (availableServers,structuredData) =>  {
   return new Promise((resolve, reject) => {
     rdInterface.question('\nSelect the server you want to target\n' + 'Options' + `\n${enumerateOptions(availableServers)}\nSelect:` , (selectedServer) => {
       const questionloop = (availableServers) => {
         rdInterface.question('\nPlease select one server id number from the list\n' + 'Options:' + `\n${enumerateOptions(availableServers)}\nSelect:` , (selectedServer) => {
-          if (selectedServer < 0 || selectedServer > availableServers.length, false) {
+          if (selectedServer < 0 || selectedServer > availableServers.length -1) {
             questionloop(availableServers);
           } else {
-            structuredData.targetedServer = selectedServer;
+            resolve(availableServers[selectedServer]);
           }
         });
-      //return structuredData.targetedServer;
       };
 
-      if (selectedServer < 0 || selectedServer > availableServers.length) {
+      if (selectedServer < 0 || selectedServer > availableServers.length -1) {
         questionloop(availableServers);
       } else {
-        structuredData.targetedServer = selectedServer;
-        resolve(selectedServer);
-        ready = true;
+        resolve(availableServers[selectedServer]);
       }
     });
   });
@@ -196,4 +193,9 @@ const verifyInput_getData =  async (rd, file,scenarioFile) => {
   const options = program.opts();
 
   const structuredData = await verifyInput_getData(rdInterface, path.resolve(options.filepath),path.resolve(options.scenario));
+
+  const manager = RequestManager();
+  await manager.createReqHandler(structuredData);
+  await manager.startOperations();
 }());
+

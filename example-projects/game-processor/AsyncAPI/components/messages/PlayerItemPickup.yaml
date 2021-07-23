@@ -1,0 +1,9 @@
+payload:
+  type: object
+  $id: PlayerItemPickupPayload
+  additionalProperties: false
+  properties:
+    pickupTimestamp:     
+      type: string
+      format: date-time
+      description: The timestamp the item was picked up
