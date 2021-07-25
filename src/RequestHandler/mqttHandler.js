@@ -2,19 +2,29 @@ const mqtt = require('async-mqtt');
 
 async function  mqttHandler (serverInfo,operations) {
   const aliveOperations = {};
+  let url;
 
-  const url = serverInfo.url.replace('{port}',serverInfo.variables.port.default);
-  const client  = await mqtt.connectAsync(`mqtt:${url}`);
-
+  if (!!serverInfo.variables?.port) {
+    url = serverInfo.url.replace('{port}' , serverInfo.variables.port.default);
+  } else {
+    url = serverInfo.url;
+  }
+  const client = await mqtt.connectAsync(`mqtt:${url}`);
   async function startSoloOperations () {
     for (const [id,value] of Object.entries(operations.soloOps)) {
+      const parameters = value.parameters;
+      let channelUrl = value.route;
+      const urlParameters = channelUrl.match(new RegExp(/{(.*?)}/gm)).map((item) => item.substring(1,item.length-1));
+      for (const [name,value] of Object.entries(parameters)) {
+        if (urlParameters.some((item) => item === name)) {
+          channelUrl = channelUrl.replace(new RegExp(`{${ name }}` , 'gi') , value);
+        }
+      }
       const interval = setInterval(async () => {
-        await client.publish(value.route , JSON.stringify({
-          test: 1
-        }));
-        console.log(value.route);
+        await client.publish(channelUrl , JSON.stringify(value.payload));
+        console.log(channelUrl);
       },
-      1000
+      1000 /value.eventsPsec
       );
       aliveOperations[id] = interval;
     }
@@ -23,14 +33,6 @@ async function  mqttHandler (serverInfo,operations) {
   async function startOperation_id (id) {
 
   }
-
-  // mqttHandler.on('end_simulation',async () => {
-  //   await client.end();
-  // });
-  // mqttHandler.on('error',async (err) => {
-  //   console.log('\nError on mqttHandler',err);
-  //   await client.end();
-  // });
 
   return {
     aliveOperations,
