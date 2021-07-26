@@ -17,27 +17,21 @@ async function  mqttHandler (serverInfo,operations) {
       const urlParameters = channelUrl.match(new RegExp(/{(.*?)}/gm)).map((item) => item.substring(1,item.length-1));
       for (const [name,value] of Object.entries(parameters)) {
         if (urlParameters.some((item) => item === name)) {
-          channelUrl = channelUrl.replace(new RegExp(`{${ name }}` , 'gi') , value);
+          channelUrl = channelUrl.replace(`{${ name }}` , value);
         }
       }
-      const interval = setInterval(async () => {
+      aliveOperations[parseInt(id, 10)] = setInterval(async () => {
         await client.publish(channelUrl , JSON.stringify(value.payload));
         console.log(channelUrl);
-      },
-      1000 /value.eventsPsec
+      } ,
+      1000 / value.eventsPsec
       );
-      aliveOperations[id] = interval;
     }
-  }
-
-  async function startOperation_id (id) {
-
   }
 
   return {
     aliveOperations,
-    startSoloOperations,
-    startOperation_id
+    startSoloOperations
   };
 }
 

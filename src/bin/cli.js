@@ -21,23 +21,23 @@ const enumerateOptions = (serv) => {
   return res;
 };
 
-const inputLoopServer =  (availableServers,structuredData) =>  {
-  return new Promise((resolve, reject) => {
+const inputLoopServer =  (availableServers) =>  {
+  return new Promise((resolve) => {
     rdInterface.question('\nSelect the server you want to target\n' + 'Options' + `\n${enumerateOptions(availableServers)}\nSelect:` , (selectedServer) => {
-      const questionloop = (availableServers) => {
+      const questionLoop = (availableServers) => {
         rdInterface.question('\nPlease select one server id number from the list\n' + 'Options:' + `\n${enumerateOptions(availableServers)}\nSelect:` , (selectedServer) => {
           if (selectedServer < 0 || selectedServer > availableServers.length -1) {
-            questionloop(availableServers);
+            questionLoop(availableServers);
           } else {
-            resolve(availableServers[selectedServer]);
+            resolve(availableServers[parseInt(selectedServer, 10)]);
           }
         });
       };
 
       if (selectedServer < 0 || selectedServer > availableServers.length -1) {
-        questionloop(availableServers);
+        questionLoop(availableServers);
       } else {
-        resolve(availableServers[selectedServer]);
+        resolve(availableServers[parseInt(selectedServer, 10)]);
       }
     });
   });
@@ -149,13 +149,13 @@ const verifyInput_getData =  async (rd, file,scenarioFile) => {
   const structuredData = await handlingContext.ParsedAndFormated;
   const availableServers = Object.keys(structuredData.servers);
 
-  structuredData.targetedServer = await inputLoopServer(availableServers,structuredData,true);
+  structuredData.targetedServer = await inputLoopServer(availableServers);
 
   return   structuredData;
 };
 
 (async function Main ()  {
-  program.version('0.0.1', 'v', 'async-api performance tester cli version');
+  program.version('0.0.1', '-v', 'async-api performance tester cli version');
 
   program
     .requiredOption('-f, --filepath <type>', 'The filepath of a async-api specification yaml or json file')
