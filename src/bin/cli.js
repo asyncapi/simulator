@@ -71,7 +71,9 @@ const inputLoopScenario = (rd,scenario,regex) => {
             rd.question('Please fix errors and provide a correctly formatted and accessible file in filepath.\nScenario filepath:',(answer) => {
               inputLoop(answer);
             });
-          } else resolve(answer);
+          } else {
+            resolve(filepath);
+          }
         };
 
         inputLoop(answer);
@@ -93,14 +95,16 @@ const inputLoopAsyncApi = (rd,asyncFile,regex) => {
             rd.question('Please fix errors and provide a correctly formatted and accessible file in filepath.\nAsyncApi Filepath:',(answer) => {
               inputLoop(answer);
             });
-          } else resolve(answer);
+          } else resolve(filepath);
         };
 
         inputLoop(answer);
       });
     });
   }
-  return  new Promise((resolve) => {resolve(asyncFile);});
+  return new Promise((resolve) => {
+    resolve(asyncFile);
+  });
 };
 
 /**

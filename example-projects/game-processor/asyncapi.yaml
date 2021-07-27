@@ -1,66 +1,67 @@
 asyncapi: 2.0.0
-info: 
+info:
   title: "Processor"
-  version: "0.0.1"  
+  version: "0.0.1"
   license:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0
-servers: 
-  local: 
+servers:
+  local:
     url: "0.0.0.0:1883"
-    description: "Development server",
+    description: "Development server"
     protocol: "mqtt"
 defaultContentType: application/json
-channels: 
+channels:
   game/server/{serverId}/events/player/{playerId}/item/{itemId}/pickup:
+    x-plot: 1
     description: Channel used when a player picks up an item in-game
     parameters:
-      serverId: 
-        $ref: "./AsyncAPI/components/Parameters.yaml#/serverId"
-      playerId: 
-        $ref: "./AsyncAPI/components/Parameters.yaml#/playerId"
-      itemId: 
-        $ref: "./AsyncAPI/components/Parameters.yaml#/itemId"
-    publish: 
+      serverId:
+        $ref:  "./example-projects/game-processor/AsyncAPI/components/Parameters.yaml#/serverId"
+      playerId:
+        $ref: "./example-projects/game-processor/AsyncAPI/components/Parameters.yaml#/playerId"
+      itemId:
+        $ref: "./example-projects/game-processor/AsyncAPI/components/Parameters.yaml#/itemId"
+    publish:
       message:
-        $ref: './AsyncAPI/components/messages/PlayerItemPickup.yaml'
+        $ref: './example-projects/game-processor/AsyncAPI/components/messages/PlayerItemPickup.yaml'
   game/server/{serverId}/events/player/{playerId}/connect:
     description: Channel used when a player joins (connect to) the game server
     parameters:
-      serverId: 
-        $ref: "./AsyncAPI/components/Parameters.yaml#/serverId"
-      playerId: 
-        $ref: "./AsyncAPI/components/Parameters.yaml#/playerId"
-    publish: 
+      serverId:
+        $ref: "./example-projects/game-processor/AsyncAPI/components/Parameters.yaml#/serverId"
+      playerId:
+        $ref: "./example-projects/game-processor/AsyncAPI/components/Parameters.yaml#/playerId"
+    publish:
       message:
-        $ref: './AsyncAPI/components/messages/PlayerConnected.yaml'
+        $ref: './example-projects/game-processor/AsyncAPI/components/messages/PlayerConnected.yaml'
   game/server/{serverId}/events/player/{playerId}/disconnect:
     description: Channel used when a player leaves (disconnects from) the game server
     parameters:
-      serverId: 
-        $ref: "./AsyncAPI/components/Parameters.yaml#/serverId"
-      playerId: 
-        $ref: "./AsyncAPI/components/Parameters.yaml#/playerId"
-    publish: 
+      serverId:
+        $ref: "./example-projects/game-processor/AsyncAPI/components/Parameters.yaml#/serverId"
+      playerId:
+        $ref: "./example-projects/game-processor/AsyncAPI/components/Parameters.yaml#/playerId"
+    publish:
       message:
-        $ref: './AsyncAPI/components/messages/PlayerDisconnected.yaml'
-  game/server/{serverId}/events/player/{playerId}/chat: 
+        $ref: './example-projects/game-processor/AsyncAPI/components/messages/PlayerDisconnected.yaml'
+  game/server/{serverId}/events/player/{playerId}/chat:
     description: Channel used when a player writes something in chat
     parameters:
-      serverId: 
-        $ref: "./AsyncAPI/components/Parameters.yaml#/serverId"
-      playerId: 
-        $ref: "./AsyncAPI/components/Parameters.yaml#/playerId"
-    publish: 
+      serverId:
+        $ref: "./example-projects/game-processor/AsyncAPI/components/Parameters.yaml#/serverId"
+      playerId:
+        $ref: "./example-projects/game-processor/AsyncAPI/components/Parameters.yaml#/playerId"
+    publish:
       message:
-        $ref: './AsyncAPI/components/messages/PlayerUsedChat.yaml'
-  game/server/{serverId}/events/player/{playerId}/hit: 
+        $ref: './example-projects/game-processor/AsyncAPI/components/messages/PlayerUsedChat.yaml'
+  game/server/{serverId}/events/player/{playerId}/hit:
     description: Channel used when a player hit another player in-game
     parameters:
-      serverId: 
-        $ref: "./AsyncAPI/components/Parameters.yaml#/serverId"
-      playerId: 
-        $ref: "./AsyncAPI/components/Parameters.yaml#/playerId"
-    publish: 
+      serverId:
+        $ref: "./example-projects/game-processor/AsyncAPI/components/Parameters.yaml#/serverId"
+      playerId:
+        $ref: "./example-projects/game-processor/AsyncAPI/components/Parameters.yaml#/playerId"
+    publish:
       message:
-        $ref: './AsyncAPI/components/messages/PlayerHit.yaml'
+        $ref: './example-projects/game-processor/AsyncAPI/components/messages/PlayerHit.yaml'
