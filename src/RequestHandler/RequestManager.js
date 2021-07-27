@@ -4,8 +4,7 @@ function RequestManager () {
 
   async function createReqHandler(dataFromParser) {
     for (const [name,data] of Object.entries(dataFromParser.servers)) {
-      const instance = await HandlerFactory(data , dataFromParser.PublishOperations);
-      handlersList[name] = instance;
+      handlersList[parseInt(name, 10)] = await HandlerFactory(data , dataFromParser.PublishOperations);
     }
   }
 
@@ -14,10 +13,8 @@ function RequestManager () {
       for (const value of Object.values(handlersList)) {
         await value.startSoloOperations();
       }
-    } else  {
-
     }
-  };
+  }
 
   return {
     handlersList,
