@@ -21,6 +21,22 @@ const enumerateOptions = (serv) => {
   return res;
 };
 
+const checkFilepath = (asyncFile,regex) => {
+  let correctType = true;
+  if (!String(asyncFile).match(regex)) {
+    console.log('\nError: Filepath provided does not point to a yaml or json file. You must provided either a yaml or json.');
+    correctType = false;
+  }
+  let fileAccess = true;
+  try {
+    filesystem.accessSync(asyncFile , filesystem.constants.R_OK);
+  } catch (err) {
+    console.log('Error: Accessing the provided file. Make sure it exists and the user in the terminal session has read access rights.');
+    fileAccess = false;
+  }
+  return correctType && fileAccess;
+};
+
 const inputLoopServer =  (availableServers) =>  {
   return new Promise((resolve) => {
     rdInterface.question('\nSelect the server you want to target\n' + 'Options' + `\n${enumerateOptions(availableServers)}\nSelect:` , (selectedServer) => {
@@ -43,30 +59,14 @@ const inputLoopServer =  (availableServers) =>  {
   });
 };
 
-const inputLoopScenario_2 = (rd,scenario,regex) => {
-  const checkFilepath = (asyncFile) => {
-    let correctType = true;
-    if (!String(asyncFile).match(regex)) {
-      console.log('\nError: Filepath provided does not point to a yaml or json file. You must provided either a yaml or json.');
-      correctType = false;
-    }
-    let fileAccess = true;
-    try {
-      filesystem.accessSync(asyncFile , filesystem.constants.R_OK);
-    } catch (err) {
-      console.log('Error: Accessing the provided file. Make sure it exists and the user in the terminal session has read access rights.');
-      fileAccess = false;
-    }
-    return correctType && fileAccess;
-  };
-
-  const res = checkFilepath(scenario);
+const inputLoopScenario = (rd,scenario,regex) => {
+  const res = checkFilepath(scenario,regex);
 
   if (!res) {
     return new Promise((resolve) => {
       rd.question('\nPlease provide an existent yaml or json file .It should abide by the scenario json schema.\nScenario filepath:',(answer) => {
         const inputLoop = (filepath) => {
-          const res = checkFilepath(filepath);
+          const res = checkFilepath(filepath,regex);
           if (!res) {
             rd.question('Please fix errors and provide a correctly formatted and accessible file in filepath.\nScenario filepath:',(answer) => {
               inputLoop(answer);
@@ -81,30 +81,14 @@ const inputLoopScenario_2 = (rd,scenario,regex) => {
   return  new Promise((resolve) => {resolve(scenario);});
 };
 
-const inputLoopAsyncApi_2 = (rd,asyncFile,regex) => {
-  const checkFilepath = (asyncFile) => {
-    let correctType = true;
-    if (!String(asyncFile).match(regex)) {
-      console.log('\nError: Filepath provided does not point to a yaml or json file. You must provided either a yaml or json.');
-      correctType = false;
-    }
-    let fileAccess = true;
-    try {
-      filesystem.accessSync(asyncFile , filesystem.constants.R_OK);
-    } catch (err) {
-      console.log('Error: Accessing the provided file. Make sure it exists and the user in the terminal session has read access rights.');
-      fileAccess = false;
-    }
-    return correctType && fileAccess;
-  };
-
-  const res = checkFilepath(asyncFile);
+const inputLoopAsyncApi = (rd,asyncFile,regex) => {
+  const res = checkFilepath(asyncFile,regex);
 
   if (!res) {
     return new Promise((resolve) => {
       rd.question('\nPlease provide an existent yaml or json file.It should abide by the asyncApi Spec.\nAsyncApi filepath:',(answer) => {
         const inputLoop = (filepath) => {
-          const res = checkFilepath(filepath);
+          const res = checkFilepath(filepath,regex);
           if (!res) {
             rd.question('Please fix errors and provide a correctly formatted and accessible file in filepath.\nAsyncApi Filepath:',(answer) => {
               inputLoop(answer);
@@ -134,9 +118,9 @@ const verifyInput_getData =  async (rd, asyncApiF,scenarioFile) => {
   `));
   console.log('\nWelcome ');
 
-  asyncApiF = await inputLoopAsyncApi_2(rd,asyncApiF,yamlJsonRegex);
+  asyncApiF = await inputLoopAsyncApi(rd,asyncApiF,yamlJsonRegex);
 
-  scenarioFile = await inputLoopScenario_2(rd,scenarioFile,yamlJsonRegex);
+  scenarioFile = await inputLoopScenario(rd,scenarioFile,yamlJsonRegex);
 
   const structuredData = await  scenarioParserAndConnector(asyncApiF,scenarioFile);
 
