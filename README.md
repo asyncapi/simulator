@@ -13,9 +13,7 @@ to production mode?
 
 #### Define and simulate high traffic scenarios for your app and create statistics.
 
-### Supported Protocols
 
-- mqtt
 
 Usage
 
@@ -27,35 +25,43 @@ simulator -f ../subdirectory/my_api.json -s ./scenario.json
 Run sample application with --gameProcessor or by specifying the corresponding 
 asyncApi and scenario files.
 ```
-simulator --gameProcessor
 simulator -f game-processor/asyncapi.yaml -s game-processor/scenario.yaml
-
 ```
 
-### Scenario File 
-
-Here with an id you name 
-- Connect your asyncApi and scenario File. 
-- Specify the parameters for each channel and have the options for them to be randomly generated.
-- Specify the payload you want to send.
-
-### AsyncApi File
-
- The file where the api you want to test is defined. By specifying the x-plot field
-under a channel will automatically make the channel available for sending requests.
 
 
-Cli
+### Cli
 
 ```
 Options:
-  -v                      async-api performance tester cli version
-  -f, --filepath <type>  The filepath of a async-api specification yaml or json file
-  -s, --scenario <type>  The filepath of a scenario file.
-  
+  -v                     async-api performance tester cli version
+  -f, --filepath <type>  The filepath of a async-api specification yaml or json asyncApiF
+  -s, --scenario <type>  The filepath of a AsyncApi File defining a scenario based on the spec.
+  -b, --basedir <type>   The basePath from which relative paths are computed.
+                         Defaults to the directory where simulator.sh resides.
   -h, --help             display help for command
 
+
 ```
+
+### Supported Protocols
+
+- mqtt
+
+### AsyncApi File
+
+The file where the api you want to test is defined. By specifying the x-plot: {id} field
+under a channel will automatically make the channel available for sending requests.
+
+
+
+### Scenario File
+
+Here with the plot-{id} (where id is the same as the x-plot: {id} in the field you specified in the async api channel) field you:
+- Connect your asyncApi and scenario File.
+- Specify the parameters for each channel and have the options for them to be randomly generated.
+- Specify the payload you want to send.
+
 
 
 

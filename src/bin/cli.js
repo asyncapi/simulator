@@ -21,7 +21,7 @@ const enumerateOptions = (serv) => {
   return res;
 };
 
-const checkFilepath = (asyncFile,regex) => {
+const checkFilepath = (asyncFile,regex,basedir) => {
   let correctType = true;
   if (!String(asyncFile).match(regex)) {
     console.log('\nError: Filepath provided does not point to a yaml or json file. You must provided either a yaml or json.');
@@ -29,7 +29,11 @@ const checkFilepath = (asyncFile,regex) => {
   }
   let fileAccess = true;
   try {
-    filesystem.accessSync(asyncFile , filesystem.constants.R_OK);
+    if (!basedir) {
+      filesystem.accessSync(asyncFile , filesystem.constants.R_OK);
+    } else {
+      filesystem.accessSync(path.resolve(basedir, asyncFile) , filesystem.constants.R_OK);
+    }
   } catch (err) {
     console.log('Error: Accessing the provided file. Make sure it exists and the user in the terminal session has read access rights.');
     fileAccess = false;
@@ -59,20 +63,20 @@ const inputLoopServer =  (availableServers) =>  {
   });
 };
 
-const inputLoopScenario = (rd,scenario,regex) => {
-  const res = checkFilepath(scenario,regex);
+const inputLoopScenario = (rd,scenario,regex,basedir) => {
+  const res = checkFilepath(scenario,regex,basedir);
 
   if (!res) {
     return new Promise((resolve) => {
       rd.question('\nPlease provide an existent yaml or json file .It should abide by the scenario json schema.\nScenario filepath:',(answer) => {
         const inputLoop = (filepath) => {
-          const res = checkFilepath(filepath,regex);
+          const res = checkFilepath(filepath,regex,basedir);
           if (!res) {
             rd.question('Please fix errors and provide a correctly formatted and accessible file in filepath.\nScenario filepath:',(answer) => {
               inputLoop(answer);
             });
           } else {
-            resolve(filepath);
+            resolve(path.resolve(basedir,filepath));
           }
         };
 
@@ -80,22 +84,24 @@ const inputLoopScenario = (rd,scenario,regex) => {
       });
     });
   }
-  return  new Promise((resolve) => {resolve(scenario);});
+  return  new Promise((resolve) => {
+    resolve(path.resolve(basedir,scenario));
+  });
 };
 
-const inputLoopAsyncApi = (rd,asyncFile,regex) => {
-  const res = checkFilepath(asyncFile,regex);
+const inputLoopAsyncApi = (rd,asyncFile,regex,basedir) => {
+  const res = checkFilepath(asyncFile,regex,basedir);
 
   if (!res) {
     return new Promise((resolve) => {
       rd.question('\nPlease provide an existent yaml or json file.It should abide by the asyncApi Spec.\nAsyncApi filepath:',(answer) => {
         const inputLoop = (filepath) => {
-          const res = checkFilepath(filepath,regex);
+          const res = checkFilepath(filepath,regex,basedir);
           if (!res) {
             rd.question('Please fix errors and provide a correctly formatted and accessible file in filepath.\nAsyncApi Filepath:',(answer) => {
               inputLoop(answer);
             });
-          } else resolve(filepath);
+          } else resolve(path.resolve(basedir,filepath));
         };
 
         inputLoop(answer);
@@ -103,7 +109,8 @@ const inputLoopAsyncApi = (rd,asyncFile,regex) => {
     });
   }
   return new Promise((resolve) => {
-    resolve(asyncFile);
+    const filepath = path.resolve(basedir,asyncFile);
+    resolve(filepath);
   });
 };
 
@@ -111,10 +118,11 @@ const inputLoopAsyncApi = (rd,asyncFile,regex) => {
  * Verifies the command line arguments, re-prompts in case of error. Parses asyncApiF and returns the object representation.
  * @returns {Promise<*|null>}
  * @param rd
- * @param asyncApiF
+ * @param asyncApiFilepath
  * @param scenarioFile
+ * @param basedir
  */
-const verifyInput_getData =  async (rd, asyncApiF,scenarioFile) => {
+const verifyInputGetData =  async (rd, asyncApiFilepath,scenarioFile,basedir) => {
   const yamlJsonRegex = RegExp(/^.*\.(json|yaml)$/, 'gm');
 
   console.log(chalk.blueBright(`
@@ -122,17 +130,17 @@ const verifyInput_getData =  async (rd, asyncApiF,scenarioFile) => {
   `));
   console.log('\nWelcome ');
 
-  asyncApiF = await inputLoopAsyncApi(rd,asyncApiF,yamlJsonRegex);
+  asyncApiFilepath = await inputLoopAsyncApi(rd,asyncApiFilepath,yamlJsonRegex,basedir);
 
-  scenarioFile = await inputLoopScenario(rd,scenarioFile,yamlJsonRegex);
+  scenarioFile = await inputLoopScenario(rd,scenarioFile,yamlJsonRegex,basedir);
 
-  const structuredData = await  scenarioParserAndConnector(asyncApiF,scenarioFile);
+  const structuredData = await  scenarioParserAndConnector(asyncApiFilepath,scenarioFile);
 
   const availableServers = Object.keys(structuredData.servers);
 
   structuredData.targetedServer = await inputLoopServer(availableServers);
 
-  return   structuredData;
+  return structuredData;
 };
 
 (async function Main ()  {
@@ -141,10 +149,9 @@ const verifyInput_getData =  async (rd, asyncApiF,scenarioFile) => {
   program
     .requiredOption('-f, --filepath <type>', 'The filepath of a async-api specification yaml or json asyncApiF')
     .requiredOption('-s, --scenario <type>', 'The filepath of a asyncApiF defining a scenario based on the spec.')
-    .option('-b, --basedir <type>', 'The basepath from which relative paths are computed.\nDefaults to t he directory where simulator.sh resides.');
+    .option('-b, --basedir <type>', 'The basePath from which relative paths are computed.\nDefaults to the directory where simulator.sh resides.','./');
 
   program.parse(process.argv);
-  ///Interface , SignalsHandling
 
   rdInterface.on('SIGINT', () => {
     console.log('\nShutting down');
@@ -170,10 +177,17 @@ const verifyInput_getData =  async (rd, asyncApiF,scenarioFile) => {
     console.log(err);
     process.exit();
   });
-
+  let asyncApiPath;
+  let scenarioPath;
   const options = program.opts();
-
-  const structuredData = await verifyInput_getData(rdInterface, path.resolve(options.filepath),path.resolve(options.scenario));
+  if (options.basedir) {
+    asyncApiPath = path.resolve(options.basedir,options.filepath);
+    scenarioPath = path.resolve(options.basedir,options.scenario);
+  } else {
+    asyncApiPath = path.resolve(options.filepath);
+    scenarioPath = path.resolve(options.scenario);
+  }
+  const structuredData = await verifyInputGetData(rdInterface, path.resolve(asyncApiPath),path.resolve(scenarioPath),options.basedir);
 
   const manager = RequestManager();
   await manager.createReqHandler(structuredData);
