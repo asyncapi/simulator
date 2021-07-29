@@ -40,7 +40,7 @@ Options:
   -f, --filepath <type>  The filepath of a async-api specification yaml or json asyncApiF
   -s, --scenario <type>  The filepath of a AsyncApi File defining a scenario based on the spec.
   -b, --basedir <type>   The basePath from which relative paths are computed.
-                         Defaults to the directory where simulator.sh resides.
+                         Defaults to the root directory of the project.
   -h, --help             display help for command
 
 
