@@ -22,7 +22,6 @@ async function saveToCollection(persistentLogId, collection, data) {
 }
 /**
  * Short code for matching simple wildcards for topic and parameter separation
-
  *
  * https://stackoverflow.com/a/32402438/6803886
  */

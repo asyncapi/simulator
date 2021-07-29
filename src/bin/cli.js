@@ -17,7 +17,6 @@ const enumerateOptions = (serverNames) => {
   serverNames.forEach((value,i) => {
     result += `\n${i}: ${value}`;
   });
-
   return result;
 };
 
@@ -63,7 +62,6 @@ const inputLoopServer =  (availableServers) =>  {
 
 const inputLoopScenario = (rd,scenario,regex,basedir) => {
   const isFileValid = checkFilepath(scenario,regex,basedir);
-
   if (!isFileValid) {
     return new Promise((resolve) => {
       rd.question('\nPlease provide an existent yaml or json file .It should abide by the scenario json schema.\nScenario filepath:',(answer) => {
@@ -76,7 +74,6 @@ const inputLoopScenario = (rd,scenario,regex,basedir) => {
             resolve(path.resolve(basedir,filepath));
           }
         };
-
         inputLoop(answer);
       });
     });
@@ -86,7 +83,6 @@ const inputLoopScenario = (rd,scenario,regex,basedir) => {
 
 const inputLoopAsyncApi = (rd,asyncFile,regex,basedir) => {
   const isFileValid = checkFilepath(asyncFile,regex,basedir);
-
   if (!isFileValid) {
     return new Promise((resolve) => {
       rd.question('\nPlease provide an existent yaml or json file.It should abide by the asyncApi Spec.\nAsyncApi filepath:',(answer) => {
@@ -96,7 +92,6 @@ const inputLoopAsyncApi = (rd,asyncFile,regex,basedir) => {
             rd.question('Please fix errors and provide a correctly formatted and accessible file in filepath.\nAsyncApi Filepath:',inputLoop);
           } else resolve(path.resolve(basedir,filepath));
         };
-
         inputLoop(answer);
       });
     });
@@ -178,7 +173,6 @@ const verifyInputGetData =  async (rd, asyncApiFilepath,scenarioFile,basedir) =>
     scenarioPath = path.resolve(options.scenario);
   }
   const structuredData = await verifyInputGetData(rdInterface, path.resolve(asyncApiPath),path.resolve(scenarioPath),options.basedir);
-
   const manager = RequestManager();
   await manager.createReqHandler(structuredData);
   await manager.startOperations();
