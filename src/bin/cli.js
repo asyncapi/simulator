@@ -13,12 +13,12 @@ const rdInterface = readline.createInterface({
 });
 
 const enumerateOptions = (serverNames) => {
-  let res = '';
+  let result = '';
   serverNames.forEach((value,i) => {
-    res += `\n${i}: ${value}`;
+    result += `\n${i}: ${value}`;
   });
 
-  return res;
+  return result;
 };
 
 const checkFilepath = (asyncFile,regex,basedir) => {
@@ -62,14 +62,14 @@ const inputLoopServer =  (availableServers) =>  {
 };
 
 const inputLoopScenario = (rd,scenario,regex,basedir) => {
-  const res = checkFilepath(scenario,regex,basedir);
+  const isFileValid = checkFilepath(scenario,regex,basedir);
 
-  if (!res) {
+  if (!isFileValid) {
     return new Promise((resolve) => {
       rd.question('\nPlease provide an existent yaml or json file .It should abide by the scenario json schema.\nScenario filepath:',(answer) => {
         const inputLoop = (filepath) => {
-          const res = checkFilepath(filepath,regex,basedir);
-          if (!res) {
+          const isFileValid = checkFilepath(filepath,regex,basedir);
+          if (!isFileValid) {
             rd.question('Please fix errors and provide a correctly formatted and' +
                 ' accessible file in filepath.\nScenario filepath:',inputLoop);
           } else {
@@ -81,20 +81,18 @@ const inputLoopScenario = (rd,scenario,regex,basedir) => {
       });
     });
   }
-  return  new Promise((resolve) => {
-    resolve(path.resolve(basedir,scenario));
-  });
+  return Promise.resolve(path.resolve(basedir,scenario));
 };
 
 const inputLoopAsyncApi = (rd,asyncFile,regex,basedir) => {
-  const res = checkFilepath(asyncFile,regex,basedir);
+  const isFileValid = checkFilepath(asyncFile,regex,basedir);
 
-  if (!res) {
+  if (!isFileValid) {
     return new Promise((resolve) => {
       rd.question('\nPlease provide an existent yaml or json file.It should abide by the asyncApi Spec.\nAsyncApi filepath:',(answer) => {
         const inputLoop = (filepath) => {
-          const res = checkFilepath(filepath,regex,basedir);
-          if (!res) {
+          const isFileValid = checkFilepath(filepath,regex,basedir);
+          if (!isFileValid) {
             rd.question('Please fix errors and provide a correctly formatted and accessible file in filepath.\nAsyncApi Filepath:',inputLoop);
           } else resolve(path.resolve(basedir,filepath));
         };
@@ -103,10 +101,7 @@ const inputLoopAsyncApi = (rd,asyncFile,regex,basedir) => {
       });
     });
   }
-  return new Promise((resolve) => {
-    const filepath = path.resolve(basedir,asyncFile);
-    resolve(filepath);
-  });
+  return new Promise.resolve(path.resolve(basedir,asyncFile));
 };
 
 /**

@@ -33,7 +33,7 @@
         "payload": {
           "type": "object",
           "additionalProperties": true,
-          "description": "The payload that is going to be sent either randomly generated or specifically defined"
+          "description": "The payload that is going to be sent is currently specifically defined."
         },
         "parameters": {
           "type": "object",
