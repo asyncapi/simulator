@@ -12,9 +12,9 @@ const rdInterface = readline.createInterface({
   output: process.stdout
 });
 
-const enumerateOptions = (serv) => {
+const enumerateOptions = (serverNames) => {
   let res = '';
-  serv.forEach((value,i) => {
+  serverNames.forEach((value,i) => {
     res += `\n${i}: ${value}`;
   });
 
@@ -22,12 +22,10 @@ const enumerateOptions = (serv) => {
 };
 
 const checkFilepath = (asyncFile,regex,basedir) => {
-  let correctType = true;
   if (!String(asyncFile).match(regex)) {
     console.log('\nError: Filepath provided does not point to a yaml or json file. You must provided either a yaml or json.');
-    correctType = false;
+    return false;
   }
-  let fileAccess = true;
   try {
     if (!basedir) {
       filesystem.accessSync(asyncFile , filesystem.constants.R_OK);
@@ -36,9 +34,9 @@ const checkFilepath = (asyncFile,regex,basedir) => {
     }
   } catch (err) {
     console.log('Error: Accessing the provided file. Make sure it exists and the user in the terminal session has read access rights.');
-    fileAccess = false;
+    return false;
   }
-  return correctType && fileAccess;
+  return true;
 };
 
 const inputLoopServer =  (availableServers) =>  {
@@ -72,9 +70,8 @@ const inputLoopScenario = (rd,scenario,regex,basedir) => {
         const inputLoop = (filepath) => {
           const res = checkFilepath(filepath,regex,basedir);
           if (!res) {
-            rd.question('Please fix errors and provide a correctly formatted and accessible file in filepath.\nScenario filepath:',(answer) => {
-              inputLoop(answer);
-            });
+            rd.question('Please fix errors and provide a correctly formatted and' +
+                ' accessible file in filepath.\nScenario filepath:',inputLoop);
           } else {
             resolve(path.resolve(basedir,filepath));
           }
@@ -98,9 +95,7 @@ const inputLoopAsyncApi = (rd,asyncFile,regex,basedir) => {
         const inputLoop = (filepath) => {
           const res = checkFilepath(filepath,regex,basedir);
           if (!res) {
-            rd.question('Please fix errors and provide a correctly formatted and accessible file in filepath.\nAsyncApi Filepath:',(answer) => {
-              inputLoop(answer);
-            });
+            rd.question('Please fix errors and provide a correctly formatted and accessible file in filepath.\nAsyncApi Filepath:',inputLoop);
           } else resolve(path.resolve(basedir,filepath));
         };
 
@@ -115,7 +110,7 @@ const inputLoopAsyncApi = (rd,asyncFile,regex,basedir) => {
 };
 
 /**
- * Verifies the command line arguments, re-prompts in case of error. Parses asyncApiF and returns the object representation.
+ * Verifies the command line arguments, re-prompts in case of error. Parses AsyncApi File and returns the object representation.
  * @returns {Promise<*|null>}
  * @param rd
  * @param asyncApiFilepath

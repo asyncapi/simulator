@@ -1,5 +1,4 @@
 const mqtt = require('async-mqtt');
-
 async function  mqttHandler (serverInfo,operations) {
   const aliveOperations = {};
   let url;

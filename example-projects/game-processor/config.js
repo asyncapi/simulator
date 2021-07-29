@@ -1,5 +1,4 @@
 module.exports = {
-
     mongodbHost: process.env.mongodbHost || "0.0.0.0:27017",
     mongodbDatabase: "processor",
     mongodbUsername: "root",

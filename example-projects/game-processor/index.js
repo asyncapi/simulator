@@ -3,7 +3,6 @@ const mqtt = require('async-mqtt');
 const { v4: uuidv4 } = require('uuid');
 const MongoClient = require('mongodb').MongoClient;
 const Config = require('./config');
-
 var mongodbUrl = `mongodb://${Config.mongodbUsername}:${Config.mongodbPassword}@${Config.mongodbHost}`;
 
 /**
@@ -24,7 +23,7 @@ async function saveToCollection(persistentLogId, collection, data) {
 /**
  * Short code for matching simple wildcards for topic and parameter separation
 
- * 
+ *
  * https://stackoverflow.com/a/32402438/6803886
  */
 function matchRuleShort(str, rule) {
@@ -73,9 +72,7 @@ async function start() {
   client.on('message', async function (topic, message) {
     console.log(`Got message on topic ${topic}`)
     // message is Buffer
-
     const parsedMessage = JSON.parse(message.toString())
-
     // Naive approach to finding parameters, but it will have to do for now.
     const topicSplit = topic.split('/')
     if (matchRuleShort(topic, 'game/server/*/events/player/*/chat')) {

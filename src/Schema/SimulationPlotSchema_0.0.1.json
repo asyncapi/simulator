@@ -37,7 +37,7 @@
         },
         "parameters": {
           "type": "object",
-          "description": "Here you specify the variable parts of the channel string.",
+          "description": "Here you specify the variable parts of the channel string. These parts are defined within curly braces (e.g /topic/{name}) in the async Api channel string.",
           "additionalProperties": false,
           "patternProperties": {
             "^[\\w\\d]{1,28}$" : {

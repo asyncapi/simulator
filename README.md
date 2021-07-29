@@ -25,7 +25,9 @@ simulator -f ../subdirectory/my_api.json -s ./scenario.json
 Run sample application with --gameProcessor or by specifying the corresponding 
 asyncApi and scenario files.
 ```
-simulator -f game-processor/asyncapi.yaml -s game-processor/scenario.yaml
+simulator -f ./example-projects/game-processor/asyncapi.yaml -s ./example-projects/game-processor/scenario.yaml
+or
+simulator -b ../ -f ./simulatorFolder/example-projects/game-processor/asyncapi.yaml -s ./simulatorFolder/example-projects/game-processor/scenario.yaml
 ```
 
 
