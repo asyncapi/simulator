@@ -23,7 +23,7 @@ const enumerateOptions = (serverNames) => {
 
 const checkFilepath = (asyncFile,regex,basedir) => {
   if (!String(asyncFile).match(regex)) {
-    console.log('\nError: Filepath provided does not point to a yaml or json file. You must provided either a yaml or json.');
+    console.log('\nError: Filepath provide does not point to a yaml or json file. You must provided either a yaml or json.');
     return false;
   }
   try {
@@ -118,7 +118,7 @@ const inputLoopAsyncApi = (rd,asyncFile,regex,basedir) => {
  * @param basedir
  */
 const verifyInputGetData =  async (rd, asyncApiFilepath,scenarioFile,basedir) => {
-  const yamlJsonRegex = RegExp(/^.*\.(json|yaml)$/, 'gm');
+  const yamlJsonRegex = new RegExp(/^.*\.(json|yaml)$/, 'gm');
 
   console.log(chalk.blueBright(`
   Async api Fluffy-robot
