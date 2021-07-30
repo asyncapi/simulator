@@ -11,7 +11,7 @@ be the center of interest?
 Does it seem distant or difficult to switch from development mode
 to production mode?
 
-#### Define and simulate high traffic scenarios for your app and create statistics.
+#### Define and simulate scenarios for your applications and create statistics.
 
 
 
@@ -63,7 +63,6 @@ Here with the plot-{id} (where id is the same as the x-plot: {id} in the field y
 - Connect your asyncApi and scenario File.
 - Specify the parameters for each channel and have the options for them to be randomly generated.
 - Specify the payload you want to send.
-
 
 
 
