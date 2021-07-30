@@ -1,4 +1,5 @@
 const {HandlerFactory} = require('./HandlerFactory');
+const supportedProtocols = ['mqtt'];
 function RequestManager () {
   const handlersList = {};
 
@@ -13,10 +14,12 @@ function RequestManager () {
       for (const value of Object.values(handlersList)) {
         await value.startSoloOperations();
       }
+    } else if (!supportedProtocols.some((protocolName) => protocolName === selectedProtocol)) {
+      console.log(`\nThe protocol ${selectedProtocol} you demanded to be used for operations is not currently supported.`);
     } else if (!Object.keys(handlersList).some((protocolName) =>
       protocolName === selectedProtocol
     )) {
-      console.log(`\nDemanded operations on unsupported protocol named ${selectedProtocol}`);
+      console.log(`\nThe protocol ${selectedProtocol} you demanded to be used for operations is not used in any of your defined servers.`);
     }
   }
 
