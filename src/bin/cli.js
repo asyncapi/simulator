@@ -96,7 +96,7 @@ const inputLoopAsyncApi = (rd,asyncFile,regex,basedir) => {
       });
     });
   }
-  return new Promise.resolve(path.resolve(basedir,asyncFile));
+  return Promise.resolve(path.resolve(basedir,asyncFile));
 };
 
 /**
