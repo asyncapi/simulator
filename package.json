@@ -36,7 +36,7 @@
     "async-mqtt": "^2.6.1",
     "chalk": "^4.1.0",
     "commander": "^7.2.0",
-    "js-yaml": "^3.14.1",
+    "js-yaml": "^3.14.1"
   },
   "devDependencies": {
     "@semantic-release/commit-analyzer": "^8.0.1",

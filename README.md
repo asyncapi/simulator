@@ -22,8 +22,8 @@ simulator -f ./my_api.yaml -s ./scenario.yaml
 simulator -f ../subdirectory/my_api.json -s ./scenario.json
 ```
 
-Run sample application with --gameProcessor or by specifying the corresponding 
-asyncApi and scenario files.
+Run sample application by specifying the corresponding 
+AsyncApi and scenario files.
 ```
 simulator -f ./example-projects/game-processor/asyncapi.yaml -s ./example-projects/game-processor/scenario.yaml
 or
@@ -60,7 +60,7 @@ under a channel will automatically make the channel available for sending reques
 ### Scenario File
 
 Here with the plot-{id} (where id is the same as the x-plot: {id} in the field you specified in the AsyncAPI channel) field you:
-- Connect your asyncApi and scenario File.
+- Connect your AsyncApi and scenario File.
 - Specify the parameters for each channel and have the options for them to be randomly generated.
 - Specify the payload you want to send.
 

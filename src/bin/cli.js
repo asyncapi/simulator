@@ -133,7 +133,7 @@ const verifyInputGetData =  async (rd, asyncApiFilepath,scenarioFile,basedir) =>
 
   program
     .requiredOption('-f, --filepath <type>', 'The filepath of a AsyncAPI document, as either yaml or json file.')
-    .requiredOption('-s, --scenario <type>', 'The filepath of a asyncApiF defining a scenario based on the spec.')
+    .requiredOption('-s, --scenario <type>', 'The filepath of a json or yaml file which defines a scenario based on the spec.')
     .option('-b, --basedir <type>', 'The basePath from which relative paths are computed.\nDefaults to the directory where simulator.sh resides.','./');
 
   program.parse(process.argv);
@@ -177,3 +177,4 @@ const verifyInputGetData =  async (rd, asyncApiFilepath,scenarioFile,basedir) =>
   await manager.createReqHandler(structuredData);
   await manager.startOperations();
 }());
+

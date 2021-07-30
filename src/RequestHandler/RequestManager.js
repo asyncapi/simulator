@@ -8,11 +8,15 @@ function RequestManager () {
     }
   }
 
-  async function startOperations (id = 'all',protocol= 'undefined') {
-    if (id === 'all' && protocol === 'undefined') {
+  async function startOperations (id = 'all',selectedProtocol= 'undefined') {
+    if (id === 'all' && selectedProtocol === 'undefined') {
       for (const value of Object.values(handlersList)) {
         await value.startSoloOperations();
       }
+    } else if (!Object.keys(handlersList).some((protocolName) =>
+      protocolName === selectedProtocol
+    )) {
+      console.log(`\nDemanded operations on unsupported protocol named ${selectedProtocol}`);
     }
   }
 
