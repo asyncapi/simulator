@@ -20,9 +20,9 @@ async function  mqttHandler (serverInfo,operations) {
         }
       }
       aliveOperations[parseInt(id, 10)] = setInterval(async () => {
-        await client.publish(channelUrl , JSON.stringify(value.payload));
+        await client.publish(channelUrl, JSON.stringify(value.payload));
         console.log(channelUrl);
-      } ,
+      },
       1000 / value.eventsPsec
       );
     }
