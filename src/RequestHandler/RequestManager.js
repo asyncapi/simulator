@@ -16,9 +16,7 @@ function RequestManager () {
       }
     } else if (!supportedProtocols.some((protocolName) => protocolName === selectedProtocol)) {
       console.log(`\nThe protocol ${selectedProtocol} you demanded to be used for operations is not currently supported.`);
-    } else if (!Object.keys(handlersList).some((protocolName) =>
-      protocolName === selectedProtocol
-    )) {
+    } else if (!Object.keys(handlersList).some((protocolName) => protocolName === selectedProtocol)) {
       console.log(`\nThe protocol ${selectedProtocol} you demanded to be used for operations is not used in any of your defined servers.`);
     }
   }
