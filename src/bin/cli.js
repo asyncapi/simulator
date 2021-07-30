@@ -132,7 +132,7 @@ const verifyInputGetData =  async (rd, asyncApiFilepath,scenarioFile,basedir) =>
   program.version('0.0.1', '-v', 'async-api performance tester cli version');
 
   program
-    .requiredOption('-f, --filepath <type>', 'The filepath of a async-api specification yaml or json asyncApiF')
+    .requiredOption('-f, --filepath <type>', 'The filepath of a AsyncAPI document, as either yaml or json file.')
     .requiredOption('-s, --scenario <type>', 'The filepath of a asyncApiF defining a scenario based on the spec.')
     .option('-b, --basedir <type>', 'The basePath from which relative paths are computed.\nDefaults to the directory where simulator.sh resides.','./');
 
@@ -177,4 +177,3 @@ const verifyInputGetData =  async (rd, asyncApiFilepath,scenarioFile,basedir) =>
   await manager.createReqHandler(structuredData);
   await manager.startOperations();
 }());
-
