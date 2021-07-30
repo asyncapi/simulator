@@ -59,10 +59,9 @@ under a channel will automatically make the channel available for sending reques
 
 ### Scenario File
 
-Here with the plot-{id} (where id is the same as the x-plot: {id} in the field you specified in the async api channel) field you:
+Here with the plot-{id} (where id is the same as the x-plot: {id} in the field you specified in the AsyncAPI channel) field you:
 - Connect your asyncApi and scenario File.
 - Specify the parameters for each channel and have the options for them to be randomly generated.
 - Specify the payload you want to send.
-
 
 
