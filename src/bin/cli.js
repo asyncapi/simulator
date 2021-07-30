@@ -129,7 +129,7 @@ const verifyInputGetData =  async (rd, asyncApiFilepath,scenarioFile,basedir) =>
 };
 
 (async function Main ()  {
-  program.version('0.0.1', '-v', 'async-api performance tester cli version');
+  program.version('0.0.1', '-v', 'AsyncApi simulator cli version.');
 
   program
     .requiredOption('-f, --filepath <type>', 'The filepath of a AsyncAPI document, as either yaml or json file.')
