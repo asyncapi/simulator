@@ -1,5 +1,9 @@
-# AsyncApi Performance Tester
+# AsyncApi Simulator
 ___
+
+ In development
+ 
+---
 
 Ever wondered what it would feel like your application to 
 be the center of interest?
@@ -7,8 +11,9 @@ be the center of interest?
 Does it seem distant or difficult to switch from development mode
 to production mode?
 
-#### Define and simulate high traffic
-#### scenarios for your app and create statistics.
+#### Define and simulate scenarios for your applications and create statistics.
+
+
 
 Usage
 
@@ -17,6 +22,45 @@ simulator -f ./my_api.yaml -s ./scenario.yaml
 simulator -f ../subdirectory/my_api.json -s ./scenario.json
 ```
 
+Run sample application by specifying the corresponding 
+AsyncApi and scenario files.
+```
+simulator -f ./example-projects/game-processor/asyncapi.yaml -s ./example-projects/game-processor/scenario.yaml
+or
+simulator -b ../ -f ./simulatorFolder/example-projects/game-processor/asyncapi.yaml -s ./simulatorFolder/example-projects/game-processor/scenario.yaml
+```
 
+
+
+### Cli
+
+```
+Options:
+  -v                     AsyncApi simulator cli version.
+  -f, --filepath <type>  The filepath of a AsyncAPI document, as either yaml or json file.
+  -s, --scenario <type>  The filepath of a json or yaml file which defines a scenario based on the spec.
+  -b, --basedir <type>   The basePath from which relative paths are computed.
+                         Defaults to the directory where simulator.sh resides. (default: "./").
+  -h, --help             Display help for flags and commands.
+
+```
+
+### Supported Protocols
+
+- mqtt
+
+### AsyncApi File
+
+The file where the api you want to test is defined. By specifying the x-plot: {id} field
+under a channel will automatically make the channel available for sending requests.
+
+
+
+### Scenario File
+
+Here with the plot-{id} (where id is the same as the x-plot: {id} in the field you specified in the AsyncAPI channel) field you:
+- Connect your AsyncApi and scenario File.
+- Specify the parameters for each channel and have the options for them to be randomly generated.
+- Specify the payload you want to send.
 
 

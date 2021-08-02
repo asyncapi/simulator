@@ -8,5 +8,5 @@ module.exports = {
     mongodbPlayerHitCollection: "playerHit",
     mongodbDisconnectsCollection: "disconnects",
     mongodbChatCollection: "chat",
-    mqttHost: process.env.mqttHost || "tcp://0.0.0.0:1883"
+    mqttHost: process.env.mqttHost || "tcp://0.0.0.0:1883"
 };

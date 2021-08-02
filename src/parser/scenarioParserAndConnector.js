@@ -69,8 +69,10 @@ const structureDataScenario = (parserContext) => {
     } else if (key.match(RegExp(/^plot-[\w\d]+$/),'g')) {
       const plotId = key.match(RegExp(/[\w\d]+$/,'g'));
       const eps = value.eps;
+      const parameters = value.parameters;
+      const payload = value.payload;
       if (parserContext.PublishOperations.soloOps.hasOwnProperty(plotId[0])) {
-        Object.assign(parserContext.PublishOperations.soloOps[plotId[0]],{eventsPsec: eps});
+        Object.assign(parserContext.PublishOperations.soloOps[plotId[0]],{eventsPsec: eps,parameters,payload});
       }
     }
   }

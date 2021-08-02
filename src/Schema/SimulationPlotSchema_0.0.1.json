@@ -18,7 +18,7 @@
         }
       }
     },
-    "^plot-[\\w\\d]+$": {
+    "^plot-[\\w\\d]+$" : {
       "type": "object",
       "additionalProperties": false,
       "properties": {
@@ -29,6 +29,22 @@
         "priority" : {
           "type": "integer",
           "description": "This determines whether it should be prioritized in case the resources to emit events is insufficient "
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "The payload that is going to be sent is currently specifically defined."
+        },
+        "parameters": {
+          "type": "object",
+          "description": "Specify the parameter instance variables of the channel, if any are present.",
+          "additionalProperties": false,
+          "patternProperties": {
+            "^[\\w\\d]{1,28}$" : {
+              "type": "string",
+              "description": "A parameter instance variable with the corresponding assigned value as string."
+            }
+          }
         }
       }
     }
