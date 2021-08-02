@@ -3,7 +3,7 @@ const expect = require('chai').expect;
 const {parseFiles} = require('../parseFiles');
 const path = require('path');
 describe('Operations Generator Tests',  function() {
-  let PublishOperations,ScenarioOperations;
+  let PublishOperations,SubscribeOperations;
   let parsedAsyncApi,parsedScenario;
   before(async function() {
     [parsedAsyncApi, parsedScenario] = await parseFiles(path.resolve(__dirname,'./correctFiles/CorrectlyFormattedAsyncApi.yaml'), path.resolve(__dirname,'./correctFiles/CorrectlyFormattedScenario.yaml'));
@@ -58,8 +58,19 @@ describe('Operations Generator Tests',  function() {
     },
     groupOps: {}
   };
-  it('1# Should correctly generate Publish Operations ', function () {
-    [PublishOperations,ScenarioOperations] = GenerateOperations(parsedAsyncApi,parsedScenario);
+  const expectedSubscribeOperations = {
+    soloOps: {},
+    groupOps: {}
+  };
+  it('1# Should correctly generate Publish Operations.', function () {
+    [PublishOperations,SubscribeOperations] = GenerateOperations(parsedAsyncApi,parsedScenario);
     expect(PublishOperations).to.deep.equal(expectedPublishOperations);
+  });
+  it('2# Should correctly generate subscribe Operations.', function () {
+    [PublishOperations,SubscribeOperations] = GenerateOperations(parsedAsyncApi,parsedScenario);
+    expect(SubscribeOperations).to.deep.equal(expectedSubscribeOperations);
+  });
+  it('3# Should handle incorrectly formatted scenario Object',function () {
+    
   });
 });
