@@ -5,13 +5,14 @@ function RequestManager () {
 
   async function createReqHandler(dataFromParser) {
     for (const [serverName,serverData] of Object.entries(dataFromParser.servers)) {
-      const handlerInstance = await HandlerFactory(serverData , dataFromParser.PublishOperations).catch((err) => {
-        console.log(err.message);
-        return 'notHealthy';
-      });
-      if (handlerInstance === 'notHealthy') {
+      let handlerInstance;
+      try {
+        handlerInstance = await HandlerFactory(serverData, dataFromParser.PublishOperations);
+      } catch (err) {
+        console.log(err);
         return;
       }
+
       handlersList[parseInt(serverName, 10)] = handlerInstance;
     }
   }
