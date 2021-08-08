@@ -3,7 +3,7 @@ const mqtt = require('async-mqtt');
 const { v4: uuidv4 } = require('uuid');
 const MongoClient = require('mongodb').MongoClient;
 const Config = require('./config');
-var mongodbUrl = `mongodb://${Config.mongodbUsername}:${Config.mongodbPassword}@${Config.mongodbHost}`;
+var mongodbUrl = 'mongodb://localhost:27017/processor'
 
 /**
  * Save data to mongodb collection
