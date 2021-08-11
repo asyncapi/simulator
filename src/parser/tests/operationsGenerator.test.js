@@ -70,7 +70,4 @@ describe('Operations Generator Tests',  function() {
     [PublishOperations,SubscribeOperations] = GenerateOperations(parsedAsyncApi,parsedScenario);
     expect(SubscribeOperations).to.deep.equal(expectedSubscribeOperations);
   });
-  it('3# Should handle incorrectly formatted scenario Object',function () {
-    
-  });
 });
