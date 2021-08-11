@@ -5,8 +5,9 @@ const readline = require('readline');
 const chalk = require('chalk');
 const filesystem = require('fs');
 const path = require('path');
-const  {scenarioParserAndConnector} = require('../parser/index');
+const parserAndGenerator = require('../parser/index');
 const {RequestManager} = require('../RequestHandler/RequestManager');
+const EventEmitter = require('events').EventEmitter;
 const rdInterface = readline.createInterface({
   input: process.stdin,
   output: process.stdout
@@ -119,7 +120,7 @@ const verifyInputGetData =  async (rd, asyncApiFilepath,scenarioFile,basedir) =>
 
   scenarioFile = await inputLoopScenario(rd,scenarioFile,yamlJsonRegex,basedir);
 
-  const structuredData = await  scenarioParserAndConnector(asyncApiFilepath,scenarioFile);
+  const structuredData = await parserAndGenerator(asyncApiFilepath,scenarioFile);
 
   const availableServers = Object.keys(structuredData.servers);
 
@@ -128,7 +129,7 @@ const verifyInputGetData =  async (rd, asyncApiFilepath,scenarioFile,basedir) =>
   return structuredData;
 };
 
-(async function Main ()  {
+const cli = async () => {
   program.version('0.0.1', '-v', 'AsyncApi simulator cli version.');
 
   program
@@ -176,5 +177,12 @@ const verifyInputGetData =  async (rd, asyncApiFilepath,scenarioFile,basedir) =>
   const manager = RequestManager();
   await manager.createReqHandler(structuredData);
   await manager.startOperations();
-}());
+};
 
+function Main () {
+  cli();
+};
+
+Main.prototype = EventEmitter.prototype;
+
+Main();

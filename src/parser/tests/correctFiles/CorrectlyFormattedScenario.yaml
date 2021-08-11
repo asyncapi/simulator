@@ -1,0 +1,11 @@
+version: 0.0.1
+plot-1:
+  eps: 1
+  priority: 2
+  payload:
+    test:
+      subtest: '2'
+  parameters:
+    serverId: '1'
+    playerId: '5'
+    itemId: '3'
