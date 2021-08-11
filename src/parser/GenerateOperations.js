@@ -1,3 +1,4 @@
+// eslint-disable-next-line sonarjs/cognitive-complexity
 function OperationsFromChannels (channels,PublishOperations,SubscribeOperations) {
   for (const [key, value] of Object.entries(channels)) {
     if (!!PublishOperations.soloOps[value._json['x-plot']] ||
