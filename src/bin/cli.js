@@ -5,7 +5,7 @@ const readline = require('readline');
 const chalk = require('chalk');
 const filesystem = require('fs');
 const path = require('path');
-const parser = require('../parser/index');
+const parserAndGenerator = require('../parser/index');
 const {RequestManager} = require('../RequestHandler/RequestManager');
 const EventEmitter = require('events').EventEmitter;
 const rdInterface = readline.createInterface({
@@ -120,7 +120,7 @@ const verifyInputGetData =  async (rd, asyncApiFilepath,scenarioFile,basedir) =>
 
   scenarioFile = await inputLoopScenario(rd,scenarioFile,yamlJsonRegex,basedir);
 
-  const structuredData = await parser(asyncApiFilepath,scenarioFile);
+  const structuredData = await parserAndGenerator(asyncApiFilepath,scenarioFile);
 
   const availableServers = Object.keys(structuredData.servers);
 

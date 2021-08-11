@@ -8,7 +8,7 @@
     "node": "14.15.5"
   },
   "scripts": {
-    "test": "mocha tests/",
+    "test": "mocha \\\"./{,!(node_modules)/**/}*.test.js\\\"",
     "release": "semantic-release",
     "docker:build": "docker build -t asyncapi/fluffy-robot:latest .",
     "get:version": "echo $npm_package_version",
@@ -36,7 +36,8 @@
     "async-mqtt": "^2.6.1",
     "chalk": "^4.1.0",
     "commander": "^7.2.0",
-    "js-yaml": "^3.14.1"
+    "js-yaml": "^3.14.1",
+    "minimatch": "^3.0.4"
   },
   "devDependencies": {
     "@semantic-release/commit-analyzer": "^8.0.1",
@@ -54,6 +55,7 @@
     "eslint-plugin-security": "^1.4.0",
     "eslint-plugin-sonarjs": "^0.8.0-125",
     "fs": "^0.0.1-security",
+    "ignore": "^4.0.6",
     "mocha": "^9.0.3",
     "path": "^0.12.7",
     "prettier": "^2.2.1",

@@ -101,7 +101,7 @@ rules:
   prefer-template: 2
 
 overrides:
-  - files: "test/**"
+  - files: "*.test.js"
     rules:
       prefer-arrow-callback: 0
       sonarjs/no-duplicate-string: 0

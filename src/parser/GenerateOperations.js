@@ -1,27 +1,5 @@
-const parser = require('@asyncapi/parser');
-const filesystem = require('fs');
-const Ajv = require('ajv');
-const scenarioSpecs = require('../Schema');
-const yamlParser  = require('js-yaml');
-
-/**
- * Take a parsed asyncApi and scenario file and generates two objects that describe
- * publish and subscribe operations with the needed details for the request handler
- * be able to make requests.
- * @param asyncApiParsed
- * @param scenarioParsed
- * @returns {({groupOps: {}, soloOps: {}} | {groupOps: {}, soloOps: {}})[]}
- */
-const GenerateOperations = (asyncApiParsed,scenarioParsed) => {
-  const PublishOperations = {
-    soloOps: {},
-    groupOps: {}
-  };
-  const SubscribeOperations = {
-    soloOps: {},
-    groupOps: {}
-  };
-  for (const [key, value] of Object.entries(asyncApiParsed.channels())) {
+function OperationsFromChannels (channels,PublishOperations,SubscribeOperations) {
+  for (const [key, value] of Object.entries(channels)) {
     if (!!PublishOperations.soloOps[value._json['x-plot']] ||
         !!SubscribeOperations.soloOps[value._json['x-plot']]) {
       console.log(`\nError solo scenario key: ${key} was specified more than one times.\nNon-group scenario keys (x-scenario) should be
@@ -49,8 +27,10 @@ const GenerateOperations = (asyncApiParsed,scenarioParsed) => {
       }
     }
   }
+}
 
-  for (const [key,value] of Object.entries(scenarioParsed)) {
+function OperationsScenarioMutator (scenario,PublishOperations) {
+  for (const [key,value] of Object.entries(scenario)) {
     if (key.match(RegExp(/^group-[\w\d]+$/),'g')) {
       const groupId = key.match(RegExp(/[\w\d]+$/),'g');
       const eps = value.eps;
@@ -67,6 +47,29 @@ const GenerateOperations = (asyncApiParsed,scenarioParsed) => {
       }
     }
   }
+}
+/**
+ * Take a parsed asyncApi and scenario file and generates two objects that describe
+ * publish and subscribe operations with the needed details for the request handler
+ * be able to make requests.
+ * @param asyncApiParsed
+ * @param scenarioParsed
+ * @returns {({groupOps: {}, soloOps: {}} | {groupOps: {}, soloOps: {}})[]}
+ */
+const GenerateOperations = (asyncApiParsed,scenarioParsed) => {
+  const PublishOperations = {
+    soloOps: {},
+    groupOps: {}
+  };
+  const SubscribeOperations = {
+    soloOps: {},
+    groupOps: {}
+  };
+
+  OperationsFromChannels(asyncApiParsed.channels(),PublishOperations,SubscribeOperations);
+
+  OperationsScenarioMutator(scenarioParsed,PublishOperations);
+
   return [PublishOperations,SubscribeOperations];
 };
 

@@ -1,7 +1,7 @@
 const {GenerateOperations}= require('./GenerateOperations');
 const {parseFiles} = require('./parseFiles');
 
-const parser = async (asyncApiFilepath,scenarioFilepath) => {
+const parserAndGenerator = async (asyncApiFilepath,scenarioFilepath) => {
   const [asyncApiContent,scenarioContent] = await parseFiles(asyncApiFilepath,scenarioFilepath);
   const OperationsData = {
     ready: true,
@@ -22,5 +22,5 @@ const parser = async (asyncApiFilepath,scenarioFilepath) => {
   return OperationsData;
 };
 
-module.exports = parser;
+module.exports = parserAndGenerator;
 
