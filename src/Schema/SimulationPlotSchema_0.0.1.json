@@ -41,8 +41,40 @@
           "additionalProperties": false,
           "patternProperties": {
             "^[\\w\\d]{1,28}$" : {
-              "type": "string",
-              "description": "A parameter instance variable with the corresponding assigned value as string."
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "regex": {
+
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "range": {
+                      "type": "object",
+                      "properties": {
+                        "min": {
+                          "type": "integer"
+                        },
+                        "max": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
             }
           }
         }

@@ -1,6 +1,6 @@
 {
   "name": "@asyncapi/fluffy-robot",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "type": "commonjs",
   "description": "The asyncapi command line library to test your app at scale.",
   "main": "src/bin/cli.js",
@@ -35,6 +35,8 @@
     "ajv": "^8.6.0",
     "async-mqtt": "^2.6.1",
     "chalk": "^4.1.0",
+    "clear": "^0.1.0",
+    "clui": "^0.3.6",
     "commander": "^7.2.0",
     "cross-env": "^7.0.3",
     "js-yaml": "^3.14.1",
