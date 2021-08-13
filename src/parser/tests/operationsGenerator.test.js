@@ -1,4 +1,4 @@
-const {GenerateOperations} = require('../GenerateOperations');
+const {generateOperations} = require('../GenerateOperations');
 const expect = require('chai').expect;
 const {parseFiles} = require('../parseFiles');
 const path = require('path');
@@ -62,12 +62,12 @@ describe('Operations Generator Tests',  function() {
     soloOps: {},
     groupOps: {}
   };
-  it('1# Should correctly generate Publish Operations.', function () {
-    [PublishOperations,SubscribeOperations] = GenerateOperations(parsedAsyncApi,parsedScenario);
+  it('Should correctly generate Publish Operations.', function () {
+    [PublishOperations,SubscribeOperations] = generateOperations(parsedAsyncApi,parsedScenario);
     expect(PublishOperations).to.deep.equal(expectedPublishOperations);
   });
-  it('2# Should correctly generate subscribe Operations.', function () {
-    [PublishOperations,SubscribeOperations] = GenerateOperations(parsedAsyncApi,parsedScenario);
+  it('Should correctly generate subscribe Operations.', function () {
+    [PublishOperations,SubscribeOperations] = generateOperations(parsedAsyncApi,parsedScenario);
     expect(SubscribeOperations).to.deep.equal(expectedSubscribeOperations);
   });
 });

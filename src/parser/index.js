@@ -1,4 +1,4 @@
-const {GenerateOperations}= require('./GenerateOperations');
+const {generateOperations}= require('./GenerateOperations');
 const {parseFiles} = require('./parseFiles');
 
 const parserAndGenerator = async (asyncApiFilepath,scenarioFilepath) => {
@@ -15,7 +15,7 @@ const parserAndGenerator = async (asyncApiFilepath,scenarioFilepath) => {
       groupOps: {}
     }
   };
-  [OperationsData.PublishOperations,OperationsData.SubscribeOperations] = GenerateOperations(asyncApiContent,scenarioContent);
+  [OperationsData.PublishOperations,OperationsData.SubscribeOperations] = generateOperations(asyncApiContent,scenarioContent);
 
   console.log(`\nFound ${Object.keys(OperationsData.PublishOperations.soloOps).length +
   Object.keys(OperationsData.PublishOperations.groupOps).length} testable Operations`);

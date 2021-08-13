@@ -1,6 +1,6 @@
 {
   "name": "@asyncapi/fluffy-robot",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "type": "commonjs",
   "description": "The asyncapi command line library to test your app at scale.",
   "main": "src/bin/cli.js",
@@ -45,8 +45,6 @@
     "@semantic-release/github": "^7.0.4",
     "@semantic-release/npm": "^7.0.6",
     "@semantic-release/release-notes-generator": "^9.0.1",
-    "@types/assert": "^1.5.5",
-    "@types/node": "^14.17.5",
     "all-contributors-cli": "^6.14.2",
     "chai": "^4.3.4",
     "chai-as-promised": "^7.1.1",
@@ -55,10 +53,7 @@
     "eslint-plugin-mocha": "^9.0.0",
     "eslint-plugin-security": "^1.4.0",
     "eslint-plugin-sonarjs": "^0.8.0-125",
-    "fs": "^0.0.1-security",
-    "ignore": "^4.0.6",
     "mocha": "^9.0.3",
-    "path": "^0.12.7",
     "prettier": "^2.2.1",
     "semantic-release": "^17.2.2"
   },

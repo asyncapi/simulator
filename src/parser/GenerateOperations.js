@@ -1,5 +1,5 @@
 // eslint-disable-next-line sonarjs/cognitive-complexity
-function OperationsFromChannels (channels,PublishOperations,SubscribeOperations) {
+function operationsFromChannels (channels,PublishOperations,SubscribeOperations) {
   for (const [key, value] of Object.entries(channels)) {
     if (!!PublishOperations.soloOps[value._json['x-plot']] ||
         !!SubscribeOperations.soloOps[value._json['x-plot']]) {
@@ -30,7 +30,7 @@ function OperationsFromChannels (channels,PublishOperations,SubscribeOperations)
   }
 }
 
-function OperationsScenarioMutator (scenario,PublishOperations) {
+function operationsScenarioMutator (scenario,PublishOperations) {
   for (const [key,value] of Object.entries(scenario)) {
     if (key.match(RegExp(/^group-[\w\d]+$/),'g')) {
       const groupId = key.match(RegExp(/[\w\d]+$/),'g');
@@ -57,7 +57,7 @@ function OperationsScenarioMutator (scenario,PublishOperations) {
  * @param scenarioParsed
  * @returns {({groupOps: {}, soloOps: {}} | {groupOps: {}, soloOps: {}})[]}
  */
-const GenerateOperations = (asyncApiParsed,scenarioParsed) => {
+const generateOperations = (asyncApiParsed, scenarioParsed) => {
   const PublishOperations = {
     soloOps: {},
     groupOps: {}
@@ -67,12 +67,12 @@ const GenerateOperations = (asyncApiParsed,scenarioParsed) => {
     groupOps: {}
   };
 
-  OperationsFromChannels(asyncApiParsed.channels(),PublishOperations,SubscribeOperations);
+  operationsFromChannels(asyncApiParsed.channels(),PublishOperations,SubscribeOperations);
 
-  OperationsScenarioMutator(scenarioParsed,PublishOperations);
+  operationsScenarioMutator(scenarioParsed,PublishOperations);
 
   return [PublishOperations,SubscribeOperations];
 };
 
-module.exports = {GenerateOperations};
+module.exports = {generateOperations};
      

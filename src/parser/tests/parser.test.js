@@ -5,7 +5,7 @@ const expectedOutputs = require('./expectedOutputs');
 const {parseFiles} = require('../parseFiles');
 describe('Parser Tests',function() {
   let asyncApi;
-  it('1# Should be able to parse correctly formatted asyncApi and scenario files.',async function() {
+  it('Should be able to parse correctly formatted asyncApi and scenario files.',async function() {
     try {
       [asyncApi] = await parseFiles(path.resolve(__dirname, './correctFiles/CorrectlyFormattedAsyncApi.yaml'), path.resolve(__dirname, './correctFiles/CorrectlyFormattedScenario.yaml'));
     } catch (err) {
@@ -13,8 +13,8 @@ describe('Parser Tests',function() {
     }
     expect(asyncApi._json).to.deep.include(expectedOutputs.P1_AsyncApi._json);
   });
-  it('2# Throws Error when parsing incorrectly formatted AsyncApi file.',async function () {
-    let Error = null;
+  it('Throws Error when parsing incorrectly formatted AsyncApi file.',async function () {
+    let Error = {};
     try {
       await parseFiles(path.resolve(__dirname, './wrongFiles/IncorrectlyFormattedAsyncApi.yaml'), path.resolve(__dirname, './correctFiles/IncorrectlyFormatedScenario.yaml'));
     } catch (err) {
