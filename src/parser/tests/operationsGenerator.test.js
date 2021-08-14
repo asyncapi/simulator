@@ -6,7 +6,7 @@ describe('Operations Generator Tests',  function() {
   let PublishOperations,SubscribeOperations;
   let parsedAsyncApi,parsedScenario;
   before(async function() {
-    [parsedAsyncApi, parsedScenario] = await parseFiles(path.resolve(__dirname,'./correctFiles/CorrectlyFormattedAsyncApi.yaml'), path.resolve(__dirname,'./correctFiles/CorrectlyFormattedScenario.yaml'));
+    [parsedAsyncApi, parsedScenario] = await parseFiles(path.resolve(__dirname,'./files/correct/CorrectlyFormattedAsyncApi.yaml'), path.resolve(__dirname,'./files/correct/CorrectlyFormattedScenario.yaml'));
   });
   const expectedPublishOperations = {
     soloOps: {

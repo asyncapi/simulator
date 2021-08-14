@@ -7,7 +7,7 @@ describe('Parser Tests',function() {
   let asyncApi;
   it('Should be able to parse correctly formatted asyncApi and scenario files.',async function() {
     try {
-      [asyncApi] = await parseFiles(path.resolve(__dirname, './correctFiles/CorrectlyFormattedAsyncApi.yaml'), path.resolve(__dirname, './correctFiles/CorrectlyFormattedScenario.yaml'));
+      [asyncApi] = await parseFiles(path.resolve(__dirname, './files/correct/CorrectlyFormattedAsyncApi.yaml'), path.resolve(__dirname, './files/correct/CorrectlyFormattedScenario.yaml'));
     } catch (err) {
       assert.fail('Test failed. Parser was not able to parse one of the files you provided');
     }
@@ -16,7 +16,7 @@ describe('Parser Tests',function() {
   it('Throws Error when parsing incorrectly formatted AsyncApi file.',async function () {
     let Error = {};
     try {
-      await parseFiles(path.resolve(__dirname, './wrongFiles/IncorrectlyFormattedAsyncApi.yaml'), path.resolve(__dirname, './correctFiles/IncorrectlyFormatedScenario.yaml'));
+      await parseFiles(path.resolve(__dirname, './files/wrong/IncorrectlyFormattedAsyncApi.yaml'), path.resolve(__dirname, './files/correct/IncorrectlyFormattedScenario.yaml'));
     } catch (err) {
       Error = err;
     }
