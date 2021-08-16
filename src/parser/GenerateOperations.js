@@ -1,30 +1,30 @@
 // eslint-disable-next-line sonarjs/cognitive-complexity
-function operationsFromChannels (channels,PublishOperations,SubscribeOperations) {
+function operationsFromChannels (channels,publishOperations,subscribeOperations) {
   for (const [key, value] of Object.entries(channels)) {
-    if (!!PublishOperations.soloOps[value._json['x-plot']] ||
-        !!SubscribeOperations.soloOps[value._json['x-plot']]) {
+    if (!!publishOperations.soloOps[value._json['x-plot']] ||
+        !!subscribeOperations.soloOps[value._json['x-plot']]) {
       console.log(`\nError solo scenario key: ${key} was specified more than one times.\nNon-group scenario keys (x-scenario) should be
       different in each channel`);
     }
     if (!!value.publish()) {
       if (value._json['x-plot']) {
-        PublishOperations.soloOps[value._json['x-plot']] = Object.assign({}, value.publish()._json, {route: key});
+        publishOperations.soloOps[value._json['x-plot']] = Object.assign({}, value.publish()._json, {route: key});
       }
       if (value._json['x-group']) {
-        if (!PublishOperations.groupOps[value._json['x-group']]) {
-          PublishOperations.groupOps[value._json['x-group']] = {};
+        if (!publishOperations.groupOps[value._json['x-group']]) {
+          publishOperations.groupOps[value._json['x-group']] = {};
         }
-        Object.assign(PublishOperations.groupOps[value._json['x-group']], {[key]: value.publish()._json});
+        Object.assign(publishOperations.groupOps[value._json['x-group']], {[key]: value.publish()._json});
       }
     } else if (!!value.subscribe()) {
       if (value._json['x-plot']) {
-        SubscribeOperations.soloOps[value._json['x-plot']] = Object.assign({}, value.subscribe()._json, {route: key});
+        subscribeOperations.soloOps[value._json['x-plot']] = Object.assign({}, value.subscribe()._json, {route: key});
       }
       if (value._json['x-group']) {
-        if (!SubscribeOperations.groupOps[value._json['x-group']]) {
-          SubscribeOperations.groupOps[value._json['x-group']] = {};
+        if (!subscribeOperations.groupOps[value._json['x-group']]) {
+          subscribeOperations.groupOps[value._json['x-group']] = {};
         }
-        Object.assign(SubscribeOperations.groupOps[value._json['x-group']], {[key]: value.subscribe()._json});
+        Object.assign(subscribeOperations.groupOps[value._json['x-group']], {[key]: value.subscribe()._json});
       }
     }
   }

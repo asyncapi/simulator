@@ -178,8 +178,4 @@ const cli = async () => {
   await manager.startOperations();
 };
 
-function Main () {
-  cli();
-}
-
-Main();
+cli();

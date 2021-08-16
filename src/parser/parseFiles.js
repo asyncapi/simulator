@@ -4,21 +4,21 @@ const Ajv = require('ajv');
 const scenarioSpecs = require('../Schema');
 const yamlParser  = require('js-yaml');
 /**
- * Parses asyncApi and scenario files and
+ * Parses asyncApi and scenario files.
  * @param filepathAsyncApi
  * @param filepathScenario
  * @returns {Promise<(*|*|string|Chai.Assertion)[]>}
  */
 const parseFiles  = async (filepathAsyncApi, filepathScenario) => {
   const ajv = new Ajv();
-  let AsyncApiContent;
+  let asyncApiContent;
   try {
     // eslint-disable-next-line security/detect-non-literal-fs-filename
-    AsyncApiContent = filesystem.readFileSync(filepathAsyncApi).toString();
+    asyncApiContent = filesystem.readFileSync(filepathAsyncApi).toString();
   } catch (err) {
     console.log(`\nError in reading the asyncApi file. Details: ${err}`);
   }
-  const asyncApiParsed = await parser.parse(AsyncApiContent);
+  const asyncApiParsed = await parser.parse(asyncApiContent);
 
   let scenarioParsed;
   try {
