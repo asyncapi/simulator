@@ -111,7 +111,7 @@ const verifyInputGetData =  async (rd, asyncApiFilepath,scenarioFile,basedir) =>
   const yamlJsonRegex = new RegExp(/^.*\.(json|yaml)$/, 'gm');
 
   console.log(chalk.blueBright(`
-  Async api Fluffy-robot
+  AsyncAPI Simulator
   `));
   console.log('\nWelcome ');
 
