@@ -16,6 +16,14 @@ Ever wondered what it would feel like your application to be the center of inter
 
 Does it seem distant or difficult to switch from development mode to production mode?
 
+---
+
+## :loudspeaker: ATTENTION:
+
+This package is under development and it has not reached version 1.0.0 yet, which means its API might get breaking changes without prior notice. Once it reaches its first stable version, we'll follow semantic versioning.
+
+---
+
 #### Define and simulate scenarios for your applications
 
 
