@@ -30,21 +30,21 @@ function operationsFromChannels (channels,publishOperations,subscribeOperations)
   }
 }
 
-function operationsScenarioMutator (scenario,PublishOperations) {
+function operationsScenarioMutator (scenario,publishOperations) {
   for (const [key,value] of Object.entries(scenario)) {
     if (key.match(RegExp(/^group-[\w\d]+$/),'g')) {
       const groupId = key.match(RegExp(/[\w\d]+$/),'g');
       const eps = value.eps;
-      if (PublishOperations.groupOps.hasOwnProperty(groupId[0])) {
-        Object.assign(PublishOperations.groupOps[groupId[0]],{eventsPsec: eps});
+      if (publishOperations.groupOps.hasOwnProperty(groupId[0])) {
+        Object.assign(publishOperations.groupOps[groupId[0]],{eventsPsec: eps});
       }
     } else if (key.match(RegExp(/^plot-[\w\d]+$/),'g')) {
       const plotId = key.match(RegExp(/[\w\d]+$/,'g'));
       const eps = value.eps;
       const parameters = value.parameters;
       const payload = value.payload;
-      if (PublishOperations.soloOps.hasOwnProperty(plotId[0])) {
-        Object.assign(PublishOperations.soloOps[plotId[0]],{eventsPsec: eps,parameters,payload});
+      if (publishOperations.soloOps.hasOwnProperty(plotId[0])) {
+        Object.assign(publishOperations.soloOps[plotId[0]],{eventsPsec: eps,parameters,payload});
       }
     }
   }
@@ -58,20 +58,20 @@ function operationsScenarioMutator (scenario,PublishOperations) {
  * @returns {({groupOps: {}, soloOps: {}} | {groupOps: {}, soloOps: {}})[]}
  */
 const generateOperations = (asyncApiParsed, scenarioParsed) => {
-  const PublishOperations = {
+  const sublishOperations = {
     soloOps: {},
     groupOps: {}
   };
-  const SubscribeOperations = {
+  const subscribeOperations = {
     soloOps: {},
     groupOps: {}
   };
 
-  operationsFromChannels(asyncApiParsed.channels(),PublishOperations,SubscribeOperations);
+  operationsFromChannels(asyncApiParsed.channels(),sublishOperations,subscribeOperations);
 
-  operationsScenarioMutator(scenarioParsed,PublishOperations);
+  operationsScenarioMutator(scenarioParsed,sublishOperations);
 
-  return [PublishOperations,SubscribeOperations];
+  return [sublishOperations,subscribeOperations];
 };
 
 module.exports = {generateOperations};
