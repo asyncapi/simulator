@@ -1,5 +1,5 @@
 const outputs = module.exports;
-outputs.P1_AsyncApi = {
+outputs.p1_AsyncApi = {
   _json: {
     asyncapi: '2.0.0',
     info: {
@@ -328,4 +328,3 @@ outputs.P1_AsyncApi = {
     'x-parser-spec-parsed': true
   }
 };
-outputs.G1 = {};
