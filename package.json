@@ -1,6 +1,6 @@
 {
-  "name": "@asyncapi/fluffy-robot",
-  "version": "0.3.0",
+  "name": "@asyncapi/simulator",
+  "version": "0.4.0",
   "type": "commonjs",
   "description": "The asyncapi command line library to test your app at scale.",
   "main": "src/bin/cli.js",
@@ -10,7 +10,7 @@
   "scripts": {
     "test": "cross-env mocha src/**/*.test.js",
     "release": "semantic-release",
-    "docker:build": "docker build -t asyncapi/fluffy-robot:latest .",
+    "docker:build": "docker build -t asyncapi/simulator:latest .",
     "get:version": "echo $npm_package_version",
     "get:name": "echo $npm_package_name",
     "lint": "eslint --max-warnings 0 --config .eslintrc .",
