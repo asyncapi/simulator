@@ -3,7 +3,7 @@ const expect = require('chai').expect;
 const {parseFiles} = require('../parseFiles');
 const path = require('path');
 describe('Operations Generator Tests',  function() {
-  let PublishOperations,SubscribeOperations;
+  let publishOperations,subscribeOperations;
   let parsedAsyncApi,parsedScenario;
   before(async function() {
     [parsedAsyncApi, parsedScenario] = await parseFiles(path.resolve(__dirname,'./files/correct/CorrectlyFormattedAsyncApi.yaml'), path.resolve(__dirname,'./files/correct/CorrectlyFormattedScenario.yaml'));
@@ -63,11 +63,11 @@ describe('Operations Generator Tests',  function() {
     groupOps: {}
   };
   it('Should correctly generate Publish Operations.', function () {
-    [PublishOperations,SubscribeOperations] = generateOperations(parsedAsyncApi,parsedScenario);
-    expect(PublishOperations).to.deep.equal(expectedPublishOperations);
+    [publishOperations,subscribeOperations] = generateOperations(parsedAsyncApi,parsedScenario);
+    expect(publishOperations).to.deep.equal(expectedPublishOperations);
   });
   it('Should correctly generate subscribe Operations.', function () {
-    [PublishOperations,SubscribeOperations] = generateOperations(parsedAsyncApi,parsedScenario);
-    expect(SubscribeOperations).to.deep.equal(expectedSubscribeOperations);
+    [publishOperations,subscribeOperations] = generateOperations(parsedAsyncApi,parsedScenario);
+    expect(subscribeOperations).to.deep.equal(expectedSubscribeOperations);
   });
 });
