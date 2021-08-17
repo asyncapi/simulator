@@ -11,7 +11,7 @@ describe('Parser Tests',function() {
     } catch (err) {
       assert.fail('Test failed. Parser was not able to parse one of the files you provided');
     }
-    expect(asyncApi._json).to.deep.include(expectedOutputs.p1_AsyncApi._json);
+    expect(asyncApi._json).to.deep.include(expectedOutputs.p1AsyncApi._json);
   });
   it('Throws Error when parsing incorrectly formatted AsyncApi file.',async function () {
     let Error = {};

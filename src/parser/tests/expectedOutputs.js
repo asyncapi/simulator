@@ -1,5 +1,5 @@
 const outputs = module.exports;
-outputs.p1_AsyncApi = {
+outputs.p1AsyncApi = {
   _json: {
     asyncapi: '2.0.0',
     info: {
