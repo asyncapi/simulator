@@ -62,11 +62,11 @@ describe('Operations Generator Tests',  function() {
     soloOps: {},
     groupOps: {}
   };
-  it('Should correctly generate Publish Operations.', function () {
+  it('Should correctly generate publish operations', function () {
     [publishOperations,subscribeOperations] = generateOperations(parsedAsyncApi,parsedScenario);
     expect(publishOperations).to.deep.equal(expectedPublishOperations);
   });
-  it('Should correctly generate subscribe Operations.', function () {
+  it('Should correctly generate subscribe operations', function () {
     [publishOperations,subscribeOperations] = generateOperations(parsedAsyncApi,parsedScenario);
     expect(subscribeOperations).to.deep.equal(expectedSubscribeOperations);
   });
