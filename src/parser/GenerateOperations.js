@@ -1,50 +1,50 @@
 // eslint-disable-next-line sonarjs/cognitive-complexity
-function OperationsFromChannels (channels,PublishOperations,SubscribeOperations) {
+function operationsFromChannels (channels,publishOperations,subscribeOperations) {
   for (const [key, value] of Object.entries(channels)) {
-    if (!!PublishOperations.soloOps[value._json['x-plot']] ||
-        !!SubscribeOperations.soloOps[value._json['x-plot']]) {
+    if (!!publishOperations.soloOps[value._json['x-plot']] ||
+        !!subscribeOperations.soloOps[value._json['x-plot']]) {
       console.log(`\nError solo scenario key: ${key} was specified more than one times.\nNon-group scenario keys (x-scenario) should be
       different in each channel`);
     }
     if (!!value.publish()) {
       if (value._json['x-plot']) {
-        PublishOperations.soloOps[value._json['x-plot']] = Object.assign({}, value.publish()._json, {route: key});
+        publishOperations.soloOps[value._json['x-plot']] = Object.assign({}, value.publish()._json, {route: key});
       }
       if (value._json['x-group']) {
-        if (!PublishOperations.groupOps[value._json['x-group']]) {
-          PublishOperations.groupOps[value._json['x-group']] = {};
+        if (!publishOperations.groupOps[value._json['x-group']]) {
+          publishOperations.groupOps[value._json['x-group']] = {};
         }
-        Object.assign(PublishOperations.groupOps[value._json['x-group']], {[key]: value.publish()._json});
+        Object.assign(publishOperations.groupOps[value._json['x-group']], {[key]: value.publish()._json});
       }
     } else if (!!value.subscribe()) {
       if (value._json['x-plot']) {
-        SubscribeOperations.soloOps[value._json['x-plot']] = Object.assign({}, value.subscribe()._json, {route: key});
+        subscribeOperations.soloOps[value._json['x-plot']] = Object.assign({}, value.subscribe()._json, {route: key});
       }
       if (value._json['x-group']) {
-        if (!SubscribeOperations.groupOps[value._json['x-group']]) {
-          SubscribeOperations.groupOps[value._json['x-group']] = {};
+        if (!subscribeOperations.groupOps[value._json['x-group']]) {
+          subscribeOperations.groupOps[value._json['x-group']] = {};
         }
-        Object.assign(SubscribeOperations.groupOps[value._json['x-group']], {[key]: value.subscribe()._json});
+        Object.assign(subscribeOperations.groupOps[value._json['x-group']], {[key]: value.subscribe()._json});
       }
     }
   }
 }
 
-function OperationsScenarioMutator (scenario,PublishOperations) {
+function operationsScenarioMutator (scenario,publishOperations) {
   for (const [key,value] of Object.entries(scenario)) {
     if (key.match(RegExp(/^group-[\w\d]+$/),'g')) {
       const groupId = key.match(RegExp(/[\w\d]+$/),'g');
       const eps = value.eps;
-      if (PublishOperations.groupOps.hasOwnProperty(groupId[0])) {
-        Object.assign(PublishOperations.groupOps[groupId[0]],{eventsPsec: eps});
+      if (publishOperations.groupOps.hasOwnProperty(groupId[0])) {
+        Object.assign(publishOperations.groupOps[groupId[0]],{eventsPsec: eps});
       }
     } else if (key.match(RegExp(/^plot-[\w\d]+$/),'g')) {
       const plotId = key.match(RegExp(/[\w\d]+$/,'g'));
       const eps = value.eps;
       const parameters = value.parameters;
       const payload = value.payload;
-      if (PublishOperations.soloOps.hasOwnProperty(plotId[0])) {
-        Object.assign(PublishOperations.soloOps[plotId[0]],{eventsPsec: eps,parameters,payload});
+      if (publishOperations.soloOps.hasOwnProperty(plotId[0])) {
+        Object.assign(publishOperations.soloOps[plotId[0]],{eventsPsec: eps,parameters,payload});
       }
     }
   }
@@ -57,22 +57,22 @@ function OperationsScenarioMutator (scenario,PublishOperations) {
  * @param scenarioParsed
  * @returns {({groupOps: {}, soloOps: {}} | {groupOps: {}, soloOps: {}})[]}
  */
-const GenerateOperations = (asyncApiParsed,scenarioParsed) => {
-  const PublishOperations = {
+const generateOperations = (asyncApiParsed, scenarioParsed) => {
+  const sublishOperations = {
     soloOps: {},
     groupOps: {}
   };
-  const SubscribeOperations = {
+  const subscribeOperations = {
     soloOps: {},
     groupOps: {}
   };
 
-  OperationsFromChannels(asyncApiParsed.channels(),PublishOperations,SubscribeOperations);
+  operationsFromChannels(asyncApiParsed.channels(),sublishOperations,subscribeOperations);
 
-  OperationsScenarioMutator(scenarioParsed,PublishOperations);
+  operationsScenarioMutator(scenarioParsed,sublishOperations);
 
-  return [PublishOperations,SubscribeOperations];
+  return [sublishOperations,subscribeOperations];
 };
 
-module.exports = {GenerateOperations};
+module.exports = {generateOperations};
      

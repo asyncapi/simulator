@@ -30,7 +30,6 @@ rules:
   consistent-this: [0, self]
   func-style: 0
   max-nested-callbacks: 0
-  camelcase: 0
 
   # Warnings
   no-debugger: 1
@@ -41,7 +40,9 @@ rules:
   no-fallthrough: 1
   sonarjs/cognitive-complexity: 1
 
+
   # Errors
+  "camelcase": [ 2, { "properties": "always" } ]
   eqeqeq: 2
   no-undef: 2
   no-dupe-keys: 2

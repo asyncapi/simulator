@@ -3,25 +3,25 @@ const expect = require('chai').expect;
 const path = require('path');
 const expectedOutputs = require('./expectedOutputs');
 const {parseFiles} = require('../parseFiles');
-describe('Parser Tests',function() {
+describe('Parser',function() {
   let asyncApi;
-  it('1# Should be able to parse correctly formatted asyncApi and scenario files.',async function() {
+  it('Should be able to parse correctly formatted AsyncAPI and scenario files',async function() {
     try {
-      [asyncApi] = await parseFiles(path.resolve(__dirname, './correctFiles/CorrectlyFormattedAsyncApi.yaml'), path.resolve(__dirname, './correctFiles/CorrectlyFormattedScenario.yaml'));
+      [asyncApi] = await parseFiles(path.resolve(__dirname, './files/correct/CorrectlyFormattedAsyncApi.yaml'), path.resolve(__dirname, './files/correct/CorrectlyFormattedScenario.yaml'));
     } catch (err) {
       assert.fail('Test failed. Parser was not able to parse one of the files you provided');
     }
-    expect(asyncApi._json).to.deep.include(expectedOutputs.P1_AsyncApi._json);
+    expect(asyncApi._json).to.deep.include(expectedOutputs.p1AsyncApi._json);
   });
-  it('2# Throws Error when parsing incorrectly formatted AsyncApi file.',async function () {
-    let Error = null;
+  it('Should throw error when parsing incorrectly formatted AsyncAPI file',async function () {
+    let error = {};
     try {
-      await parseFiles(path.resolve(__dirname, './wrongFiles/IncorrectlyFormattedAsyncApi.yaml'), path.resolve(__dirname, './correctFiles/IncorrectlyFormatedScenario.yaml'));
+      await parseFiles(path.resolve(__dirname, './files/wrong/IncorrectlyFormattedAsyncApi.yaml'), path.resolve(__dirname, './files/correct/IncorrectlyFormattedScenario.yaml'));
     } catch (err) {
-      Error = err;
+      error = err;
     }
-    expect(Error).to.be.a('Error');
-    expect(Error.title).to.equal('The provided YAML is not valid.');
+    expect(error).to.be.a('Error');
+    expect(error.title).to.equal('The provided YAML is not valid.');
   });
 });
 

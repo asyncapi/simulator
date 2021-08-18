@@ -1,12 +1,12 @@
-const {GenerateOperations} = require('../GenerateOperations');
+const {generateOperations} = require('../GenerateOperations');
 const expect = require('chai').expect;
 const {parseFiles} = require('../parseFiles');
 const path = require('path');
 describe('Operations Generator Tests',  function() {
-  let PublishOperations,SubscribeOperations;
+  let publishOperations,subscribeOperations;
   let parsedAsyncApi,parsedScenario;
   before(async function() {
-    [parsedAsyncApi, parsedScenario] = await parseFiles(path.resolve(__dirname,'./correctFiles/CorrectlyFormattedAsyncApi.yaml'), path.resolve(__dirname,'./correctFiles/CorrectlyFormattedScenario.yaml'));
+    [parsedAsyncApi, parsedScenario] = await parseFiles(path.resolve(__dirname,'./files/correct/CorrectlyFormattedAsyncApi.yaml'), path.resolve(__dirname,'./files/correct/CorrectlyFormattedScenario.yaml'));
   });
   const expectedPublishOperations = {
     soloOps: {
@@ -62,12 +62,12 @@ describe('Operations Generator Tests',  function() {
     soloOps: {},
     groupOps: {}
   };
-  it('1# Should correctly generate Publish Operations.', function () {
-    [PublishOperations,SubscribeOperations] = GenerateOperations(parsedAsyncApi,parsedScenario);
-    expect(PublishOperations).to.deep.equal(expectedPublishOperations);
+  it('Should correctly generate publish operations', function () {
+    [publishOperations,subscribeOperations] = generateOperations(parsedAsyncApi,parsedScenario);
+    expect(publishOperations).to.deep.equal(expectedPublishOperations);
   });
-  it('2# Should correctly generate subscribe Operations.', function () {
-    [PublishOperations,SubscribeOperations] = GenerateOperations(parsedAsyncApi,parsedScenario);
-    expect(SubscribeOperations).to.deep.equal(expectedSubscribeOperations);
+  it('Should correctly generate subscribe operations', function () {
+    [publishOperations,subscribeOperations] = generateOperations(parsedAsyncApi,parsedScenario);
+    expect(subscribeOperations).to.deep.equal(expectedSubscribeOperations);
   });
 });

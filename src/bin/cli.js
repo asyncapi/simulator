@@ -7,7 +7,6 @@ const filesystem = require('fs');
 const path = require('path');
 const parserAndGenerator = require('../parser/index');
 const {RequestManager} = require('../RequestHandler/RequestManager');
-const EventEmitter = require('events').EventEmitter;
 const rdInterface = readline.createInterface({
   input: process.stdin,
   output: process.stdout
@@ -112,7 +111,7 @@ const verifyInputGetData =  async (rd, asyncApiFilepath,scenarioFile,basedir) =>
   const yamlJsonRegex = new RegExp(/^.*\.(json|yaml)$/, 'gm');
 
   console.log(chalk.blueBright(`
-  Async api Fluffy-robot
+  AsyncAPI Simulator
   `));
   console.log('\nWelcome ');
 
@@ -179,10 +178,4 @@ const cli = async () => {
   await manager.startOperations();
 };
 
-function Main () {
-  cli();
-};
-
-Main.prototype = EventEmitter.prototype;
-
-Main();
+cli();
