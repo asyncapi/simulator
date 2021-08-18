@@ -1,18 +1,30 @@
-# AsyncApi Simulator
-___
+<h5 align="center">
+  <br>
+  <a href="https://www.asyncapi.org"><img src="https://github.com/asyncapi/parser-nodejs/raw/master/assets/logo.png" alt="AsyncAPI logo" width="200"></a>
+  <br>
+  Simulator
+</h5>
+<p align="center">
+  <em>The official simulator for simulating scenarios</em>
+</p>
 
- In development
- 
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
+
+Ever wondered what it would feel like your application to be the center of interest?
+
+Does it seem distant or difficult to switch from development mode to production mode?
+
 ---
 
-Ever wondered what it would feel like your application to 
-be the center of interest?
+## :loudspeaker: ATTENTION:
 
-Does it seem distant or difficult to switch from development mode
-to production mode?
+This package is under development and it has not reached version 1.0.0 yet, which means its API might get breaking changes without prior notice. Once it reaches its first stable version, we'll follow semantic versioning.
 
-#### Define and simulate scenarios for your applications and create statistics.
+---
 
+#### Define and simulate scenarios for your applications
 
 
 Usage
@@ -63,4 +75,27 @@ Here with the plot-{id} (where id is the same as the x-plot: {id} in the field y
 - Specify the parameters for each channel and have the options for them to be randomly generated.
 - Specify the payload you want to send.
 
+## Contributing
 
+Read [CONTRIBUTING](https://github.com/asyncapi/.github/blob/master/CONTRIBUTING.md) guide.
+
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/NektariosFifes"><img src="https://avatars.githubusercontent.com/u/61620751?v=4?s=100" width="100px;" alt=""/><br /><sub><b>NektariosFifes</b></sub></a><br /><a href="https://github.com/asyncapi/fluffy-robot/commits?author=NektariosFifes" title="Code">💻</a> <a href="https://github.com/asyncapi/fluffy-robot/commits?author=NektariosFifes" title="Documentation">📖</a> <a href="#ideas-NektariosFifes" title="Ideas, Planning, & Feedback">🤔</a> <a href="#maintenance-NektariosFifes" title="Maintenance">🚧</a> <a href="https://github.com/asyncapi/fluffy-robot/commits?author=NektariosFifes" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://github.com/jonaslagoni"><img src="https://avatars.githubusercontent.com/u/13396189?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jonas Lagoni</b></sub></a><br /><a href="https://github.com/asyncapi/fluffy-robot/commits?author=jonaslagoni" title="Documentation">📖</a> <a href="https://github.com/asyncapi/fluffy-robot/pulls?q=is%3Apr+reviewed-by%3Ajonaslagoni" title="Reviewed Pull Requests">👀</a> <a href="#mentoring-jonaslagoni" title="Mentoring">🧑‍🏫</a> <a href="#example-jonaslagoni" title="Examples">💡</a></td>
+  </tr>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
