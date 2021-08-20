@@ -10,7 +10,7 @@ const yamlParser  = require('js-yaml');
  * @returns {Promise<(*|*|string|Chai.Assertion)[]>}
  */
 const parseFiles  = async (filepathAsyncApi, filepathScenario) => {
-  const ajv = new Ajv();
+  const ajv = new Ajv({allowMatchingProperties: true});
   let asyncApiContent;
   try {
     // eslint-disable-next-line security/detect-non-literal-fs-filename

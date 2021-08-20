@@ -9,3 +9,9 @@ plot-1:
     serverId: '1'
     playerId: '5'
     itemId: '3'
+    randomString:
+      regex: '^[\w]{2,6}$'
+    randomInt:
+      range:
+       min: 5
+       max: 6

@@ -1,24 +1,20 @@
-const {generateOperations}= require('./GenerateOperations');
+const {generateOperationsAndScenarios}= require('./GenerateOperations');
 const {parseFiles} = require('./parseFiles');
 
 const parserAndGenerator = async (asyncApiFilepath,scenarioFilepath) => {
   const [asyncApiContent,scenarioContent] = await parseFiles(asyncApiFilepath,scenarioFilepath);
   const operationsData = {
-    ready: true,
     servers: asyncApiContent._json.servers,
-    publishOperations: {
-      soloOps: {},
-      groupOps: {}
+    operations: {
+
     },
-    subscribeOperations: {
-      soloOps: {},
-      groupOps: {}
+    scenarios: {
+
     }
   };
-  [operationsData.publishOperations,operationsData.subscribeOperations] = generateOperations(asyncApiContent,scenarioContent);
+  [operationsData.operations,operationsData.scenarios] = generateOperationsAndScenarios(asyncApiContent,scenarioContent);
 
-  console.log(`\nFound ${Object.keys(operationsData.publishOperations.soloOps).length +
-  Object.keys(operationsData.publishOperations.groupOps).length} testable Operations`);
+  console.log(`\nFound ${Object.keys(operationsData.scenarios).length} executable scenario/s`);
   return operationsData;
 };
 
