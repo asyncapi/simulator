@@ -7,7 +7,7 @@ function RequestManager () {
     for (const [serverName,serverData] of Object.entries(dataFromParser.servers)) {
       let handlerInstance;
       try {
-        handlerInstance = await HandlerFactory(serverData, dataFromParser.publishOperations);
+        handlerInstance = await HandlerFactory(serverData, dataFromParser.scenarios);
       } catch (err) {
         console.log(err);
         return;

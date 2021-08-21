@@ -39,28 +39,6 @@ function getdefinedChannels (channels) {
   return [publishChannels,subscribeChannels];
 }
 
-// function generateOperations (scenario) {
-//   let operations;
-//   let scenarios;
-//   for (const [key,value] of Object.entries(scenario)) {
-//     if (key.match(RegExp(/^group-[\w\d]+$/),'g')) {
-//       const groupId = key.match(RegExp(/[\w\d]+$/),'g');
-//       const eps = value.eps;
-//       if (publishOperations.groupOps.hasOwnProperty(groupId[0])) {
-//         Object.assign(publishOperations.groupOps[groupId[0]],{eventsPsec: eps});
-//       }
-//     } else if (key.match(RegExp(/^plot-[\w\d]+$/),'g')) {
-//       const plotId = key.match(RegExp(/[\w\d]+$/,'g'));
-//       const eps = value.eps;
-//       const parameters = value.parameters;
-//       const payload = value.payload;
-//       if (publishOperations.soloOps.hasOwnProperty(plotId[0])) {
-//         Object.assign(publishOperations.soloOps[plotId[0]],{eventsPsec: eps,parameters,payload});
-//       }
-//     }
-//   }
-// }
-
 function generateOperations (scenarioParsed) {
   const operations = {};
 
@@ -75,18 +53,19 @@ function generateOperations (scenarioParsed) {
 
 function generateScenarios(scenarioParsed,operations) {
   const scenarios = {};
-  for (const [name,value] of Object.entries(scenarioParsed)) {
-    let matchedOperation;
-    if (name.match(RegExp(/^scenario-[\w\d]+$/))) {
+  for (const [itemName,value] of Object.entries(scenarioParsed)) {
+    if (itemName.match(RegExp(/^scenario-[\w\d]+$/))) {
+      // eslint-disable-next-line security/detect-object-injection
+      scenarios[itemName]  = {};
       for (const operationName of value) {
         for (const [name,value] of Object.entries(operations)) {
           if (name === operationName) {
-            matchedOperation = value;
+            // eslint-disable-next-line security/detect-object-injection
+            Object.assign(scenarios[itemName], {[name]: value});
           }
         }
       }
     }
-    if (matchedOperation) Object.assign(scenarios,{[name]: matchedOperation});
   }
   return scenarios;
 }
