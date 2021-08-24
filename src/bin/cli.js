@@ -6,167 +6,137 @@ const chalk = require('chalk');
 const filesystem = require('fs');
 const path = require('path');
 const  {scenarioParserAndConnector} = require('../parser/index');
+const {RequestManager} = require('../RequestHandler/RequestManager');
 const rdInterface = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
 
-const enumerateOptions = (serv) => {
-  let res = '';
-  serv.forEach((value,i) => {
-    res += `\n${i}: ${value}`;
+const enumerateOptions = (serverNames) => {
+  let result = '';
+  serverNames.forEach((value,i) => {
+    result += `\n${i}: ${value}`;
   });
-
-  return res;
+  return result;
 };
 
-const inputLoopServer =  (availableServers,structuredData,firstLoop) =>  {
-  let ready = false;
-  return new Promise((resolve, reject) => {
+const checkFilepath = (asyncFile,regex,basedir) => {
+  if (!String(asyncFile).match(regex)) {
+    console.log('\nError: Filepath provide does not point to a yaml or json file. You must provided either a yaml or json.');
+    return false;
+  }
+  try {
+    if (!basedir) {
+      filesystem.accessSync(asyncFile , filesystem.constants.R_OK);
+    } else {
+      filesystem.accessSync(path.resolve(basedir, asyncFile) , filesystem.constants.R_OK);
+    }
+  } catch (err) {
+    console.log('Error: Accessing the provided file. Make sure it exists and the user in the terminal session has read access rights.');
+    return false;
+  }
+  return true;
+};
+
+const inputLoopServer =  (availableServers) =>  {
+  return new Promise((resolve) => {
     rdInterface.question('\nSelect the server you want to target\n' + 'Options' + `\n${enumerateOptions(availableServers)}\nSelect:` , (selectedServer) => {
-      const questionloop = (availableServers) => {
+      const questionLoop = (availableServers) => {
         rdInterface.question('\nPlease select one server id number from the list\n' + 'Options:' + `\n${enumerateOptions(availableServers)}\nSelect:` , (selectedServer) => {
-          if (selectedServer < 0 || selectedServer > availableServers.length, false) {
-            questionloop(availableServers);
+          if (selectedServer < 0 || selectedServer > availableServers.length -1) {
+            questionLoop(availableServers);
           } else {
-            structuredData.targetedServer = selectedServer;
+            resolve(availableServers[parseInt(selectedServer, 10)]);
           }
         });
-      //return structuredData.targetedServer;
       };
 
-      if (selectedServer < 0 || selectedServer > availableServers.length) {
-        questionloop(availableServers);
+      if (selectedServer < 0 || selectedServer > availableServers.length -1) {
+        questionLoop(availableServers);
       } else {
-        structuredData.targetedServer = selectedServer;
-        resolve(selectedServer);
-        ready = true;
+        resolve(availableServers[parseInt(selectedServer, 10)]);
       }
     });
   });
 };
 
-function  parseAsyncApi(handlingContext) {
-  if (handlingContext.ready && handlingContext.scenarioReady) {
-    handlingContext.ParsedAndFormated = scenarioParserAndConnector(handlingContext.file,handlingContext.scenarioFile);
-  } else {
-    console.log('\nUnable to complete AsyncApi File parsing. The file is either non-Existent or there was an unknown Error.\nPress Ctrl + c to terminate');
-  }
-}
-
-const inputLoopScenario = (handlingContext) => {
-  handlingContext.rd.question(`\nEnter a proper ${chalk.blueBright('scenario')} document filepath:`, (scenarioFile) => {
-    filesystem.access(scenarioFile, 1, (err) => {
-      if (err) {
-        console.log(`\nError in accessing provided ${chalk.blueBright('scenario')} file \nDetails:${err}\n\n`);
-        inputLoopScenario(handlingContext);
-      } else if (!String(scenarioFile).match(handlingContext.yamlJsonRegex)) {
-        console.log(`\nPlease provide a proper ${chalk.blueBright('scenario')} filepath ex: ./myAsyncApi.json ./myAsyncApi.yaml:`);
-        inputLoopScenario(handlingContext);
-      } else {
-        handlingContext.scenarioFile = scenarioFile;
-        handlingContext.scenarioReady = true;
-        parseAsyncApi(handlingContext);
-      }
-    });
-  });
-};
-
-const inputLoopAsyncApi = (handlingContext) => {
-  handlingContext.rd.question(`\nEnter a proper ${chalk.green('asyncApi')} document filepath:`, (filepath) => {
-    filesystem.access(filepath, 1, (err) => {
-      if (err) {
-        console.log(`\nError in accessing provided file \nDetails:${err}\n\n`);
-        inputLoopAsyncApi(handlingContext);
-      } else if (!String(filepath).match(handlingContext.yamlJsonRegex)) {
-        console.log('\nPlease provide a proper filepath ex: ./myAsyncApi.json ./myAsyncApi.yaml:');
-        inputLoopAsyncApi(handlingContext);
-      } else {
-        handlingContext.ready = true;
-        handlingContext.file = filepath;
-        if (!handlingContext.scenarioFile) {
-          inputLoopScenario(handlingContext);
-        }
-        // eslint-disable-next-line sonarjs/no-identical-functions
-        filesystem.access(handlingContext.scenarioFile, 1, (err) => {
-          if (err) {
-            console.log(`\nError in accessing provided ${chalk.blueBright('scenario')} file \nDetails:${err}\n\n`);
-            inputLoopScenario(handlingContext);
-          } else if (!String(handlingContext.scenarioFile).match(handlingContext.yamlJsonRegex)) {
-            console.log(`\nPlease provide a proper ${chalk.blueBright('scenario')} filepath ex: ./myAsyncApi.json ./myAsyncApi.yaml:`);
-            inputLoopScenario(handlingContext);
+const inputLoopScenario = (rd,scenario,regex,basedir) => {
+  const isFileValid = checkFilepath(scenario,regex,basedir);
+  if (!isFileValid) {
+    return new Promise((resolve) => {
+      rd.question('\nPlease provide an existent yaml or json file .It should abide by the scenario json schema.\nScenario filepath:',(answer) => {
+        const inputLoop = (filepath) => {
+          const isFileValid = checkFilepath(filepath,regex,basedir);
+          if (!isFileValid) {
+            rd.question('Please fix errors and provide a correctly formatted and' +
+                ' accessible file in filepath.\nScenario filepath:',inputLoop);
           } else {
-            //handlingContext.scenarioFile = handlingContext.scenarioFile;
-            handlingContext.scenarioReady = true;
-            parseAsyncApi(handlingContext);
+            resolve(path.resolve(basedir,filepath));
           }
-        }
-        );
-      }
+        };
+        inputLoop(answer);
+      });
     });
-  });
+  }
+  return Promise.resolve(path.resolve(basedir,scenario));
+};
+
+const inputLoopAsyncApi = (rd,asyncFile,regex,basedir) => {
+  const isFileValid = checkFilepath(asyncFile,regex,basedir);
+  if (!isFileValid) {
+    return new Promise((resolve) => {
+      rd.question('\nPlease provide an existent yaml or json file.It should abide by the asyncApi Spec.\nAsyncApi filepath:',(answer) => {
+        const inputLoop = (filepath) => {
+          const isFileValid = checkFilepath(filepath,regex,basedir);
+          if (!isFileValid) {
+            rd.question('Please fix errors and provide a correctly formatted and accessible file in filepath.\nAsyncApi Filepath:',inputLoop);
+          } else resolve(path.resolve(basedir,filepath));
+        };
+        inputLoop(answer);
+      });
+    });
+  }
+  return Promise.resolve(path.resolve(basedir,asyncFile));
 };
 
 /**
- * Verifies the command line arguments, re-prompts in case of error. Parses file and returns the object representation.
+ * Verifies the command line arguments, re-prompts in case of error. Parses AsyncApi File and returns the object representation.
  * @returns {Promise<*|null>}
  * @param rd
- * @param file
+ * @param asyncApiFilepath
  * @param scenarioFile
+ * @param basedir
  */
-const verifyInput_getData =  async (rd, file,scenarioFile) => {
-  const handlingContext = this;
-  handlingContext.ready = false;
-  handlingContext.rd = rd;
-  handlingContext.file = file;
-  handlingContext.scenarioFile= scenarioFile;
-  const yamlJsonRegex = RegExp(/^.*\.(json|yaml)$/, 'gm');
-  handlingContext.yamlJsonRegex = yamlJsonRegex;
+const verifyInputGetData =  async (rd, asyncApiFilepath,scenarioFile,basedir) => {
+  const yamlJsonRegex = new RegExp(/^.*\.(json|yaml)$/, 'gm');
 
   console.log(chalk.blueBright(`
   Async api Fluffy-robot
   `));
   console.log('\nWelcome ');
 
-  if (!!file) {
-    if (!String(file).match(yamlJsonRegex)) {
-      console.log('\nPlease provide a correctly formatted filepath ex: ./myAsyncApi.json ./myAsyncApi.yaml:');
-      inputLoopAsyncApi(handlingContext);
-    } else {
-      handlingContext.file = file;
-      handlingContext.ready = true;
-      if (!scenarioFile) {
-        inputLoopScenario(handlingContext);
-      } else if (!String(scenarioFile).match(yamlJsonRegex)) {
-        inputLoopScenario(handlingContext);
-      } else {
-        handlingContext.scenarioFile = scenarioFile;
-        handlingContext.scenarioReady = true;
-        parseAsyncApi(handlingContext);
-      }
-    }
-  } else {
-    console.log('\nFilepath not provided');
-    inputLoopAsyncApi(handlingContext);
-  }
-  const structuredData = await handlingContext.ParsedAndFormated;
+  asyncApiFilepath = await inputLoopAsyncApi(rd,asyncApiFilepath,yamlJsonRegex,basedir);
+
+  scenarioFile = await inputLoopScenario(rd,scenarioFile,yamlJsonRegex,basedir);
+
+  const structuredData = await  scenarioParserAndConnector(asyncApiFilepath,scenarioFile);
+
   const availableServers = Object.keys(structuredData.servers);
 
-  structuredData.targetedServer = await inputLoopServer(availableServers,structuredData,true);
+  structuredData.targetedServer = await inputLoopServer(availableServers);
 
-  return   structuredData;
+  return structuredData;
 };
 
 (async function Main ()  {
-  program.version('0.0.1', 'v', 'async-api performance tester cli version');
+  program.version('0.0.1', '-v', 'AsyncApi simulator cli version.');
 
   program
-    .requiredOption('-f, --filepath <type>', 'The filepath of a async-api specification yaml or json file')
-    .requiredOption('-s, --scenario <type>', 'The filepath of a file defining a scenario based on the spec.')
-    .option('-b, --basedir <type>', 'The basepath from which relative paths are computed.\nDefaults to t he directory where simulator.sh resides.');
+    .requiredOption('-f, --filepath <type>', 'The filepath of a AsyncAPI document, as either yaml or json file.')
+    .requiredOption('-s, --scenario <type>', 'The filepath of a json or yaml file which defines a scenario based on the spec.')
+    .option('-b, --basedir <type>', 'The basePath from which relative paths are computed.\nDefaults to the directory where simulator.sh resides.','./');
 
   program.parse(process.argv);
-  ///Interface , SignalsHandling
 
   rdInterface.on('SIGINT', () => {
     console.log('\nShutting down');
@@ -192,8 +162,19 @@ const verifyInput_getData =  async (rd, file,scenarioFile) => {
     console.log(err);
     process.exit();
   });
-
+  let asyncApiPath;
+  let scenarioPath;
   const options = program.opts();
-
-  const structuredData = await verifyInput_getData(rdInterface, path.resolve(options.filepath),path.resolve(options.scenario));
+  if (options.basedir) {
+    asyncApiPath = path.resolve(options.basedir,options.filepath);
+    scenarioPath = path.resolve(options.basedir,options.scenario);
+  } else {
+    asyncApiPath = path.resolve(options.filepath);
+    scenarioPath = path.resolve(options.scenario);
+  }
+  const structuredData = await verifyInputGetData(rdInterface, path.resolve(asyncApiPath),path.resolve(scenarioPath),options.basedir);
+  const manager = RequestManager();
+  await manager.createReqHandler(structuredData);
+  await manager.startOperations();
 }());
+

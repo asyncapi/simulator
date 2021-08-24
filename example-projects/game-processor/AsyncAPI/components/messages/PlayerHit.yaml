@@ -1,0 +1,14 @@
+payload:
+  type: object
+  additionalProperties: false
+  properties:
+    hitTimestamp:
+      type: string
+      format: date-time
+      description: The timestamp of the hit
+    target:
+      type: string
+      description: The id of the player who got hit
+    damage: 
+      type: number
+      description: The damage given to the target
