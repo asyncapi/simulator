@@ -1,4 +1,4 @@
-const {generateOperations} = require('../GenerateOperations');
+const {generateOperations} = require('../GenerateOperationsAndScenarios');
 const expect = require('chai').expect;
 const {parseFiles} = require('../parseFiles');
 const path = require('path');

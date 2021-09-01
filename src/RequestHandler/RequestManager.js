@@ -7,11 +7,11 @@ function RequestManager () {
     for (const [serverName,serverData] of Object.entries(dataFromParser.servers)) {
       let handlerInstance;
       try {
-        handlerInstance = await HandlerFactory(serverData, dataFromParser.scenarios);
+        handlerInstance = await HandlerFactory(serverData, dataFromParser.scenarios, dataFromParser.parameterDefinitions);
       } catch (err) {
         console.log(err);
         return;
-      }
+      }  
 
       handlersList[parseInt(serverName, 10)] = handlerInstance;
     }
@@ -28,7 +28,7 @@ function RequestManager () {
       console.log(`\nThe protocol ${selectedProtocol} you demanded to be used for operations is not used in any of your defined servers.`);
     } else  {
       console.log(`\nThe protocol ${selectedProtocol} you demanded to be used for operations is badly defined or unknown.`);
-    }
+    }  
   }
 
   return {
