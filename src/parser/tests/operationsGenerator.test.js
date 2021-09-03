@@ -21,7 +21,7 @@ describe('Operations Generator Tests',  function() {
                 type: 'string',
                 format: 'date-time',
                 description: 'The timestamp the item was picked up',
-                'x-parser-schema-id': '<anonymous-schema-4>'
+                'x-parser-schema-id': '<anonymous-schema-1>'
               }
             }
           },
