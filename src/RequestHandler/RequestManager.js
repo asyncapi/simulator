@@ -7,20 +7,20 @@ function RequestManager () {
     for (const [serverName,serverData] of Object.entries(dataFromParser.servers)) {
       let handlerInstance;
       try {
-        handlerInstance = await HandlerFactory(serverData, dataFromParser.scenarios, dataFromParser.parameterDefinitions);
+        handlerInstance = await HandlerFactory(serverData, dataFromParser.scenarios, dataFromParser.parameterDefinitions,dataFromParser.operations);
       } catch (err) {
         console.log(err);
         return;
       }  
 
-      handlersList[parseInt(serverName, 10)] = handlerInstance;
+      handlersList[`${serverName}_${serverData.protocol}`] = handlerInstance;
     }
   }
 
-  async function startOperations (id = 'all',selectedProtocol= 'undefined') {
-    if (id === 'all' && selectedProtocol === 'undefined' && handlersList !== {}) {
+  async function startOperation (operationName = 'all',selectedProtocol= 'undefined') {
+    if (operationName === 'all' && selectedProtocol === 'undefined' && handlersList !== {}) {
       for (const value of Object.values(handlersList)) {
-        await value.startSoloOperations();
+        await value.startOperations(operationName);
       }
     } else if (!supportedProtocols.some((protocolName) => protocolName === selectedProtocol)) {
       console.log(`\nThe protocol ${selectedProtocol} you demanded to be used for operations is not currently supported.`);
@@ -31,10 +31,25 @@ function RequestManager () {
     }  
   }
 
+  async function startScenario (scenarioName = 'all', selectedProtocol = 'undefined') {
+    if (scenarioName === 'all' && selectedProtocol === 'undefined' && handlersList !== {}) {
+      for (const value of Object.values(handlersList)) {
+        await value.startScenario(scenarioName);
+      }
+    } else if (!supportedProtocols.some((protocolName) => protocolName === selectedProtocol)) {
+      console.log(`\nThe protocol ${selectedProtocol} you demanded to be used for operations is not currently supported.`);
+    } else if (!Object.keys(handlersList).some((protocolName) => protocolName === selectedProtocol)) {
+      console.log(`\nThe protocol ${selectedProtocol} you demanded to be used for operations is not used in any of your defined servers.`);
+    } else  {
+      console.log(`\nThe protocol ${selectedProtocol} you demanded to be used for operations is badly defined or unknown.`);
+    }
+  }
+
   return {
     handlersList,
     createReqHandler,
-    startOperations
+    startOperation,
+    startScenario
   };
 }
 

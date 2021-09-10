@@ -1,6 +1,10 @@
 const {generateOperationsAndScenarios}= require('./GenerateOperationsAndScenarios');
 const {parseFiles} = require('./parseFiles');
 
+function checkScenarioParamsValidity () {
+
+}
+
 function getParameterDefinitions(channels) {
   const paramDefinitions = {};
   for (const [channel,channelDetails] of Object.entries(channels)) {
@@ -28,7 +32,7 @@ const parserAndGenerator = async (asyncApiFilepath,scenarioFilepath) => {
   [operationsData.operations,operationsData.scenarios] = generateOperationsAndScenarios(asyncApiContent,scenarioContent);
 
   operationsData.parameterDefinitions = getParameterDefinitions(asyncApiContent.channels());
-  
+
   console.log(`\nFound ${Object.keys(operationsData.scenarios).length} executable scenario/s`);
   return operationsData;
 };

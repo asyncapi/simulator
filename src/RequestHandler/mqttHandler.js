@@ -1,76 +1,124 @@
 const mqtt = require('async-mqtt');
+const randExp = require('randexp');
+function randomChannelParamNumber (min,max) {
+  return Math.floor(Math.random() * max);
+}
 
-function channelParamValidator(parameterDefininitions) {
-  function validate (channel,paramName) {
-    if (!parameterDefininitions[channel]) {
-      return false;
-    }
-  }
-  return {
-    validate
-  };
+function randomChannelParamString (regex) {
+  return new randExp(regex).gen();
+}
+
+function getChannelParams (channel) {
+  return channel.match(new RegExp(/{(.*?)}/gm)).map((item) => item.substring(1, item.length - 1));
 }
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
-async function  mqttHandler (serverInfo,scenarios,parameterDefinitions) {
+async function  mqttHandler (serverInfo,scenarios,parameterDefinitions,operations) {
+  delete operations.version;
   const aliveOperations = {};
+  const aliveScenarios = {};
   let serverUrl;
-  const paramValidator = channelParamValidator(parameterDefinitions);
   if (!!serverInfo.variables?.port) {
     serverUrl = serverInfo.url.replace('{port}' , serverInfo.variables.port.default);
   } else {
     serverUrl = serverInfo.url;
   }
   const client = await mqtt.connectAsync(`mqtt:${serverUrl}`);
-  async function startScenario (scenario = 'all') {
-    // for (const [id,value] of Object.entries(scenarios.soloOps)) {
-    //   const parameters = value.parameters;
-    //   let channelUrl = value.route;
-    //   const urlParameters = channelUrl.match(new RegExp(/{(.*?)}/gm)).map((item) => item.substring(1,item.length-1));
-    //   for (const [name,value] of Object.entries(parameters)) {
-    //     if (urlParameters.some((item) => item === name)) {
-    //       channelUrl = channelUrl.replace(`{${ name }}` , value);
-    //     }
-    //   }
-    //   aliveOperations[parseInt(id, 10)] = setInterval(async () => {
-    //     await client.publish(channelUrl, JSON.stringify(value.payload));
-    //     console.log(channelUrl);
-    //   },
-    //   1000 / value.eventsPsec
-    //   );
-    // }
-    for (const [scenarioName,scenarioOperations] of Object.entries(scenarios)) {
-      for (const [operationName,operation] of scenarioOperations) {
-        if (operation.loop) {
-          const secsInterval = operation.loop.interval; 
-          const loopCycles = operation.loop.cycles;
-          for (const [channelName,channelDetails] of operation.loop) {
-            // eslint-disable-next-line security/detect-unsafe-regex
-            if (channelName.match(RegExp(/^(\/[^\/]+){0,4}\/?$/),'gm')) {
-              const payload = {};
-              const channelParams = {};
-              for (const [propName,propValue] of channelDetails) {
-                if (propName !== 'payload') {
-                  payload = propValue;
-                } else  {
-                  channelParamValidator();
-                  Object.assign(channelParams,{[propName]: propValue});
-                }
-              }
-            }
-          }
-        } else {
-          for (const [channelName,channelDetails] of operation) {
+  
+  async function runOperation (operatioName,operationData) {
+    aliveOperations[operatioName] = {};
 
+    if (operationData.loop) {
+      const channels = Object.assign({},operationData.loop);
+
+      const cycles = operationData.loop.cycles;
+      const interval = operationData.loop.interval;
+
+      delete channels.interval;
+      delete channels.cycles;
+
+      for (let [channelName, details] of Object.entries(channels)) {
+        let currentCycle = 0;
+
+        const channelParams = Object.assign(details);
+        const payload = (!!channelParams.payload) ? channelParams.payload : {};
+        (!!payload) ? delete channelParams.payload : console.log(`\nChannel ${channelName} has no payload.`);
+
+        const urlParameters = channelName.match(new RegExp(/{(.*?)}/gm)).map((item) => item.substring(1, item.length - 1));
+
+        for (const [name, value] of Object.entries(channelParams)) {
+          if (urlParameters.some((item) => item === name)) {
+            const generatedString = (!!value.regex) ? randomChannelParamString(value.regex) : null;
+            const generatedNumber = (!!(value.min) && !!(value.max)) ? randomChannelParamNumber(value.min, value.max) : null;
+            let parameterValue;
+            if (generatedString  || generatedNumber)
+              ((!!generatedNumber) ? parameterValue = generatedNumber : parameterValue = generatedString);
+            else
+              parameterValue = value;
+            channelName = channelName.replace(`{${name}}`, parameterValue);
           }
         }
+
+        const actionLoop = setInterval(async () => {
+          currentCycle += 1;
+          console.log(channelName);
+          await client.publish(channelName, JSON.stringify(payload));
+          if (currentCycle === cycles)
+            clearInterval(actionLoop);
+        }, interval);
+
+        aliveOperations[operatioName] = {
+          loopInstance: actionLoop
+        };
+      }
+    } else {
+      for (let [channelName, channelValue] of Object.entries(operationData)) {
+        aliveOperations[operatioName] = {};
+
+        const channelParams = Object.assign({}, channelValue);
+        const payload = (!channelValue.payload) ? {} : channelValue.payload;
+        (!!channelParams.payload) ? delete channelParams.payload : console.log(`\nChannel ${channelName} has no payload.`);
+
+        const urlParameters = getChannelParams(channelName);
+
+        for (let [name, value] of Object.entries(channelParams)) {
+          if (urlParameters.some((item) => item === name)) {
+            const generatedString = (!!value.regex) ? randomChannelParamString(value.regex) : 'NotSpecified String';
+            const generatedNumber = (!!(value.min) && !!(value.max)) ? randomChannelParamNumber(value.min, value.max) : 'NotSpecified Number';
+            value = (generatedString) ? generatedString : generatedNumber;
+            channelName = channelName.replace(`{${name}}`, value);
+          }
+        }
+        setTimeout(async () => {
+          console.log(channelName);
+          await client.publish(channelName, JSON.stringify(payload));
+        }, 100);
+      }
+    }
+  }
+  
+  async function startOperations (operationName) {
+    if (operationName === 'all') {
+      for (const [operatioName,operationData] of Object.entries(operations)) {
+        runOperation(operatioName,operationData);
+      }
+    } else {
+      runOperation(operationName,operations[operationName]);
+    }
+  }
+  async function startScenario (scenarioName) {
+    for (const [scenarioName,scenarioOperations] of Object.entries(scenarios)) {
+      for (const [operationName,operation] of Object.entries(scenarioOperations)) {
+        startOperations(operationName);
       }
     }
   }
 
   return {
+    aliveScenarios,
     aliveOperations,
-    startScenario
+    startScenario,
+    startOperations
   };
 }
 
