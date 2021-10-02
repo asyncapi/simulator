@@ -176,7 +176,6 @@ const cli = async () => {
   const manager = RequestManager();
   await manager.createReqHandler(dataFromParser);
   await manager.startOperation();
-  //await manager.startScenario('all');
 };
 
 cli();
