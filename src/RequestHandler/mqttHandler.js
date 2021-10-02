@@ -11,7 +11,9 @@ function randomChannelParamString (regex) {
 function getChannelParams (channel) {
   return channel.match(new RegExp(/{(.*?)}/gm)).map((item) => item.substring(1, item.length - 1));
 }
-
+/* eslint-disable security/detect-object-injection */
+/* eslint-disable no-unused-expressions */
+/* eslint-disable prefer-const */
 // eslint-disable-next-line sonarjs/cognitive-complexity
 async function  mqttHandler (serverInfo,scenarios,parameterDefinitions,operations) {
   delete operations.version;
@@ -37,6 +39,7 @@ async function  mqttHandler (serverInfo,scenarios,parameterDefinitions,operation
       delete channels.interval;
       delete channels.cycles;
 
+      // eslint-disable-next-line prefer-const
       for (let [channelName, details] of Object.entries(channels)) {
         let currentCycle = 0;
 
@@ -106,10 +109,16 @@ async function  mqttHandler (serverInfo,scenarios,parameterDefinitions,operation
       runOperation(operationName,operations[operationName]);
     }
   }
-  async function startScenario (scenarioName) {
-    for (const [scenarioName,scenarioOperations] of Object.entries(scenarios)) {
-      for (const [operationName,operation] of Object.entries(scenarioOperations)) {
-        startOperations(operationName);
+  async function startScenario (scenarioName = 'all') {
+    if (scenarioName = 'all') {
+      for (const scenarioOperations of Object.values(scenarios)) {
+        for (const operationName of Object.keys(scenarioOperations)) {
+          await startOperations(operationName);
+        }
+      }
+    } else {
+      for (const operationName of Object.keys(scenarioOperations)) {
+        await startOperations(operationName);
       }
     }
   }
