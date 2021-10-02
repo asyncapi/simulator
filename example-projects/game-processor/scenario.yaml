@@ -10,7 +10,7 @@ user-logs-on:
 user-gameLoop:
   loop:
     interval:
-      60
+      600
     cycles:
       5
     game/server/{serverId}/events/player/{playerId}/hit:

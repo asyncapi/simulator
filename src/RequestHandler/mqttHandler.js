@@ -24,7 +24,7 @@ async function  mqttHandler (serverInfo,scenarios,parameterDefinitions,operation
     serverUrl = serverInfo.url;
   }
   const client = await mqtt.connectAsync(`mqtt:${serverUrl}`);
-  
+
   async function runOperation (operatioName,operationData) {
     aliveOperations[operatioName] = {};
 
@@ -42,17 +42,17 @@ async function  mqttHandler (serverInfo,scenarios,parameterDefinitions,operation
 
         const channelParams = Object.assign(details);
         const payload = (!!channelParams.payload) ? channelParams.payload : {};
-        (!!payload) ? delete channelParams.payload : console.log(`\nChannel ${channelName} has no payload.`);
+        (!!payload) ? delete channelParams.payload : console.log(`\nNotice: Channel ${channelName} has no payload.`);
 
         const urlParameters = channelName.match(new RegExp(/{(.*?)}/gm)).map((item) => item.substring(1, item.length - 1));
 
         for (const [name, value] of Object.entries(channelParams)) {
           if (urlParameters.some((item) => item === name)) {
             const generatedString = (!!value.regex) ? randomChannelParamString(value.regex) : null;
-            const generatedNumber = (!!(value.min) && !!(value.max)) ? randomChannelParamNumber(value.min, value.max) : null;
+            const generatedNumber = (typeof value.min === 'number') && (typeof value.max === 'number') ? randomChannelParamNumber(value.min, value.max) : null;
             let parameterValue;
-            if (generatedString  || generatedNumber)
-              ((!!generatedNumber) ? parameterValue = generatedNumber : parameterValue = generatedString);
+            if (generatedString  || typeof generatedNumber === 'number')
+              (typeof generatedNumber === 'number') ? parameterValue = generatedNumber : parameterValue = generatedString;
             else
               parameterValue = value;
             channelName = channelName.replace(`{${name}}`, parameterValue);
@@ -83,8 +83,8 @@ async function  mqttHandler (serverInfo,scenarios,parameterDefinitions,operation
 
         for (let [name, value] of Object.entries(channelParams)) {
           if (urlParameters.some((item) => item === name)) {
-            const generatedString = (!!value.regex) ? randomChannelParamString(value.regex) : 'NotSpecified String';
-            const generatedNumber = (!!(value.min) && !!(value.max)) ? randomChannelParamNumber(value.min, value.max) : 'NotSpecified Number';
+            const generatedString = (!!value.regex) ? randomChannelParamString(value.regex) : 'NotSpecifiedString';
+            const generatedNumber = (!!(value.min) && !!(value.max)) ? randomChannelParamNumber(value.min, value.max) : 'NotSpecifiedNumber';
             value = (generatedString) ? generatedString : generatedNumber;
             channelName = channelName.replace(`{${name}}`, value);
           }
@@ -96,7 +96,7 @@ async function  mqttHandler (serverInfo,scenarios,parameterDefinitions,operation
       }
     }
   }
-  
+
   async function startOperations (operationName) {
     if (operationName === 'all') {
       for (const [operatioName,operationData] of Object.entries(operations)) {

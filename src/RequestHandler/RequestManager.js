@@ -11,7 +11,7 @@ function RequestManager () {
       } catch (err) {
         console.log(err);
         return;
-      }  
+      }
 
       handlersList[`${serverName}_${serverData.protocol}`] = handlerInstance;
     }
@@ -28,7 +28,7 @@ function RequestManager () {
       console.log(`\nThe protocol ${selectedProtocol} you demanded to be used for operations is not used in any of your defined servers.`);
     } else  {
       console.log(`\nThe protocol ${selectedProtocol} you demanded to be used for operations is badly defined or unknown.`);
-    }  
+    }
   }
 
   async function startScenario (scenarioName = 'all', selectedProtocol = 'undefined') {

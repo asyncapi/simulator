@@ -1,10 +1,6 @@
 const {generateOperationsAndScenarios}= require('./GenerateOperationsAndScenarios');
 const {parseFiles} = require('./parseFiles');
 
-function checkScenarioParamsValidity () {
-
-}
-
 function getParameterDefinitions(channels) {
   const paramDefinitions = {};
   for (const [channel,channelDetails] of Object.entries(channels)) {
