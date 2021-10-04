@@ -110,14 +110,14 @@ async function  mqttHandler (serverInfo,scenarios,parameterDefinitions,operation
     }
   }
   async function startScenario (scenarioName = 'all') {
-    if (scenarioName = 'all') {
+    if (scenarioName === 'all') {
       for (const scenarioOperations of Object.values(scenarios)) {
         for (const operationName of Object.keys(scenarioOperations)) {
           await startOperations(operationName);
         }
       }
     } else {
-      for (const operationName of Object.keys(scenarioOperations)) {
+      for (const operationName of Object.keys(scenarios[scenarioName])) {
         await startOperations(operationName);
       }
     }
