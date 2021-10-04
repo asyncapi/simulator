@@ -1,0 +1,40 @@
+{
+  "projectName": "simulator",
+  "projectOwner": "asyncapi",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "commitConvention": "none",
+  "contributors": [
+    {
+      "login": "NektariosFifes",
+      "name": "NektariosFifes",
+      "avatar_url": "https://avatars.githubusercontent.com/u/61620751?v=4",
+      "profile": "https://github.com/NektariosFifes",
+      "contributions": [
+        "code",
+        "doc",
+        "ideas",
+        "maintenance",
+        "test"
+      ]
+    },
+    {
+      "login": "jonaslagoni",
+      "name": "Jonas Lagoni",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13396189?v=4",
+      "profile": "https://github.com/jonaslagoni",
+      "contributions": [
+        "doc",
+        "review",
+        "mentoring",
+        "example"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7
+}

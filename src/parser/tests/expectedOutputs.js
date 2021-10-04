@@ -27,25 +27,22 @@ outputs.p1AsyncApi = {
             description: 'The id of the server',
             schema: {
               type: 'string',
-              'x-parser-schema-id': '<anonymous-schema-1>'
-            },
-            'x-parser-schema-id': 'serverId'
+              'x-parser-schema-id': 'serverId'
+            }
           },
           playerId: {
             description: 'The id of the player who performed the action',
             schema: {
               type: 'string',
-              'x-parser-schema-id': '<anonymous-schema-2>'
-            },
-            'x-parser-schema-id': 'playerId'
+              'x-parser-schema-id': 'playerId'
+            }
           },
           itemId: {
             description: 'The id of item',
             schema: {
               type: 'string',
-              'x-parser-schema-id': '<anonymous-schema-3>'
-            },
-            'x-parser-schema-id': 'itemId'
+              'x-parser-schema-id': 'itemId'
+            }
           }
         },
         publish: {
@@ -59,7 +56,7 @@ outputs.p1AsyncApi = {
                   type: 'string',
                   format: 'date-time',
                   description: 'The timestamp the item was picked up',
-                  'x-parser-schema-id': '<anonymous-schema-4>'
+                  'x-parser-schema-id': '<anonymous-schema-1>'
                 }
               }
             },
@@ -89,17 +86,15 @@ outputs.p1AsyncApi = {
             description: 'The id of the server',
             schema: {
               type: 'string',
-              'x-parser-schema-id': '<anonymous-schema-1>'
-            },
-            'x-parser-schema-id': 'serverId'
+              'x-parser-schema-id': 'serverId'
+            }
           },
           playerId: {
             description: 'The id of the player who performed the action',
             schema: {
               type: 'string',
-              'x-parser-schema-id': '<anonymous-schema-2>'
-            },
-            'x-parser-schema-id': 'playerId'
+              'x-parser-schema-id': 'playerId'
+            }
           }
         },
         publish: {
@@ -113,7 +108,7 @@ outputs.p1AsyncApi = {
                   type: 'string',
                   format: 'date-time',
                   description: 'The timestamp the player connected to the game server',
-                  'x-parser-schema-id': '<anonymous-schema-5>'
+                  'x-parser-schema-id': '<anonymous-schema-2>'
                 }
               }
             },
@@ -143,17 +138,15 @@ outputs.p1AsyncApi = {
             description: 'The id of the server',
             schema: {
               type: 'string',
-              'x-parser-schema-id': '<anonymous-schema-1>'
-            },
-            'x-parser-schema-id': 'serverId'
+              'x-parser-schema-id': 'serverId'
+            }
           },
           playerId: {
             description: 'The id of the player who performed the action',
             schema: {
               type: 'string',
-              'x-parser-schema-id': '<anonymous-schema-2>'
-            },
-            'x-parser-schema-id': 'playerId'
+              'x-parser-schema-id': 'playerId'
+            }
           }
         },
         publish: {
@@ -167,7 +160,7 @@ outputs.p1AsyncApi = {
                   type: 'string',
                   format: 'date-time',
                   description: 'The timestamp the player disconnected from the game server',
-                  'x-parser-schema-id': '<anonymous-schema-6>'
+                  'x-parser-schema-id': '<anonymous-schema-3>'
                 }
               }
             },
@@ -197,17 +190,15 @@ outputs.p1AsyncApi = {
             description: 'The id of the server',
             schema: {
               type: 'string',
-              'x-parser-schema-id': '<anonymous-schema-1>'
-            },
-            'x-parser-schema-id': 'serverId'
+              'x-parser-schema-id': 'serverId'
+            }
           },
           playerId: {
             description: 'The id of the player who performed the action',
             schema: {
               type: 'string',
-              'x-parser-schema-id': '<anonymous-schema-2>'
-            },
-            'x-parser-schema-id': 'playerId'
+              'x-parser-schema-id': 'playerId'
+            }
           }
         },
         publish: {
@@ -221,12 +212,12 @@ outputs.p1AsyncApi = {
                   type: 'string',
                   format: 'date-time',
                   description: 'The timestamp the player send the message in-game',
-                  'x-parser-schema-id': '<anonymous-schema-7>'
+                  'x-parser-schema-id': '<anonymous-schema-4>'
                 },
                 message: {
                   type: 'string',
                   description: 'The message the player send',
-                  'x-parser-schema-id': '<anonymous-schema-8>'
+                  'x-parser-schema-id': '<anonymous-schema-5>'
                 }
               }
             },
@@ -260,17 +251,15 @@ outputs.p1AsyncApi = {
             description: 'The id of the server',
             schema: {
               type: 'string',
-              'x-parser-schema-id': '<anonymous-schema-1>'
-            },
-            'x-parser-schema-id': 'serverId'
+              'x-parser-schema-id': 'serverId'
+            }
           },
           playerId: {
             description: 'The id of the player who performed the action',
             schema: {
               type: 'string',
-              'x-parser-schema-id': '<anonymous-schema-2>'
-            },
-            'x-parser-schema-id': 'playerId'
+              'x-parser-schema-id': 'playerId'
+            }
           }
         },
         publish: {
@@ -283,20 +272,20 @@ outputs.p1AsyncApi = {
                   type: 'string',
                   format: 'date-time',
                   description: 'The timestamp of the hit',
-                  'x-parser-schema-id': '<anonymous-schema-10>'
+                  'x-parser-schema-id': '<anonymous-schema-7>'
                 },
                 target: {
                   type: 'string',
                   description: 'The id of the player who got hit',
-                  'x-parser-schema-id': '<anonymous-schema-11>'
+                  'x-parser-schema-id': '<anonymous-schema-8>'
                 },
                 damage: {
                   type: 'number',
                   description: 'The damage given to the target',
-                  'x-parser-schema-id': '<anonymous-schema-12>'
+                  'x-parser-schema-id': '<anonymous-schema-9>'
                 }
               },
-              'x-parser-schema-id': '<anonymous-schema-9>'
+              'x-parser-schema-id': '<anonymous-schema-6>'
             },
             'x-parser-original-schema-format': 'application/vnd.aai.asyncapi;version=2.0.0',
             'x-parser-original-payload': {
