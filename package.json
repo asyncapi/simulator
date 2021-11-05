@@ -1,9 +1,9 @@
 {
   "name": "@asyncapi/simulator",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "type": "commonjs",
   "description": "The asyncapi command line library to test your app at scale.",
-  "main": "src/bin/cli.js",
+  "types": "index.d.ts",
   "engines": {
     "node": "14.15.5"
   },

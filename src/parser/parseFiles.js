@@ -24,7 +24,11 @@ const parseFiles  = async (filepathAsyncApi, filepathScenario) => {
   try {
     // eslint-disable-next-line security/detect-non-literal-fs-filename
     const scenario = filesystem.readFileSync(filepathScenario,{encoding: 'utf-8',flag: 'r'});
-    scenarioParsed = yamlParser.load(scenario);
+    if (filepathAsyncApi.match(/.yaml$/)) {
+      scenarioParsed = yamlParser.load(scenario);
+    } else {
+      scenarioParsed = JSON.parse(scenario);
+    }
     const validate = ajv.compile(scenarioSpecs[scenarioParsed.version]);
     if (!validate) {
       console.log('\nWrong or unavailable schema version be sure to check the spec for more info.');
