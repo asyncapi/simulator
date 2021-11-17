@@ -5,7 +5,28 @@
   "description": "AsyncApi Api Simulator. Define routes and settings regarding traffic Simulated",
   "patternProperties": {
     "^scenario-[\\w\\d]+$" : {
+      "$ref": "#/definitions/scenarioSchema"
+    }
+  ,
+    "^(?!version)[\\w\\d]{1,30}$" : {
+      "$ref": "#/definitions/operationSchema"
+    }
+  },
+  "properties": {
+    "version":{
+      "type": "string",
+      "enum": [
+        "0.0.1"
+      ]
+    }
+  },
+  "required": ["version"],
+
+  "definitions": {
+    "scenarioSchema" : {
+      "title": "scenarioSchema.json",
       "type": "array",
+      "definitions": {},
       "items": {
         "oneOf": [
           {
@@ -78,7 +99,7 @@
         ]
       }
     },
-    "^(?!version)[\\w\\d]{1,30}$" : {
+    "operationSchema" : {
       "type": "object",
       "additionalProperties": false,
       "properties": {
@@ -142,14 +163,5 @@
         }
       }
     }
-  },
-  "properties": {
-    "version":{
-      "type": "string",
-      "enum": [
-        "0.0.1"
-      ]
-    }
-  },
-  "required": ["version"]
+  }
 }

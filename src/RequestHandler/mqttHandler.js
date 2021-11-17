@@ -4,6 +4,48 @@ function randomChannelParamNumber (min,max) {
   return Math.floor(Math.random() * max);
 }
 
+function replaceChannelParam (urlParameters,name,value,channelName) {
+  if (urlParameters.some((item) => item === name)) {
+    const generatedString = (!!value.regex) ? randomChannelParamString(value.regex) : null;
+    const generatedNumber = (typeof value.min === 'number') && (typeof value.max === 'number') ? randomChannelParamNumber(value.min, value.max) : null;
+    let parameterValue;
+    if (generatedString  || typeof generatedNumber === 'number')
+      if (typeof generatedNumber === 'number')  parameterValue = generatedNumber;
+      else parameterValue = generatedString;
+    else
+      parameterValue = value;
+    return channelName.replace(`{${name}}` , parameterValue);
+  }
+}
+
+function runOperationForChannel (channelName,details,client,cycles,interval,aliveOperations,operatioName) {
+  let currentCycle = 0;
+
+  const channelParams = Object.assign(details);
+  const payload = (!!channelParams.payload) ? channelParams.payload : {};
+
+  if (!!payload)  delete channelParams.payload;
+  else console.log(`\nNotice: Channel ${channelName} has no payload.`);
+
+  const urlParameters = channelName.match(new RegExp(/{(.*?)}/gm)).map((item) => item.substring(1, item.length - 1));
+
+  for (const [name, value] of Object.entries(channelParams)) {
+    channelName = replaceChannelParam(urlParameters,name,value,channelName);
+  }
+
+  const actionLoop = setInterval(async () => {
+    currentCycle += 1;
+    console.log(channelName);
+    await client.publish(channelName, JSON.stringify(payload));
+    if (currentCycle === cycles)
+      clearInterval(actionLoop);
+  }, interval);
+
+  aliveOperations[String(operatioName)] = {
+    loopInstance: actionLoop
+  };
+}
+
 function randomChannelParamString (regex) {
   return new randExp(regex).gen();
 }
@@ -41,38 +83,7 @@ async function  mqttHandler (serverInfo,scenarios,parameterDefinitions,operation
 
       // eslint-disable-next-line prefer-const
       for (let [channelName, details] of Object.entries(channels)) {
-        let currentCycle = 0;
-
-        const channelParams = Object.assign(details);
-        const payload = (!!channelParams.payload) ? channelParams.payload : {};
-        (!!payload) ? delete channelParams.payload : console.log(`\nNotice: Channel ${channelName} has no payload.`);
-
-        const urlParameters = channelName.match(new RegExp(/{(.*?)}/gm)).map((item) => item.substring(1, item.length - 1));
-
-        for (const [name, value] of Object.entries(channelParams)) {
-          if (urlParameters.some((item) => item === name)) {
-            const generatedString = (!!value.regex) ? randomChannelParamString(value.regex) : null;
-            const generatedNumber = (typeof value.min === 'number') && (typeof value.max === 'number') ? randomChannelParamNumber(value.min, value.max) : null;
-            let parameterValue;
-            if (generatedString  || typeof generatedNumber === 'number')
-              (typeof generatedNumber === 'number') ? parameterValue = generatedNumber : parameterValue = generatedString;
-            else
-              parameterValue = value;
-            channelName = channelName.replace(`{${name}}`, parameterValue);
-          }
-        }
-
-        const actionLoop = setInterval(async () => {
-          currentCycle += 1;
-          console.log(channelName);
-          await client.publish(channelName, JSON.stringify(payload));
-          if (currentCycle === cycles)
-            clearInterval(actionLoop);
-        }, interval);
-
-        aliveOperations[operatioName] = {
-          loopInstance: actionLoop
-        };
+        runOperationForChannel(channelName,details,client,cycles,interval,aliveOperations,operatioName);
       }
     } else {
       for (let [channelName, channelValue] of Object.entries(operationData)) {
@@ -117,7 +128,7 @@ async function  mqttHandler (serverInfo,scenarios,parameterDefinitions,operation
         }
       }
     } else {
-      for (const operationName of Object.keys(scenarios[scenarioName])) {
+      for (const operationName of Object.keys(scenarios[`scenario-${scenarioName}`])) {
         await startOperations(operationName);
       }
     }

@@ -18,10 +18,13 @@ function RequestManager () {
   }
 
   async function startOperation (operationName = 'all',selectedProtocol= 'undefined') {
+    console.log(handlersList);
     if (operationName === 'all' && selectedProtocol === 'undefined' && handlersList !== {}) {
       for (const value of Object.values(handlersList)) {
         await value.startOperations(operationName);
       }
+    } else if (supportedProtocols.some((protocolName) => protocolName === selectedProtocol)) {
+      await handlersList[`local_${selectedProtocol}`].startOperations(operationName);
     } else if (!supportedProtocols.some((protocolName) => protocolName === selectedProtocol)) {
       console.log(`\nThe protocol ${selectedProtocol} you demanded to be used for operations is not currently supported.`);
     } else if (!Object.keys(handlersList).some((protocolName) => protocolName === selectedProtocol)) {
@@ -36,6 +39,8 @@ function RequestManager () {
       for (const value of Object.values(handlersList)) {
         await value.startScenario(scenarioName);
       }
+    } else if (supportedProtocols.some((protocolName) => protocolName === selectedProtocol)) {
+      await handlersList[`local_${selectedProtocol}`].startScenario(scenarioName);
     } else if (!supportedProtocols.some((protocolName) => protocolName === selectedProtocol)) {
       console.log(`\nThe protocol ${selectedProtocol} you demanded to be used for operations is not currently supported.`);
     } else if (!Object.keys(handlersList).some((protocolName) => protocolName === selectedProtocol)) {

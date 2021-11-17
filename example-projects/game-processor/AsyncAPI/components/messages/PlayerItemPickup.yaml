@@ -1,0 +1,8 @@
+payload:
+  type: object
+  additionalProperties: false
+  properties:
+    pickUpTimestamp:
+      type: string
+      format: time
+      description: The timestamp the player send the pickup action occured.

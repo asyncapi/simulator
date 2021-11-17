@@ -45,7 +45,38 @@ outputs.p1AsyncApi = {
             }
           }
         },
-        publish: {}
+        publish: {
+          message: {
+            payload: {
+              type: 'object',
+              additionalProperties: false,
+              properties: {
+                pickUpTimestamp: {
+                  type: 'string',
+                  format: 'time',
+                  description: 'The timestamp the player send the pickup action occured.',
+                  'x-parser-schema-id': '<anonymous-schema-2>'
+                }
+              },
+              'x-parser-schema-id': '<anonymous-schema-1>'
+            },
+            'x-parser-original-schema-format': 'application/vnd.aai.asyncapi;version=2.0.0',
+            'x-parser-original-payload': {
+              type: 'object',
+              additionalProperties: false,
+              properties: {
+                pickUpTimestamp: {
+                  type: 'string',
+                  format: 'time',
+                  description: 'The timestamp the player send the pickup action occured.'
+                }
+              }
+            },
+            schemaFormat: 'application/vnd.aai.asyncapi;version=2.0.0',
+            'x-parser-message-parsed': true,
+            'x-parser-message-name': '<anonymous-message-1>'
+          }
+        }
       },
       'game/server/{serverId}/events/player/{playerId}/connect': {
         description: 'Channel used when a player joins (connect to) the game server',
@@ -76,7 +107,7 @@ outputs.p1AsyncApi = {
                   type: 'string',
                   format: 'date-time',
                   description: 'The timestamp the player connected to the game server',
-                  'x-parser-schema-id': '<anonymous-schema-1>'
+                  'x-parser-schema-id': '<anonymous-schema-3>'
                 }
               }
             },
@@ -128,7 +159,7 @@ outputs.p1AsyncApi = {
                   type: 'string',
                   format: 'date-time',
                   description: 'The timestamp the player disconnected from the game server',
-                  'x-parser-schema-id': '<anonymous-schema-2>'
+                  'x-parser-schema-id': '<anonymous-schema-4>'
                 }
               }
             },
@@ -180,12 +211,12 @@ outputs.p1AsyncApi = {
                   type: 'string',
                   format: 'date-time',
                   description: 'The timestamp the player send the message in-game',
-                  'x-parser-schema-id': '<anonymous-schema-3>'
+                  'x-parser-schema-id': '<anonymous-schema-5>'
                 },
                 message: {
                   type: 'string',
                   description: 'The message the player send',
-                  'x-parser-schema-id': '<anonymous-schema-4>'
+                  'x-parser-schema-id': '<anonymous-schema-6>'
                 }
               }
             },
@@ -240,20 +271,20 @@ outputs.p1AsyncApi = {
                   type: 'string',
                   format: 'date-time',
                   description: 'The timestamp of the hit',
-                  'x-parser-schema-id': '<anonymous-schema-6>'
+                  'x-parser-schema-id': '<anonymous-schema-8>'
                 },
                 target: {
                   type: 'string',
                   description: 'The id of the player who got hit',
-                  'x-parser-schema-id': '<anonymous-schema-7>'
+                  'x-parser-schema-id': '<anonymous-schema-9>'
                 },
                 damage: {
                   type: 'number',
                   description: 'The damage given to the target',
-                  'x-parser-schema-id': '<anonymous-schema-8>'
+                  'x-parser-schema-id': '<anonymous-schema-10>'
                 }
               },
-              'x-parser-schema-id': '<anonymous-schema-5>'
+              'x-parser-schema-id': '<anonymous-schema-7>'
             },
             'x-parser-original-schema-format': 'application/vnd.aai.asyncapi;version=2.0.0',
             'x-parser-original-payload': {
@@ -283,5 +314,4 @@ outputs.p1AsyncApi = {
       }
     },
     'x-parser-spec-parsed': true
-  }
-};
+  }};

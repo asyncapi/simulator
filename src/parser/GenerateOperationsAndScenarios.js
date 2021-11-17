@@ -1,5 +1,30 @@
+function getDefinedChannel (key,value,publishChannels,subscribeChannels) {
+  if (!!publishChannels.soloOps[value._json['x-plot']] ||
+      !!subscribeChannels.soloOps[value._json['x-plot']]) {
+    console.log(`\nError solo scenario key: ${key} was specified more than one times.\nNon-group scenario keys (x-scenario) should be
+      different in each channel`);
+  }
+  if (!!value.publish()) {
+    if (value._json['x-plot']) {
+      publishChannels.soloOps[value._json['x-plot']] = Object.assign({}, value.publish()._json, {route: key});
+    }
+    if (value._json['x-group']) {
+      if (!publishChannels.groupOps[value._json['x-group']]) {
+        publishChannels.groupOps[value._json['x-group']] = {};
+      }
+      Object.assign(publishChannels.groupOps[value._json['x-group']], {[key]: value.publish()._json});
+    }
+  } else if (!!value.subscribe() && value._json['x-plot']) {
+    subscribeChannels.soloOps[value._json['x-plot']] = Object.assign({}, value.subscribe()._json, {route: key});
+  } else if (!!value.subscribe() && value._json['x-group'] && !subscribeChannels.groupOps[value._json['x-group']]) {
+    subscribeChannels.groupOps[value._json['x-group']] = {};
+
+    Object.assign(subscribeChannels.groupOps[value._json['x-group']], {[key]: value.subscribe()._json});
+  }
+}
+
 // eslint-disable-next-line sonarjs/cognitive-complexity
-function getdefinedChannels (channels) {
+function getDefinedChannels (channels) {
   const publishChannels = {
     soloOps: {},
     groupOps: {}
@@ -8,33 +33,9 @@ function getdefinedChannels (channels) {
     soloOps: {},
     groupOps: {}
   };
+
   for (const [key, value] of Object.entries(channels)) {
-    if (!!publishChannels.soloOps[value._json['x-plot']] ||
-        !!subscribeChannels.soloOps[value._json['x-plot']]) {
-      console.log(`\nError solo scenario key: ${key} was specified more than one times.\nNon-group scenario keys (x-scenario) should be
-      different in each channel`);
-    }
-    if (!!value.publish()) {
-      if (value._json['x-plot']) {
-        publishChannels.soloOps[value._json['x-plot']] = Object.assign({}, value.publish()._json, {route: key});
-      }
-      if (value._json['x-group']) {
-        if (!publishChannels.groupOps[value._json['x-group']]) {
-          publishChannels.groupOps[value._json['x-group']] = {};
-        }
-        Object.assign(publishChannels.groupOps[value._json['x-group']], {[key]: value.publish()._json});
-      }
-    } else if (!!value.subscribe()) {
-      if (value._json['x-plot']) {
-        subscribeChannels.soloOps[value._json['x-plot']] = Object.assign({}, value.subscribe()._json, {route: key});
-      }
-      if (value._json['x-group']) {
-        if (!subscribeChannels.groupOps[value._json['x-group']]) {
-          subscribeChannels.groupOps[value._json['x-group']] = {};
-        }
-        Object.assign(subscribeChannels.groupOps[value._json['x-group']], {[key]: value.subscribe()._json});
-      }
-    }
+    getDefinedChannel(key,value,publishChannels,subscribeChannels);
   }
   return [publishChannels,subscribeChannels];
 }
@@ -55,13 +56,11 @@ function generateScenarios(scenarioParsed,operations) {
   const scenarios = {};
   for (const [itemName,value] of Object.entries(scenarioParsed)) {
     if (itemName.match(RegExp(/^scenario-[\w\d]+$/))) {
-      // eslint-disable-next-line security/detect-object-injection
-      scenarios[itemName]  = {};
+      scenarios[String(itemName)]  = {};
       for (const operationName of value) {
         for (const [name,value] of Object.entries(operations)) {
           if (name === operationName) {
-            // eslint-disable-next-line security/detect-object-injection
-            Object.assign(scenarios[itemName], {[name]: value});
+            Object.assign(scenarios[String(itemName)], {[name]: value});
           }
         }
       }
@@ -83,17 +82,14 @@ const generateOperationsAndScenarios = (asyncApiParsed, scenarioParsed) => {
     publish: {},
     subscribe: {}
   };
-  let operations = {};
-  let scenarios = {};
 
-  [channels.publish,channels.subscribe] = getdefinedChannels(asyncApiParsed.channels());
+  [channels.publish,channels.subscribe] = getDefinedChannels(asyncApiParsed.channels());
 
-  operations = generateOperations(scenarioParsed);
+  const operations = generateOperations(scenarioParsed);
 
-  scenarios = generateScenarios(scenarioParsed,operations);
+  const scenarios = generateScenarios(scenarioParsed,operations);
 
   return [operations,scenarios];
 };
 
 module.exports = {generateOperationsAndScenarios};
-     

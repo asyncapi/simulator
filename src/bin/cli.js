@@ -175,7 +175,7 @@ const cli = async () => {
   const dataFromParser = await verifyInputGetData(rdInterface, path.resolve(asyncApiPath),path.resolve(scenarioPath),options.basedir);
   const manager = RequestManager();
   await manager.createReqHandler(dataFromParser);
-  await manager.startOperation();
+  await manager.startScenario('SimpleGame','mqtt');
 };
 
 cli();
