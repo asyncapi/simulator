@@ -23,7 +23,6 @@ function getDefinedChannel (key,value,publishChannels,subscribeChannels) {
   }
 }
 
-// eslint-disable-next-line sonarjs/cognitive-complexity
 function getDefinedChannels (channels) {
   const publishChannels = {
     soloOps: {},
