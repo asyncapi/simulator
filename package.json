@@ -1,6 +1,6 @@
 {
   "name": "@asyncapi/simulator",
-  "version": "0.4.8",
+  "version": "0.4.9",
   "type": "commonjs",
   "description": "The asyncapi command line library to test your app at scale.",
   "types": "index.d.ts",
@@ -31,7 +31,7 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@asyncapi/parser": "^1.11.0",
+    "@asyncapi/parser": "^1.11.1",
     "ajv": "^8.6.0",
     "async-mqtt": "^2.6.1",
     "chalk": "^4.1.0",
