@@ -1,7 +1,6 @@
 const assert = require('assert');
 const expect = require('chai').expect;
 const path = require('path');
-// eslint-disable-next-line no-unused-vars
 const expectedOutputs = require('./expectedOutputs');
 const nodeAssert = require('assert');
 const {parseFiles} = require('../parseFiles');
