@@ -6,7 +6,6 @@ const expectedOutputs = require('./expectedOutputs');
 const nodeAssert = require('assert');
 const {parseFiles} = require('../parseFiles');
 describe('Parser',function() {
-  // eslint-disable-next-line no-unused-vars
   let asyncApi;
   it('Should be able to parse correctly formatted AsyncAPI and scenario files',async function() {
     try {
