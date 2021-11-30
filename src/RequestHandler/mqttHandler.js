@@ -53,9 +53,6 @@ function randomChannelParamString (regex) {
 function getChannelParams (channel) {
   return channel.match(new RegExp(/{(.*?)}/gm)).map((item) => item.substring(1, item.length - 1));
 }
-/* eslint-disable security/detect-object-injection */
-/* eslint-disable no-unused-expressions */
-/* eslint-disable prefer-const */
 // eslint-disable-next-line sonarjs/cognitive-complexity
 async function  mqttHandler (serverInfo,scenarios,parameterDefinitions,operations) {
   delete operations.version;
@@ -70,7 +67,7 @@ async function  mqttHandler (serverInfo,scenarios,parameterDefinitions,operation
   const client = await mqtt.connectAsync(`mqtt:${serverUrl}`);
 
   async function runOperation (operatioName,operationData) {
-    aliveOperations[operatioName] = {};
+    aliveOperations[String(operatioName)] = {};
 
     if (operationData.loop) {
       const channels = Object.assign({},operationData.loop);
@@ -81,20 +78,23 @@ async function  mqttHandler (serverInfo,scenarios,parameterDefinitions,operation
       delete channels.interval;
       delete channels.cycles;
 
-      // eslint-disable-next-line prefer-const
-      for (let [channelName, details] of Object.entries(channels)) {
+      for (const [channelName, details] of Object.entries(channels)) {
         runOperationForChannel(channelName,details,client,cycles,interval,aliveOperations,operatioName);
       }
     } else {
+      // eslint-disable-next-line prefer-const
       for (let [channelName, channelValue] of Object.entries(operationData)) {
-        aliveOperations[operatioName] = {};
+        aliveOperations[String(operatioName)] = {};
 
         const channelParams = Object.assign({}, channelValue);
         const payload = (!channelValue.payload) ? {} : channelValue.payload;
-        (!!channelParams.payload) ? delete channelParams.payload : console.log(`\nChannel ${channelName} has no payload.`);
+
+        if (!!channelParams.payload)  delete channelParams.payload;
+        else console.log(`\nChannel ${channelName} has no payload.`);
 
         const urlParameters = getChannelParams(channelName);
 
+        // eslint-disable-next-line prefer-const
         for (let [name, value] of Object.entries(channelParams)) {
           if (urlParameters.some((item) => item === name)) {
             const generatedString = (!!value.regex) ? randomChannelParamString(value.regex) : 'NotSpecifiedString';
@@ -117,7 +117,7 @@ async function  mqttHandler (serverInfo,scenarios,parameterDefinitions,operation
         runOperation(operatioName,operationData);
       }
     } else {
-      runOperation(operationName,operations[operationName]);
+      runOperation(operationName,operations[String(operationName)]);
     }
   }
   async function startScenario (scenarioName = 'all') {

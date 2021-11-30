@@ -37,7 +37,7 @@ function RequestManager () {
   async function startScenario (scenarioName = 'all', selectedProtocol = 'undefined') {
     if (scenarioName === 'all' && selectedProtocol === 'undefined' && handlersList !== {}) {
       for (const value of Object.values(handlersList)) {
-        await value.startScenario(scenarioName);
+        await value.startScenario('all');
       }
     } else if (supportedProtocols.some((protocolName) => protocolName === selectedProtocol)) {
       await handlersList[`local_${selectedProtocol}`].startScenario(scenarioName);

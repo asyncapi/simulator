@@ -26,75 +26,13 @@
     "scenarioSchema" : {
       "title": "scenarioSchema.json",
       "type": "array",
-      "definitions": {},
       "items": {
         "oneOf": [
           {
             "type": "string"
           },
           {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "eps": {
-                "description": "Events per second being emitted",
-                "type": "integer"
-              },
-              "priority" : {
-                "type": "integer",
-                "description": "This determines whether it should be prioritized in case the resources to emit events is insufficient "
-              },
-              "payload": {
-                "type": "object",
-                "additionalProperties": true,
-                "description": "The payload that is going to be sent is currently specifically defined."
-              },
-              "parameters": {
-                "type": "object",
-                "description": "Specify the parameter instance variables of the channel, if any are present.",
-                "additionalProperties": false,
-                "patternProperties": {
-                  "^[\\w\\d]{1,28}$" : {
-                    "oneOf": [
-                      {
-                        "type": "string"
-                      },
-                      {
-                        "type": "integer"
-                      },
-                      {
-                        "type": "object",
-                        "additionalProperties": false,
-                        "required": ["regex"],
-                        "properties": {
-                          "regex": {
-                            "type": "string"
-                          }
-                        }
-                      },
-                      {
-                        "type": "object",
-                        "additionalProperties": false,
-                        "required": ["range"],
-                        "properties": {
-                          "range": {
-                            "type": "object",
-                            "properties": {
-                              "min": {
-                                "type": "integer"
-                              },
-                              "max": {
-                                "type": "integer"
-                              }
-                            }
-                          }
-                        }
-                      }
-                    ]
-                  }
-                }
-              }
-            }
+            "$ref": "#/definitions/scenarioObjectItem"
           }
         ]
       }
@@ -107,6 +45,11 @@
           "type": "object",
           "additionalProperties": false,
           "required": ["interval","cycles"],
+          "patternProperties": {
+            "^(\\/|.*)*$": {
+              "$ref": "#/definitions/channelSchema"
+            }
+          },
           "properties": {
             "interval" : {
               "type": "integer"
@@ -115,8 +58,27 @@
               "type": "integer"
             }
           }
+        }
+      }
+    },
+    "scenarioObjectItem" : {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "eps": {
+          "description": "Events per second being emitted",
+          "type": "integer"
         },
-        "^(\\/|.*)*$": {
+        "priority" : {
+          "type": "integer",
+          "description": "This determines whether it should be prioritized in case the resources to emit events is insufficient "
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "The payload that is going to be sent is currently specifically defined."
+        },
+        "parameters": {
           "type": "object",
           "description": "Specify the parameter instance variables of the channel, if any are present.",
           "additionalProperties": false,
@@ -161,6 +123,71 @@
             }
           }
         }
+      }
+    },
+    "channelSchema" : {
+      "type": "object",
+      "description": "Specify the parameter instance variables of the channel, if any are present.",
+      "additionalProperties": false,
+      "patternProperties": {
+        "^[\\w\\d]{1,28}$" :
+        {
+          "$ref": "#/definitions/channelParameterSchema"
+        }
+      }
+    },
+    "channelParameterSchema" : {
+      "oneOf": [
+        {
+          "$ref" : "#/definitions/ParameterTypeSchemas/SimpleString"
+        },
+        {
+          "$ref" : "#/definitions/ParameterTypeSchemas/SimpleInteger"
+        },
+        {
+          "$ref" : "#/definitions/ParameterTypeSchemas/RandomStringFrom_Regex"
+        },
+        {
+          "$ref" : "#/definitions/ParameterTypeSchemas/RandomInteger_InRange"
+        }
+      ]
+    },
+    "ParameterTypeSchemas" : {
+      "RandomStringFrom_Regex" : {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["regex"],
+        "properties": {
+          "regex": {
+            "type": "string"
+          }
+        }
+      },
+      "RandomInteger_InRange" : {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["range"],
+        "properties": {
+          "range": {
+            "type": "object",
+            "properties": {
+              "min": {
+                "type": "integer"
+              },
+              "max": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      },
+      "SimpleString" : {
+        "type": "string",
+        "description": "Simple string parameter"
+      },
+      "SimpleInteger" : {
+        "type": "integer",
+        "description": "Simple integer parameter"
       }
     }
   }
