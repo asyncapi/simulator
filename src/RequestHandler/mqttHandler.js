@@ -4,6 +4,13 @@ function randomChannelParamNumber (min,max) {
   return Math.floor(Math.random() * max);
 }
 
+function replaceChannelParams (channelParams,urlParameters,channelName) {
+  for (const [name, value] of Object.entries(channelParams)) {
+    channelName = replaceChannelParam(urlParameters,name,value,channelName);
+  }
+  return channelName;
+}
+
 function replaceChannelParam (urlParameters,name,value,channelName) {
   if (urlParameters.some((item) => item === name)) {
     const generatedString = (!!value.regex) ? randomChannelParamString(value.regex) : null;
@@ -29,14 +36,11 @@ function runOperationForChannel (channelName,details,client,cycles,interval,aliv
 
   const urlParameters = channelName.match(new RegExp(/{(.*?)}/gm)).map((item) => item.substring(1, item.length - 1));
 
-  for (const [name, value] of Object.entries(channelParams)) {
-    channelName = replaceChannelParam(urlParameters,name,value,channelName);
-  }
-
   const actionLoop = setInterval(async () => {
     currentCycle += 1;
-    console.log(channelName);
-    await client.publish(channelName, JSON.stringify(payload));
+    const channel = replaceChannelParams(channelParams,urlParameters,channelName);
+    console.log(channel);
+    await client.publish(channel, JSON.stringify(payload));
     if (currentCycle === cycles)
       clearInterval(actionLoop);
   }, interval);
