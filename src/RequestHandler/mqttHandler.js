@@ -4,16 +4,31 @@ function randomChannelParamNumber (min,max) {
   return Math.floor(Math.random() * max);
 }
 
-function replaceChannelParams (channelParams,urlParameters,channelName) {
+function randomChannelParamString (regex) {
+  return new Promise((res,rej) => {
+    const securityTimer = setTimeout(() => {
+      console.log('\nDDOS warning.');
+      rej(new Error('Regex generation timed out'));
+    }
+    ,1000);
+
+    const generatedStr = new randExp(regex).gen();
+
+    clearInterval(securityTimer);
+    res(generatedStr);
+  });
+}
+
+async function replaceChannelParams (channelParams,urlParameters,channelName) {
   for (const [name, value] of Object.entries(channelParams)) {
-    channelName = replaceChannelParam(urlParameters,name,value,channelName);
+    channelName = await replaceChannelParam(urlParameters,name,value,channelName);
   }
   return channelName;
 }
 
-function replaceChannelParam (urlParameters,name,value,channelName) {
+async function replaceChannelParam (urlParameters,name,value,channelName) {
   if (urlParameters.some((item) => item === name)) {
-    const generatedString = (!!value.regex) ? randomChannelParamString(value.regex) : null;
+    const generatedString = (!!value.regex) ? await randomChannelParamString(value.regex) : null;
     const generatedNumber = (typeof value.min === 'number') && (typeof value.max === 'number') ? randomChannelParamNumber(value.min, value.max) : null;
     let parameterValue;
     if (generatedString  || typeof generatedNumber === 'number')
@@ -25,7 +40,7 @@ function replaceChannelParam (urlParameters,name,value,channelName) {
   }
 }
 
-function runOperationForChannel (channelName,details,client,cycles,interval,aliveOperations,operatioName) {
+async function runOperationForChannel (channelName,details,client,cycles,interval,aliveOperations,operatioName) {
   let currentCycle = 0;
 
   const channelParams = Object.assign(details);
@@ -38,7 +53,7 @@ function runOperationForChannel (channelName,details,client,cycles,interval,aliv
 
   const actionLoop = setInterval(async () => {
     currentCycle += 1;
-    const channel = replaceChannelParams(channelParams,urlParameters,channelName);
+    const channel = await replaceChannelParams(channelParams,urlParameters,channelName);
     console.log(channel);
     await client.publish(channel, JSON.stringify(payload));
     if (currentCycle === cycles)
@@ -48,10 +63,6 @@ function runOperationForChannel (channelName,details,client,cycles,interval,aliv
   aliveOperations[String(operatioName)] = {
     loopInstance: actionLoop
   };
-}
-
-function randomChannelParamString (regex) {
-  return new randExp(regex).gen();
 }
 
 function getChannelParams (channel) {
@@ -83,7 +94,7 @@ async function  mqttHandler (serverInfo,scenarios,parameterDefinitions,operation
       delete channels.cycles;
 
       for (const [channelName, details] of Object.entries(channels)) {
-        runOperationForChannel(channelName,details,client,cycles,interval,aliveOperations,operatioName);
+        await runOperationForChannel(channelName,details,client,cycles,interval,aliveOperations,operatioName);
       }
     } else {
       // eslint-disable-next-line prefer-const

@@ -23,7 +23,7 @@ const parseFiles  = async (filepathAsyncApi, filepathScenario) => {
   let scenarioParsed;
   try {
     // eslint-disable-next-line security/detect-non-literal-fs-filename
-    const scenario = filesystem.readFileSync(filepathScenario,{encoding: 'utf-8',flag: 'r'});
+    const scenario = filesystem.readFileSync(String(filepathScenario),{encoding: 'utf-8',flag: 'r'});
     if (filepathAsyncApi.match(/.yaml$/)) {
       scenarioParsed = yamlParser.load(scenario);
     } else {

@@ -16,7 +16,6 @@ function RequestManager () {
       handlersList[`${serverName}_${serverData.protocol}`] = handlerInstance;
     }
   }
-
   async function startOperation (operationName = 'all',selectedProtocol= 'undefined') {
     console.log(handlersList);
     if (operationName === 'all' && selectedProtocol === 'undefined' && handlersList !== {}) {
