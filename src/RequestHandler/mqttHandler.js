@@ -4,7 +4,19 @@ function randomChannelParamNumber (min,max) {
   return Math.floor(Math.random() * max);
 }
 
-function randomChannelParamString (regex) {
+function getChannelParams (channelName) {
+  return  new Promise((res,rej) => {
+    const securityTimeout = setTimeout(() => {
+      console.log('\nDDOS warning.');
+      rej(new Error('\'Regex generation timed out\''));
+    },1000);
+    const params = channelName.match(new RegExp(/{(.*?)}/gm)).map((item) => item.substring(1, item.length - 1));
+    clearInterval(securityTimeout);
+    res(params);
+  });
+}
+
+function randomString (regex) {
   return new Promise((res,rej) => {
     const securityTimer = setTimeout(() => {
       console.log('\nDDOS warning.');
@@ -28,7 +40,7 @@ async function replaceChannelParams (channelParams,urlParameters,channelName) {
 
 async function replaceChannelParam (urlParameters,name,value,channelName) {
   if (urlParameters.some((item) => item === name)) {
-    const generatedString = (!!value.regex) ? await randomChannelParamString(value.regex) : null;
+    const generatedString = (!!value.regex) ? await randomString(value.regex) : null;
     const generatedNumber = (typeof value.min === 'number') && (typeof value.max === 'number') ? randomChannelParamNumber(value.min, value.max) : null;
     let parameterValue;
     if (generatedString  || typeof generatedNumber === 'number')
@@ -49,7 +61,7 @@ async function runOperationForChannel (channelName,details,client,cycles,interva
   if (!!payload)  delete channelParams.payload;
   else console.log(`\nNotice: Channel ${channelName} has no payload.`);
 
-  const urlParameters = channelName.match(new RegExp(/{(.*?)}/gm)).map((item) => item.substring(1, item.length - 1));
+  const urlParameters = await getChannelParams(channelName);
 
   const actionLoop = setInterval(async () => {
     currentCycle += 1;
@@ -65,9 +77,6 @@ async function runOperationForChannel (channelName,details,client,cycles,interva
   };
 }
 
-function getChannelParams (channel) {
-  return channel.match(new RegExp(/{(.*?)}/gm)).map((item) => item.substring(1, item.length - 1));
-}
 // eslint-disable-next-line sonarjs/cognitive-complexity
 async function  mqttHandler (serverInfo,scenarios,parameterDefinitions,operations) {
   delete operations.version;
@@ -107,12 +116,12 @@ async function  mqttHandler (serverInfo,scenarios,parameterDefinitions,operation
         if (!!channelParams.payload)  delete channelParams.payload;
         else console.log(`\nChannel ${channelName} has no payload.`);
 
-        const urlParameters = getChannelParams(channelName);
+        const urlParameters = await getChannelParams(channelName);
 
         // eslint-disable-next-line prefer-const
         for (let [name, value] of Object.entries(channelParams)) {
           if (urlParameters.some((item) => item === name)) {
-            const generatedString = (!!value.regex) ? randomChannelParamString(value.regex) : 'NotSpecifiedString';
+            const generatedString = (!!value.regex) ? randomString(value.regex) : 'NotSpecifiedString';
             const generatedNumber = (!!(value.min) && !!(value.max)) ? randomChannelParamNumber(value.min, value.max) : 'NotSpecifiedNumber';
             value = (generatedString) ? generatedString : generatedNumber;
             channelName = channelName.replace(`{${name}}`, value);
