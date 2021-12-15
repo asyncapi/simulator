@@ -315,6 +315,6 @@ outputs.p1AsyncApi = {
       }
     },
     'x-parser-spec-parsed': true
-  }};
+  }}; //NOSONAR
 
 //@sonar.issue.ignore.block.end
