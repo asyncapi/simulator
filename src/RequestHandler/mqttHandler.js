@@ -1,7 +1,7 @@
 const mqtt = require('async-mqtt');
 const randExp = require('randexp');
 function randomChannelParamNumber (min,max) {
-  return Math.floor(Math.random() * max);
+  return Math.floor(Math.random() * max); //NOSONAR
 }
 
 function getChannelParams (channelName) {
@@ -10,7 +10,7 @@ function getChannelParams (channelName) {
       console.log('\nDDOS warning.');
       rej(new Error('\'Regex generation timed out\''));
     },1000);
-    const params = channelName.match(new RegExp(/{(.*?)}/gm)).map((item) => item.substring(1, item.length - 1));
+    const params = channelName.match(new RegExp(/{(.*?)}/gm)).map((item) => item.substring(1, item.length - 1)); //NOSONAR
     clearInterval(securityTimeout);
     res(params);
   });
