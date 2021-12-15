@@ -1,4 +1,5 @@
 const outputs = module.exports;
+//@sonar.issue.ignore.block.start
 outputs.p1AsyncApi = {
   _json: {
     asyncapi: '2.0.0',
@@ -315,3 +316,5 @@ outputs.p1AsyncApi = {
     },
     'x-parser-spec-parsed': true
   }};
+
+//@sonar.issue.ignore.block.end
