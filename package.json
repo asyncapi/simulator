@@ -3,7 +3,7 @@
   "version": "0.4.9",
   "type": "commonjs",
   "description": "The asyncapi command line library to test your app at scale.",
-  "main": "src/bin/cli.js",
+  "types": "index.d.ts",
   "engines": {
     "node": "14.15.5"
   },
@@ -37,7 +37,8 @@
     "chalk": "^4.1.0",
     "commander": "^7.2.0",
     "cross-env": "^7.0.3",
-    "js-yaml": "^3.14.1"
+    "js-yaml": "^3.14.1",
+    "randexp": "^0.5.3"
   },
   "devDependencies": {
     "@semantic-release/commit-analyzer": "^8.0.1",

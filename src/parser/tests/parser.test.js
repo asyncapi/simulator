@@ -2,6 +2,7 @@ const assert = require('assert');
 const expect = require('chai').expect;
 const path = require('path');
 const expectedOutputs = require('./expectedOutputs');
+const nodeAssert = require('assert');
 const {parseFiles} = require('../parseFiles');
 describe('Parser',function() {
   let asyncApi;
@@ -11,7 +12,7 @@ describe('Parser',function() {
     } catch (err) {
       assert.fail('Test failed. Parser was not able to parse one of the files you provided');
     }
-    expect(asyncApi._json).to.deep.include(expectedOutputs.p1AsyncApi._json);
+    nodeAssert.deepStrictEqual(asyncApi.json(),expectedOutputs.p1AsyncApi._json);
   });
   it('Should throw error when parsing incorrectly formatted AsyncAPI file',async function () {
     let error = {};

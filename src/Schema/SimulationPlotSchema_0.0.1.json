@@ -4,21 +4,64 @@
   "type": "object",
   "description": "AsyncApi Api Simulator. Define routes and settings regarding traffic Simulated",
   "patternProperties": {
-    "^group-[\\w\\d]+$": {
+    "^scenario-[\\w\\d]+$" : {
+      "$ref": "#/definitions/scenarioSchema"
+    }
+  ,
+    "^(?!version)[\\w\\d]{1,30}$" : {
+      "$ref": "#/definitions/operationSchema"
+    }
+  },
+  "properties": {
+    "version":{
+      "type": "string",
+      "enum": [
+        "0.0.1"
+      ]
+    }
+  },
+  "required": ["version"],
+
+  "definitions": {
+    "scenarioSchema" : {
+      "title": "scenarioSchema.json",
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "$ref": "#/definitions/scenarioObjectItem"
+          }
+        ]
+      }
+    },
+    "operationSchema" : {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "eps": {
-          "description": "Events per second being emitted",
-          "type": "integer"
-        },
-        "priority" : {
-          "type": "integer",
-          "description": "This determines whether it should be prioritized in case the resources to emit events is insufficient."
+        "loop": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["interval","cycles"],
+          "patternProperties": {
+            "^(\\/|.*)*$": {
+              "$ref": "#/definitions/channelSchema"
+            }
+          },
+          "properties": {
+            "interval" : {
+              "type": "integer"
+            },
+            "cycles": {
+              "type": "integer"
+            }
+          }
         }
       }
     },
-    "^plot-[\\w\\d]+$" : {
+    "scenarioObjectItem" : {
       "type": "object",
       "additionalProperties": false,
       "properties": {
@@ -41,22 +84,111 @@
           "additionalProperties": false,
           "patternProperties": {
             "^[\\w\\d]{1,28}$" : {
-              "type": "string",
-              "description": "A parameter instance variable with the corresponding assigned value as string."
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["regex"],
+                  "properties": {
+                    "regex": {
+                      "type": "string"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["range"],
+                  "properties": {
+                    "range": {
+                      "type": "object",
+                      "properties": {
+                        "min": {
+                          "type": "integer"
+                        },
+                        "max": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
             }
           }
         }
       }
-    }
-  },
-  "additionalProperties": false,
-  "properties": {
-    "version":{
-      "type": "string",
-      "enum": [
-        "0.0.1"
+    },
+    "channelSchema" : {
+      "type": "object",
+      "description": "Specify the parameter instance variables of the channel, if any are present.",
+      "additionalProperties": false,
+      "patternProperties": {
+        "^[\\w\\d]{1,28}$" :
+        {
+          "$ref": "#/definitions/channelParameterSchema"
+        }
+      }
+    },
+    "channelParameterSchema" : {
+      "oneOf": [
+        {
+          "$ref" : "#/definitions/ParameterTypeSchemas/SimpleString"
+        },
+        {
+          "$ref" : "#/definitions/ParameterTypeSchemas/SimpleInteger"
+        },
+        {
+          "$ref" : "#/definitions/ParameterTypeSchemas/RandomStringFrom_Regex"
+        },
+        {
+          "$ref" : "#/definitions/ParameterTypeSchemas/RandomInteger_InRange"
+        }
       ]
+    },
+    "ParameterTypeSchemas" : {
+      "RandomStringFrom_Regex" : {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["regex"],
+        "properties": {
+          "regex": {
+            "type": "string"
+          }
+        }
+      },
+      "RandomInteger_InRange" : {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["range"],
+        "properties": {
+          "range": {
+            "type": "object",
+            "properties": {
+              "min": {
+                "type": "integer"
+              },
+              "max": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      },
+      "SimpleString" : {
+        "type": "string",
+        "description": "Simple string parameter"
+      },
+      "SimpleInteger" : {
+        "type": "integer",
+        "description": "Simple integer parameter"
+      }
     }
-  },
-  "required": ["version"]
+  }
 }

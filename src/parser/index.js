@@ -1,24 +1,35 @@
-const {generateOperations}= require('./GenerateOperations');
+const {generateOperationsAndScenarios}= require('./GenerateOperationsAndScenarios');
 const {parseFiles} = require('./parseFiles');
+
+function getParameterDefinitions(channels) {
+  const paramDefinitions = {};
+  for (const [channel,channelDetails] of Object.entries(channels)) {
+    Object.assign(paramDefinitions,{[channel]: {}});
+    for (const [paramName,paramValue] of Object.entries(channelDetails._json.parameters)) {
+      // eslint-disable-next-line security/detect-object-injection
+      Object.assign(paramDefinitions[channel],{[paramName]: paramValue});
+    }
+  }
+  return paramDefinitions;
+}
 
 const parserAndGenerator = async (asyncApiFilepath,scenarioFilepath) => {
   const [asyncApiContent,scenarioContent] = await parseFiles(asyncApiFilepath,scenarioFilepath);
   const operationsData = {
-    ready: true,
     servers: asyncApiContent._json.servers,
-    publishOperations: {
-      soloOps: {},
-      groupOps: {}
+    parameterDefinitions: {},
+    operations: {
+
     },
-    subscribeOperations: {
-      soloOps: {},
-      groupOps: {}
+    scenarios: {
+
     }
   };
-  [operationsData.publishOperations,operationsData.subscribeOperations] = generateOperations(asyncApiContent,scenarioContent);
+  [operationsData.operations,operationsData.scenarios] = generateOperationsAndScenarios(asyncApiContent,scenarioContent);
 
-  console.log(`\nFound ${Object.keys(operationsData.publishOperations.soloOps).length +
-  Object.keys(operationsData.publishOperations.groupOps).length} testable Operations`);
+  operationsData.parameterDefinitions = getParameterDefinitions(asyncApiContent.channels());
+
+  console.log(`\nFound ${Object.keys(operationsData.scenarios).length} executable scenario/s`);
   return operationsData;
 };
 

@@ -1,4 +1,5 @@
 const outputs = module.exports;
+//@sonar.issue.ignore.block.start
 outputs.p1AsyncApi = {
   _json: {
     asyncapi: '2.0.0',
@@ -49,27 +50,26 @@ outputs.p1AsyncApi = {
           message: {
             payload: {
               type: 'object',
-              $id: 'PlayerItemPickupPayload',
               additionalProperties: false,
               properties: {
-                pickupTimestamp: {
+                pickUpTimestamp: {
                   type: 'string',
-                  format: 'date-time',
-                  description: 'The timestamp the item was picked up',
-                  'x-parser-schema-id': '<anonymous-schema-1>'
+                  format: 'time',
+                  description: 'The timestamp the player send the pickup action occured.',
+                  'x-parser-schema-id': '<anonymous-schema-2>'
                 }
-              }
+              },
+              'x-parser-schema-id': '<anonymous-schema-1>'
             },
             'x-parser-original-schema-format': 'application/vnd.aai.asyncapi;version=2.0.0',
             'x-parser-original-payload': {
               type: 'object',
-              $id: 'PlayerItemPickupPayload',
               additionalProperties: false,
               properties: {
-                pickupTimestamp: {
+                pickUpTimestamp: {
                   type: 'string',
-                  format: 'date-time',
-                  description: 'The timestamp the item was picked up'
+                  format: 'time',
+                  description: 'The timestamp the player send the pickup action occured.'
                 }
               }
             },
@@ -108,7 +108,7 @@ outputs.p1AsyncApi = {
                   type: 'string',
                   format: 'date-time',
                   description: 'The timestamp the player connected to the game server',
-                  'x-parser-schema-id': '<anonymous-schema-2>'
+                  'x-parser-schema-id': '<anonymous-schema-3>'
                 }
               }
             },
@@ -160,7 +160,7 @@ outputs.p1AsyncApi = {
                   type: 'string',
                   format: 'date-time',
                   description: 'The timestamp the player disconnected from the game server',
-                  'x-parser-schema-id': '<anonymous-schema-3>'
+                  'x-parser-schema-id': '<anonymous-schema-4>'
                 }
               }
             },
@@ -212,12 +212,12 @@ outputs.p1AsyncApi = {
                   type: 'string',
                   format: 'date-time',
                   description: 'The timestamp the player send the message in-game',
-                  'x-parser-schema-id': '<anonymous-schema-4>'
+                  'x-parser-schema-id': '<anonymous-schema-5>'
                 },
                 message: {
                   type: 'string',
                   description: 'The message the player send',
-                  'x-parser-schema-id': '<anonymous-schema-5>'
+                  'x-parser-schema-id': '<anonymous-schema-6>'
                 }
               }
             },
@@ -272,20 +272,20 @@ outputs.p1AsyncApi = {
                   type: 'string',
                   format: 'date-time',
                   description: 'The timestamp of the hit',
-                  'x-parser-schema-id': '<anonymous-schema-7>'
+                  'x-parser-schema-id': '<anonymous-schema-8>'
                 },
                 target: {
                   type: 'string',
                   description: 'The id of the player who got hit',
-                  'x-parser-schema-id': '<anonymous-schema-8>'
+                  'x-parser-schema-id': '<anonymous-schema-9>'
                 },
                 damage: {
                   type: 'number',
                   description: 'The damage given to the target',
-                  'x-parser-schema-id': '<anonymous-schema-9>'
+                  'x-parser-schema-id': '<anonymous-schema-10>'
                 }
               },
-              'x-parser-schema-id': '<anonymous-schema-6>'
+              'x-parser-schema-id': '<anonymous-schema-7>'
             },
             'x-parser-original-schema-format': 'application/vnd.aai.asyncapi;version=2.0.0',
             'x-parser-original-payload': {
@@ -315,5 +315,6 @@ outputs.p1AsyncApi = {
       }
     },
     'x-parser-spec-parsed': true
-  }
-};
+  }}; //NOSONAR
+
+//@sonar.issue.ignore.block.end

@@ -119,13 +119,13 @@ const verifyInputGetData =  async (rd, asyncApiFilepath,scenarioFile,basedir) =>
 
   scenarioFile = await inputLoopScenario(rd,scenarioFile,yamlJsonRegex,basedir);
 
-  const structuredData = await parserAndGenerator(asyncApiFilepath,scenarioFile);
+  const dataFromParser = await parserAndGenerator(asyncApiFilepath,scenarioFile);
 
-  const availableServers = Object.keys(structuredData.servers);
+  const availableServers = Object.keys(dataFromParser.servers);
 
-  structuredData.targetedServer = await inputLoopServer(availableServers);
+  dataFromParser.targetedServer = await inputLoopServer(availableServers);
 
-  return structuredData;
+  return dataFromParser;
 };
 
 const cli = async () => {
@@ -172,10 +172,10 @@ const cli = async () => {
     asyncApiPath = path.resolve(options.filepath);
     scenarioPath = path.resolve(options.scenario);
   }
-  const structuredData = await verifyInputGetData(rdInterface, path.resolve(asyncApiPath),path.resolve(scenarioPath),options.basedir);
+  const dataFromParser = await verifyInputGetData(rdInterface, path.resolve(asyncApiPath),path.resolve(scenarioPath),options.basedir);
   const manager = RequestManager();
-  await manager.createReqHandler(structuredData);
-  await manager.startOperations();
+  await manager.createReqHandler(dataFromParser);
+  await manager.startScenario();
 };
 
 cli();
