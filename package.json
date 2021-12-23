@@ -1,16 +1,16 @@
 {
-  "name": "@asyncapi/fluffy-robot",
-  "version": "0.3.0",
+  "name": "@asyncapi/simulator",
+  "version": "0.5.0",
   "type": "commonjs",
   "description": "The asyncapi command line library to test your app at scale.",
-  "main": "src/bin/cli.js",
+  "types": "index.d.ts",
   "engines": {
     "node": "14.15.5"
   },
   "scripts": {
-    "test": "echo \"No test specified\"",
+    "test": "cross-env mocha src/**/*.test.js",
     "release": "semantic-release",
-    "docker:build": "docker build -t asyncapi/fluffy-robot:latest .",
+    "docker:build": "docker build -t asyncapi/simulator:latest .",
     "get:version": "echo $npm_package_version",
     "get:name": "echo $npm_package_name",
     "lint": "eslint --max-warnings 0 --config .eslintrc .",
@@ -31,25 +31,29 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@asyncapi/parser": "^1.4.1",
+    "@asyncapi/parser": "^1.11.1",
     "ajv": "^8.6.0",
     "async-mqtt": "^2.6.1",
     "chalk": "^4.1.0",
     "commander": "^7.2.0",
-    "js-yaml": "^3.14.1"
+    "cross-env": "^7.0.3",
+    "js-yaml": "^3.14.1",
+    "randexp": "^0.5.3"
   },
   "devDependencies": {
     "@semantic-release/commit-analyzer": "^8.0.1",
     "@semantic-release/github": "^7.0.4",
     "@semantic-release/npm": "^7.0.6",
     "@semantic-release/release-notes-generator": "^9.0.1",
-    "@types/node": "^14.17.5",
     "all-contributors-cli": "^6.14.2",
+    "chai": "^4.3.4",
+    "chai-as-promised": "^7.1.1",
     "conventional-changelog-conventionalcommits": "^4.4.0",
     "eslint": "^7.31.0",
     "eslint-plugin-mocha": "^9.0.0",
     "eslint-plugin-security": "^1.4.0",
     "eslint-plugin-sonarjs": "^0.8.0-125",
+    "mocha": "^9.0.3",
     "prettier": "^2.2.1",
     "semantic-release": "^17.2.2"
   },

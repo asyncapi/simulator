@@ -5,7 +5,7 @@ const readline = require('readline');
 const chalk = require('chalk');
 const filesystem = require('fs');
 const path = require('path');
-const  {scenarioParserAndConnector} = require('../parser/index');
+const parserAndGenerator = require('../parser/index');
 const {RequestManager} = require('../RequestHandler/RequestManager');
 const rdInterface = readline.createInterface({
   input: process.stdin,
@@ -111,7 +111,7 @@ const verifyInputGetData =  async (rd, asyncApiFilepath,scenarioFile,basedir) =>
   const yamlJsonRegex = new RegExp(/^.*\.(json|yaml)$/, 'gm');
 
   console.log(chalk.blueBright(`
-  Async api Fluffy-robot
+  AsyncAPI Simulator
   `));
   console.log('\nWelcome ');
 
@@ -119,16 +119,16 @@ const verifyInputGetData =  async (rd, asyncApiFilepath,scenarioFile,basedir) =>
 
   scenarioFile = await inputLoopScenario(rd,scenarioFile,yamlJsonRegex,basedir);
 
-  const structuredData = await  scenarioParserAndConnector(asyncApiFilepath,scenarioFile);
+  const dataFromParser = await parserAndGenerator(asyncApiFilepath,scenarioFile);
 
-  const availableServers = Object.keys(structuredData.servers);
+  const availableServers = Object.keys(dataFromParser.servers);
 
-  structuredData.targetedServer = await inputLoopServer(availableServers);
+  dataFromParser.targetedServer = await inputLoopServer(availableServers);
 
-  return structuredData;
+  return dataFromParser;
 };
 
-(async function Main ()  {
+const cli = async () => {
   program.version('0.0.1', '-v', 'AsyncApi simulator cli version.');
 
   program
@@ -172,9 +172,10 @@ const verifyInputGetData =  async (rd, asyncApiFilepath,scenarioFile,basedir) =>
     asyncApiPath = path.resolve(options.filepath);
     scenarioPath = path.resolve(options.scenario);
   }
-  const structuredData = await verifyInputGetData(rdInterface, path.resolve(asyncApiPath),path.resolve(scenarioPath),options.basedir);
+  const dataFromParser = await verifyInputGetData(rdInterface, path.resolve(asyncApiPath),path.resolve(scenarioPath),options.basedir);
   const manager = RequestManager();
-  await manager.createReqHandler(structuredData);
-  await manager.startOperations();
-}());
+  await manager.createReqHandler(dataFromParser);
+  await manager.startScenario();
+};
 
+cli();
