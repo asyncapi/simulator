@@ -1,0 +1,75 @@
+asyncapi: 2.0.0
+info:
+  title: "Processor"
+  version: "0.0.1"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+servers:
+  local:
+    url: "0.0.0.0:1883"
+    description: "Development server"
+    protocol: "mqtt"
+defaultContentType: application/json
+channels:
+  game/server/{serverId}/events/player/{playerId}/item/{itemId}/pickup:
+    x-plot: 1
+    description: Channel used when a player picks up an item in-game
+    parameters:
+      serverId:
+        $ref:  "./src/main/Parameters.yaml#/serverId"
+      playerId:
+        $ref: "./src/main/Parameters.yaml#/playerId"
+      itemId:
+        $ref: "./src/main/Parameters.yaml#/itemId"
+    publish:
+      message:
+        payload:
+          type: object
+          $id: PlayerItemPickupPayload
+          additionalProperties: false
+          properties:
+            pickupTimestamp:
+              type: string
+              format: date-time
+              description: The timestamp the item was picked up
+  game/server/{serverId}/events/player/{playerId}/connect:
+    description: Channel used when a player joins (connect to) the game server
+    parameters:
+      serverId:
+        $ref: "./src/main/Parameters.yaml#/serverId"
+      playerId:
+        $ref: "./src/main/Parameters.yaml#/playerId"
+    publish:
+      message:
+        $ref: './src/main/messages/PlayerConnected.yaml'
+  game/server/{serverId}/events/player/{playerId}/disconnect:
+    description: Channel used when a player leaves (disconnects from) the game server
+    parameters:
+      serverId:
+        $ref: "./src/main/Parameters.yaml#/serverId"
+      playerId:
+        $ref: "./src/main/Parameters.yaml#/playerId"
+    publish:
+      message:
+        $ref: './src/main/messages/PlayerDisconnected.yaml'
+  game/server/{serverId}/events/player/{playerId}/chat:
+    description: Channel used when a player writes something in chat
+    parameters:
+      serverId:
+        $ref: "./src/main/Parameters.yaml#/serverId"
+      playerId:
+        $ref: "./src/main/Parameters.yaml#/playerId"
+    publish:
+      message:
+        $ref: './src/main/messages/PlayerUsedChat.yaml'
+  game/server/{serverId}/events/player/{playerId}/hit:
+    description: Channel used when a player hit another player in-game
+    parameters:
+      serverId:
+        $ref: "./src/main/Parameters.yaml#/serverId"
+      playerId:
+        $ref: "./src/main/Parameters.yaml#/playerId"
+    publish:
+      message:
+        $ref: './src/main/messages/PlayerHit.yaml'

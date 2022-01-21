@@ -1,0 +1,19 @@
+[33mcommit 5ad31508f58ed0cc89cb43938ebcb0d86f1a7a94[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: Amila Welihinda <amilajack@gmail.com>
+Date:   Mon Oct 4 14:08:46 2021 -0700
+
+    v4.1.0
+
+[1mdiff --git a/release/app/package.json b/release/app/package.json[m
+[1mindex 453c2c0..2fe89b6 100644[m
+[1m--- a/release/app/package.json[m
+[1m+++ b/release/app/package.json[m
+[36m@@ -1,7 +1,7 @@[m
+ {[m
+   "name": "electron-react-boilerplate",[m
+   "productName": "electron-react-boilerplate",[m
+[31m-  "version": "4.0.0",[m
+[32m+[m[32m  "version": "4.1.0",[m
+   "description": "Electron application boilerplate based on React, React Router, Webpack, React Hot Loader for rapid application development",[m
+   "main": "./dist/main/main.js",[m
+   "author": {[m

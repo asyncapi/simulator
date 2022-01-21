@@ -1,0 +1,9 @@
+payload: 
+  type: object
+  $id: PlayerConnectedPayload
+  additionalProperties: false
+  properties:
+    connectTimestamp:
+      type: string
+      format: date-time
+      description: The timestamp the player connected to the game server
