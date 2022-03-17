@@ -29,6 +29,14 @@ This package is under development and it has not reached version 1.0.0 yet, whic
 
 Usage
 
+#### Throught desktop application (underDevelopment):     
+```
+npm run desktop
+```
+
+#### Throught command line:
+
+
 ```
 simulator -f ./my_api.yaml -s ./scenario.yaml
 simulator -f ../subdirectory/my_api.json -s ./scenario.json
