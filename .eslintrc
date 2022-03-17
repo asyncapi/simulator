@@ -39,6 +39,8 @@ rules:
   no-native-reassign: 1
   no-fallthrough: 1
   sonarjs/cognitive-complexity: 1
+  prefer-arrow-callback: 1
+
 
 
   # Errors
@@ -96,7 +98,6 @@ rules:
   no-this-before-super: 2
   no-var: 2
   object-shorthand: [2, always]
-  prefer-arrow-callback: 2
   prefer-const: 2
   prefer-spread: 2
   prefer-template: 2

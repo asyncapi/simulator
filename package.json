@@ -9,6 +9,7 @@
   },
   "scripts": {
     "test": "cross-env mocha src/**/*.test.js",
+    "desktop": "cd Desktop && cross-env npm run-script start",
     "release": "semantic-release",
     "docker:build": "docker build -t asyncapi/simulator:latest .",
     "get:version": "echo $npm_package_version",
@@ -38,7 +39,8 @@
     "commander": "^7.2.0",
     "cross-env": "^7.0.3",
     "js-yaml": "^3.14.1",
-    "randexp": "^0.5.3"
+    "randexp": "^0.5.3",
+    "run-script": "^0.1.1"
   },
   "devDependencies": {
     "@semantic-release/commit-analyzer": "^8.0.1",
