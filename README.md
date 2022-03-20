@@ -1,11 +1,6 @@
-<h5 align="center">
-  <br>
-  <a href="https://www.asyncapi.org"><img src="https://github.com/asyncapi/parser-nodejs/raw/master/assets/logo.png" alt="AsyncAPI logo" width="200"></a>
-  <br>
-  Simulator
-</h5>
+![plot](./github-repobanner-simulator.png)
 <p align="center">
-  <em>The official simulator for simulating scenarios</em>
+  <em>The official application for simulating scenarios</em>
 </p>
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
@@ -28,6 +23,14 @@ This package is under development and it has not reached version 1.0.0 yet, whic
 
 
 Usage
+
+#### Throught desktop application (underDevelopment):     
+```
+npm run desktop
+```
+
+#### Throught command line:
+
 
 ```
 simulator -f ./my_api.yaml -s ./scenario.yaml
