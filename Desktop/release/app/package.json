@@ -1,12 +1,12 @@
 {
-  "name": "electron-react-boilerplate",
+  "name": "async-api-simulator",
   "version": "4.5.0",
-  "description": "A foundation for scalable desktop apps",
+  "description": "Simulate asynchronous protocol traffic",
   "main": "./dist/main/main.js",
   "author": {
-    "name": "Electron React Boilerplate Maintainers",
-    "email": "electronreactboilerplate@gmail.com",
-    "url": "https://github.com/electron-react-boilerplate"
+    "name": "NektariosFifes",
+    "email": "nektariosfifes12@gmail.com",
+    "url": "https://github.com/asyncapi/simulator"
   },
   "scripts": {
     "electron-rebuild": "node -r ts-node/register ../../.erb/scripts/electron-rebuild.js",
