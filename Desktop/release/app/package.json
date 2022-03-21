@@ -1,5 +1,5 @@
 {
-  "name": "asyncapi-simulator",
+  "name": "async-api-simulator",
   "version": "4.5.0",
   "description": "Simulate asynchronous protocol traffic",
   "main": "./dist/main/main.js",
