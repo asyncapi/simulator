@@ -29,7 +29,7 @@ function ScenarioVisualizer(props: any): JSX.Element {
         <h2>Scenarios</h2>
         {/* eslint-disable-next-line react/prop-types */}
         {Object.keys(scenarioObject.scenarios).map((scenarioName) => {
-          const name = scenarioName.match(new RegExp(/[^-]*$/, 'gm'));
+          const name = scenarioName.match(new RegExp(/[^-]*$/, 'gm')); //NOSONAR
           return (
             <div key={scenarioName}>
               <div
