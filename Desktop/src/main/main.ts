@@ -64,21 +64,6 @@ ipcMain.on('editor/visualizeRequest', (event, scenario, format) => {
       console.log('---------ERROR');
       console.log(err);
     });
-  // console.log(Object.assign(tempScenarioSave, { ...scenario.parsedJSON }));
-
-  // parserAndGenerator(
-  //   path.resolve(__dirname, 'test.yaml'),
-  //   path.resolve(__dirname, 'temp.json')
-  // )
-  //   .then((dataFromParser: any) => {
-  //     console.log(dataFromParser);
-  //     event.reply('editor/visualizationReady', 'dataFromParser');
-  //   })
-  //   .catch((err: any) => {
-  //     console.log(err);
-  //   });
-  // console.log(`--------------${dataFromParser}`);
-  // event.reply('editor/visualizationReady', dataFromParser);
 });
 
 ipcMain.on('editor/action', (_event, actionName) => {
