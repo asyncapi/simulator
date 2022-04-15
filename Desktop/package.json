@@ -228,7 +228,7 @@
     "webpack-merge": "^5.8.0"
   },
   "dependencies": {
-    "@asyncapi/simulator": "C:\\Users\\nektarios\\WebstormProjects\\fluffy-robot3\\asyncapi-simulator-0.4.9.tgz",
+    "@asyncapi/simulator": "^0.7.0",
     "@babel/core": "^7.16.0",
     "@swc/core": "^1.2.102",
     "ace-builds": "^1.4.13",
