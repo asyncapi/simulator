@@ -113,7 +113,8 @@ function ScenarioVisualizer(props: any): JSX.Element {
         height: '100%',
         padding: 5,
         margin: '0px',
-        border: '2px solid #374151',
+        marginLeft: 7,
+        marginTop: 1,
         backgroundColor: 'azure',
       }}
     >
