@@ -7,7 +7,7 @@ import ScenarioVisualizer from './components/ScenarioVisualizer';
 import { defaultEditorState } from './constants';
 import SideBar from './components/SideBar';
 
-export const WorkBenchContext: any = createContext<any>({
+export const WorkBenchContext: any = createContext<>({
   state: defaultEditorState,
   dispatch: () => null,
 });

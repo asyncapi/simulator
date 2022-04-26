@@ -8,24 +8,17 @@
  * When running `npm run build` or `npm run build:main`, this file is compiled to
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
-import 'core-js/stable';
-import 'regenerator-runtime/runtime';
 import path from 'path';
 import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import yamlParser from 'js-yaml';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 import { requestManager, parserAndGenerator } from '@asyncapi/simulator';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+// eslint-disable-next-line import/extensions
 import autoSave from './tempScenarioSave';
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/ban-ts-comment
-// @ts-ignore
 
 export default class AppUpdater {
   constructor() {

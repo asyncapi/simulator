@@ -1,41 +1,25 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import AceEditor from 'react-ace';
 
 import 'ace-builds/src-noconflict/mode-java';
 import 'ace-builds/src-noconflict/theme-github';
-import Editor from 'react-simple-code-editor';
-// import { highlight, languages } from 'prismjs/components/prism-core';
-// import 'prismjs/components/prism-clike';
-// import 'prismjs/components/prism-javascript';
-// import 'prismjs/themes/prism.css';
 import { ipcRenderer } from 'electron';
-// eslint-disable-next-line import/no-cycle
 import { WorkBenchContext } from '..';
+import { DefaultWorkBenchStateType } from '../types';
 import { ACTIONS_IDS } from '../constants';
 
 // Example style, you can use another
 function ScenarioEditor(): JSX.Element {
-  const WBContext = useContext(WorkBenchContext);
+  const WBContext: {
+    state: DefaultWorkBenchStateType;
+    dispatch: (arg0: Record<string, unknown>) => null;
+  } = useContext(WorkBenchContext);
 
   const [EditorContent, setContent] = useState('myScenario:');
-
-  const [visualizationObj, setScenario] = React.useState({});
 
   const getContent = useCallback(() => {
     return EditorContent;
   }, [EditorContent]);
-
-  const getScenario = useCallback(() => {
-    return WBContext.state.currentValidScenario;
-  }, [WBContext.state.currentValidScenario]);
 
   const setUpForVisualization = useCallback(
     (value) => {
@@ -48,8 +32,7 @@ function ScenarioEditor(): JSX.Element {
     function getCurrentScenario() {
       return getContent();
     }
-    function updateVisualizationObj(event, obj) {
-      console.log(obj);
+    function updateVisualizationObj(_event: any, obj: any) {
       WBContext.dispatch({ type: ACTIONS_IDS.setScenarioFile, payload: obj });
     }
     console.log('effectara');
@@ -67,7 +50,12 @@ function ScenarioEditor(): JSX.Element {
         updateVisualizationObj
       );
     };
-  }, [setUpForVisualization, getContent, WBContext.state.upForVisualization]);
+  }, [
+    setUpForVisualization,
+    getContent,
+    WBContext.state.upForVisualization,
+    WBContext,
+  ]);
   return (
     <div
       style={{
@@ -85,7 +73,6 @@ function ScenarioEditor(): JSX.Element {
             onChange={(code) => setContent(code)}
             name="UNIQUE_ID_OF_DIV"
             editorProps={{ $blockScrolling: true }}
-            setOptions={}
           />
         )}
       </WorkBenchContext.Consumer>
