@@ -7,7 +7,7 @@ import { defaultEditorState } from './constants';
 import { TitleBar } from '../TitleBar';
 import template from '../TitleBar/menuTemplate';
 import ScenarioWorkbench from '../Workbench';
-import icon from '../../../../assets/asyncApiLogoFull.svg';
+import icon from '../../../../assets/icon.svg';
 
 const EditorContext = createContext<{
   state: DefaultEditorStateType;

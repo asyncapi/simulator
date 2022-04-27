@@ -33,8 +33,8 @@ export const TitleBar: React.FC<TitleBarProps> = ({
         className="icon"
         src={icon}
         style={{
-          height: '60px',
-          width: '100px',
+          height: '40px',
+          width: '80px',
         }}
       />
     )}
