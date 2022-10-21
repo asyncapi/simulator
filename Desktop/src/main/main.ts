@@ -12,8 +12,13 @@ import path from 'path';
 import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
+// @ts-ignore
+import yamlParser from 'js-yaml';
+import { requestManager, parserAndGenerator } from '@asyncapi/simulator';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+// eslint-disable-next-line import/extensions
+import autoSave from './tempScenarioSave';
 
 export default class AppUpdater {
   constructor() {
@@ -22,13 +27,49 @@ export default class AppUpdater {
     autoUpdater.checkForUpdatesAndNotify();
   }
 }
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// @ts-ignore
+const tempScenarioSave = autoSave('temp.json');
 
 let mainWindow: BrowserWindow | null = null;
 
-ipcMain.on('ipc-example', async (event, arg) => {
-  const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
-  console.log(msgTemplate(arg));
-  event.reply('ipc-example', msgTemplate('pong'));
+let dataFromParser = {};
+
+console.log('---------------------------');
+console.log(path.resolve(__dirname, 'test.yaml'));
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ipcMain.on('editor/visualizeRequest', (event, scenario, format) => {
+  let scenarioParsed = {};
+  if (format === 'json') scenarioParsed = JSON.parse(scenario);
+  else scenarioParsed = yamlParser.load(scenario);
+
+  console.log(scenarioParsed);
+  Object.assign(tempScenarioSave, { ...scenario });
+  parserAndGenerator(
+    path.resolve(__dirname, 'test.yaml'),
+    path.resolve(__dirname, 'temp.json')
+  )
+    .then((res: any) => {
+      dataFromParser = res;
+      event.reply('editor/visualizationReady', res);
+    })
+    .catch((err: any) => {
+      console.log('---------ERROR');
+      console.log(err);
+    });
+});
+
+ipcMain.on('editor/action', (_event, actionName) => {
+  const managerInstance = requestManager();
+  managerInstance
+    .createReqHandler(dataFromParser)
+    .then(() => {
+      managerInstance.startScenario(actionName);
+    })
+    .catch((err: any) => {
+      console.log(err);
+    });
+  console.log('Sending to manager');
 });
 
 if (process.env.NODE_ENV === 'production') {
@@ -69,13 +110,19 @@ const createWindow = async () => {
     return path.join(RESOURCES_PATH, ...paths);
   };
 
+  const { initialize } = require('./setup');
+  initialize();
+
   mainWindow = new BrowserWindow({
     show: false,
     width: 1024,
     height: 728,
-    icon: getAssetPath('icon.png'),
+    frame: false,
+    icon: getAssetPath('asyncapi-logo-only-color.png'),
     webPreferences: {
+      nodeIntegration: true,
       preload: path.join(__dirname, 'preload.js'),
+      contextIsolation: false,
     },
   });
 
@@ -89,6 +136,7 @@ const createWindow = async () => {
       mainWindow.minimize();
     } else {
       mainWindow.show();
+      mainWindow.focus();
     }
   });
 
