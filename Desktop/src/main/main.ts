@@ -38,16 +38,16 @@ let dataFromParser = {};
 console.log('---------------------------');
 console.log(path.resolve(__dirname, 'test.yaml'));
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-ipcMain.on('editor/visualizeRequest', (event, scenario, format) => {
+ipcMain.handle('editor/visualizeRequest', (event, scenario, format) => {
   let scenarioParsed = {};
   if (format === 'json') scenarioParsed = JSON.parse(scenario);
   else scenarioParsed = yamlParser.load(scenario);
 
   console.log(scenarioParsed);
-  Object.assign(tempScenarioSave, { ...scenario });
+  Object.assign(tempScenarioSave, { ...scenarioParsed });
   parserAndGenerator(
-    path.resolve(__dirname, 'test.yaml'),
-    path.resolve(__dirname, 'temp.json')
+    path.resolve(__dirname, 'save.yaml'),
+    path.resolve(__dirname, 'save.json')
   )
     .then((res: any) => {
       dataFromParser = res;
@@ -59,17 +59,22 @@ ipcMain.on('editor/visualizeRequest', (event, scenario, format) => {
     });
 });
 
-ipcMain.on('editor/action', (_event, actionName) => {
+ipcMain.handle('editor/action', async (_event, actionName) => {
   const managerInstance = requestManager();
-  managerInstance
-    .createReqHandler(dataFromParser)
-    .then(() => {
-      managerInstance.startScenario(actionName);
-    })
-    .catch((err: any) => {
-      console.log(err);
-    });
-  console.log('Sending to manager');
+
+  await managerInstance.createReqHandler();
+
+  await managerInstance.startScenario(actionName);
+
+  return;
+  // managerInstance
+  //   .createReqHandler(dataFromParser)
+  //   .then(() => {
+  //     managerInstance.startScenario(actionName);
+  //   })
+  //   .catch((err: any) => {
+  //     console.log(err);
+  //   });
 });
 
 if (process.env.NODE_ENV === 'production') {
