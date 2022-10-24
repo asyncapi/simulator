@@ -15,17 +15,6 @@ function minimizeWindow(browserWindow = getCurrentWindow()) {
   }
 }
 
-function maximizeWindow(browserWindow = getCurrentWindow()) {
-  if (browserWindow.maximizable) {
-    // browserWindow.isMaximizable() for old electron versions
-    browserWindow.maximize();
-  }
-}
-
-function unmaximizeWindow(browserWindow = getCurrentWindow()) {
-  browserWindow.unmaximize();
-}
-
 function maxUnmaxWindow(browserWindow = getCurrentWindow()) {
   if (browserWindow.isMaximized()) {
     browserWindow.unmaximize();
