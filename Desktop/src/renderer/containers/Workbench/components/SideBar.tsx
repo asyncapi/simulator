@@ -1,19 +1,18 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { VscRunAll } from 'react-icons/vsc';
 import { IconContext } from 'react-icons';
 import { ACTIONS_IDS } from '../constants';
 // eslint-disable-next-line import/no-cycle
 import { WorkBenchContext } from '..';
+import { ipcRenderer } from 'electron';
 
-function SideBar(): JSX.Element {
-  const WBContext = useContext(WorkBenchContext);
-
-  function VisualizeScenario() {
-    console.log('clicked');
-    WBContext.dispatch({ type: ACTIONS_IDS.visualizeScenarioFile });
+function SideBar({ EditorState, dispatch }): JSX.Element {
+  async function VisualizeScenario() {
+    console.log(dispatch);
   }
+
   const [RunIconStyle, SetRunStyle] = useState({
     color: 'white',
   });
