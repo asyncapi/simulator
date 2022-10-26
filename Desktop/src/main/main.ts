@@ -65,16 +65,6 @@ ipcMain.handle('editor/action', async (_event, actionName) => {
   await managerInstance.createReqHandler();
 
   await managerInstance.startScenario(actionName);
-
-  return;
-  // managerInstance
-  //   .createReqHandler(dataFromParser)
-  //   .then(() => {
-  //     managerInstance.startScenario(actionName);
-  //   })
-  //   .catch((err: any) => {
-  //     console.log(err);
-  //   });
 });
 
 if (process.env.NODE_ENV === 'production') {

@@ -1,12 +1,8 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { VscRunAll } from 'react-icons/vsc';
 import { IconContext } from 'react-icons';
-import { ACTIONS_IDS } from '../constants';
-// eslint-disable-next-line import/no-cycle
-import { WorkBenchContext } from '..';
-import { ipcRenderer } from 'electron';
 
 function SideBar({ EditorState, dispatch }): JSX.Element {
   async function VisualizeScenario() {

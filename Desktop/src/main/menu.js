@@ -7,7 +7,6 @@ const template = [
     label: 'File',
     submenu: [isMac ? { role: 'close' } : { role: 'quit' }],
   },
-  // { role: 'editMenu' }
   {
     label: 'Edit',
     submenu: [
@@ -19,7 +18,6 @@ const template = [
       { role: 'paste' },
     ],
   },
-  // { role: 'viewMenu' }
   {
     label: 'View',
     submenu: [
@@ -34,7 +32,6 @@ const template = [
       { role: 'togglefullscreen' },
     ],
   },
-  // { role: 'windowMenu' }
   {
     label: 'Window',
     submenu: [{ role: 'minimize' }, { role: 'zoom' }],

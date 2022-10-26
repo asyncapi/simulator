@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import React, { createContext, useContext, useEffect, useReducer } from 'react';
-import { EditorPropsType, DefaultEditorStateType } from './types';
+import React, { useReducer } from 'react';
+import { EditorPropsType } from './types';
 import { editorReducer } from './reducers';
 import { defaultEditorState } from './constants';
 import { TitleBar } from '../TitleBar';
