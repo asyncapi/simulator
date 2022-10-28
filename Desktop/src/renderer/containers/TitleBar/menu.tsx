@@ -1,6 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
 import { reduxSet } from './utils';
@@ -81,7 +78,7 @@ export const MenuBar: React.FC<MenuBarProps> = ({ menu: propMenu }) => {
     } else {
       let newMenu = [...menu];
       const menuLength = menu[mainIndex].submenu.length;
-      for (let i = 0; i < menuLength; i++) {
+      for (let i = 0; i < menuLength; i += 1) {
         if (menu[mainIndex].submenu[i].type === 'radio') {
           newMenu = reduxSet(
             newMenu,
@@ -105,9 +102,13 @@ export const MenuBar: React.FC<MenuBarProps> = ({ menu: propMenu }) => {
         return (
           // eslint-disable-next-line jsx-a11y/click-events-have-key-events
           <div
+            role="menu"
             key={i}
             onMouseOver={() => onButtonMouseOver(i)}
             onClick={() => onButtonClick(i)}
+            onFocus={() => {
+              onButtonClick();
+            }}
             onTouchStart={() => onTouchStart(i)}
             onMouseMove={() => onMouseMove(i)}
             ref={(ref) => ref && setRefs(ref, i)}
