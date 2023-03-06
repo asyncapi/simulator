@@ -2,16 +2,15 @@
 // @ts-nocheck
 import React, { useReducer } from 'react';
 import { EditorPropsType } from './types';
-import { editorReducer } from './reducers';
+import { EditorReducer, EditorContext } from './reducers';
 import { defaultEditorState } from './constants';
 import { TitleBar } from '../TitleBar';
 import template from '../TitleBar/menuTemplate';
 import ScenarioWorkbench from '../Workbench';
 import icon from '../../../../assets/icon.svg';
-import { EditorContext } from '../Workbench/reducers';
 
 function Editor(props: EditorPropsType): JSX.Element {
-  const [EditorState, dispatch] = useReducer(editorReducer, defaultEditorState);
+  const [EditorState, dispatch] = useReducer(EditorReducer, defaultEditorState);
 
   return (
     <EditorContext.Provider value={{ state: EditorState, dispatch }}>
