@@ -13,8 +13,8 @@ function getParameterDefinitions(channels) {
   return paramDefinitions;
 }
 
-const parserAndGenerator = async (asyncApiFilepath,scenarioFilepath) => {
-  const [asyncApiContent,scenarioContent] = await parseFiles(asyncApiFilepath,scenarioFilepath);
+const parserAndGenerator = async (asyncApiFilepath,scenarioFilepath,basedir) => {
+  const [asyncApiContent,scenarioContent] = await parseFiles(asyncApiFilepath,scenarioFilepath,basedir);
   const operationsData = {
     servers: asyncApiContent._json.servers,
     parameterDefinitions: {},
