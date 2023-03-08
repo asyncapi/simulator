@@ -9,7 +9,7 @@ const yamlParser  = require('js-yaml');
  * @param filepathScenario
  * @returns {Promise<(*|*|string|Chai.Assertion)[]>}
  */
-const parseFiles  = async (filepathAsyncApi, filepathScenario) => {
+const parseFiles  = async (filepathAsyncApi, filepathScenario,basedir) => {
   const ajv = new Ajv({allowMatchingProperties: true,strict: true,allErrors: true, verbose: true});
   let asyncApiContent;
   try {
@@ -18,8 +18,7 @@ const parseFiles  = async (filepathAsyncApi, filepathScenario) => {
   } catch (err) {
     console.log(`\nError in reading the asyncApi file. Details: ${err}`);
   }
-  const asyncApiParsed = await parser.parse(asyncApiContent);
-
+  const asyncApiParsed = await parser.parse(asyncApiContent, {path: basedir});
   let scenarioParsed;
   try {
     // eslint-disable-next-line security/detect-non-literal-fs-filename
