@@ -1,4 +1,4 @@
-const {generateOperationsAndScenarios} = require('../GenerateOperationsAndScenarios');
+const {cliInterface} = require('../');
 const expect = require('chai').expect;
 const {parseFiles} = require('../parseFiles');
 const path = require('path');
@@ -64,12 +64,12 @@ describe('Operations Generator Tests',  function() {
       'user-gameLoop': expectedUserGameLoop
     }
   };
-  it('Should correctly generate publish operations', function () {
-    [operations,scenarios] = generateOperationsAndScenarios(parsedAsyncApi,parsedScenario);
+  it('Should correctly generate publish operations', async function () {
+    operations = cliInterface(parsedAsyncApi,parsedScenario).operationsData.operations;
     expect(operations).to.deep.equal(expectedOperations);
   });
   it('Should correctly generate subscribe operations', function () {
-    [operations,scenarios] = generateOperationsAndScenarios(parsedAsyncApi,parsedScenario);
+    scenarios = cliInterface(parsedAsyncApi,parsedScenario).operationsData.scenarios;
     expect(scenarios).to.deep.equal(expectedScenarios);
   });
 });

@@ -1,20 +1,11 @@
-const {generateOperationsAndScenarios}= require('./GenerateOperationsAndScenarios');
-const {parseFiles} = require('./parseFiles');
+const {getParameterDefinitions, getDefinedChannels, generateOperations, generateScenarios } = require('./dataTypesGenerator');
 
-function getParameterDefinitions(channels) {
-  const paramDefinitions = {};
-  for (const [channel,channelDetails] of Object.entries(channels)) {
-    Object.assign(paramDefinitions,{[channel]: {}});
-    for (const [paramName,paramValue] of Object.entries(channelDetails._json.parameters)) {
-      // eslint-disable-next-line security/detect-object-injection
-      Object.assign(paramDefinitions[channel],{[paramName]: paramValue});
-    }
-  }
-  return paramDefinitions;
-}
+const cliInterface =  (asyncApiContent,scenarioContent,basedir) => {
+  const channels = {
+    publish: {},
+    subscribe: {}
+  };
 
-const parserAndGenerator = async (asyncApiFilepath,scenarioFilepath) => {
-  const [asyncApiContent,scenarioContent] = await parseFiles(asyncApiFilepath,scenarioFilepath);
   const operationsData = {
     servers: asyncApiContent._json.servers,
     parameterDefinitions: {},
@@ -25,13 +16,23 @@ const parserAndGenerator = async (asyncApiFilepath,scenarioFilepath) => {
 
     }
   };
-  [operationsData.operations,operationsData.scenarios] = generateOperationsAndScenarios(asyncApiContent,scenarioContent);
+
+  [channels.publish,channels.subscribe] = getDefinedChannels(asyncApiContent.channels());
+
+  operationsData.operations = generateOperations(scenarioContent);
+
+  operationsData.scenarios = generateScenarios(scenarioContent,operationsData.operations);
 
   operationsData.parameterDefinitions = getParameterDefinitions(asyncApiContent.channels());
 
   console.log(`\nFound ${Object.keys(operationsData.scenarios).length} executable scenario/s`);
-  return operationsData;
+  return {operationsData
+
+  };
 };
 
-module.exports = parserAndGenerator;
+const desktopAppInterface = async (asyncApiContent,scenarioContent,basedir) => {
 
+};
+
+module.exports = {cliInterface,desktopAppInterface};
