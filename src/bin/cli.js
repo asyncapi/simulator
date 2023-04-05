@@ -119,7 +119,7 @@ const verifyInputGetData =  async (rd, asyncApiFilepath,scenarioFile,basedir) =>
 
   scenarioFile = await inputLoopScenario(rd,scenarioFile,yamlJsonRegex,basedir);
 
-  const dataFromParser = await parserAndGenerator(asyncApiFilepath,scenarioFile);
+  const dataFromParser = await parserAndGenerator(asyncApiFilepath,scenarioFile,basedir);
 
   const availableServers = Object.keys(dataFromParser.servers);
 
