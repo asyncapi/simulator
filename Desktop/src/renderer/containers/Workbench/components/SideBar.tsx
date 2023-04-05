@@ -3,12 +3,10 @@
 import React, { useState } from 'react';
 import { VscRunAll } from 'react-icons/vsc';
 import { IconContext } from 'react-icons';
-import {ACTIONS_IDS} from "../../Editor/constants";
 
 function SideBar({ EditorState, dispatch }): JSX.Element {
   async function VisualizeScenario() {
     console.log(dispatch);
-    dispatch({ type: ACTIONS_IDS.checkScenarioSyntax });
   }
 
   const [RunIconStyle, SetRunStyle] = useState({

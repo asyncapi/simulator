@@ -1,7 +1,8 @@
-import * as types from '../../Workbench/types';
+import * as types from '../types';
 
 export const ACTIONS_IDS = {
   checkScenarioSyntax: 0,
+  visualizeScenarioFile: 1,
   executeOperation: 2,
   executeScenario: 3,
   cancelExecution: 4,
@@ -9,7 +10,14 @@ export const ACTIONS_IDS = {
   scenarioUpdated: 6,
 };
 
-const defaultScenario = `version: "0.0.1"
+export const defaultEditorState: types.DefaultWorkBenchStateType = {
+  currentScenario: {},
+  scenarioUpdated: false,
+  pendingRequestExecutions: {},
+  applicationActionsHistory: [],
+};
+
+export const defaultScenario = `version: "0.0.1"
 user-logs-on:
   game/server/{serverId}/events/player/{playerId}/connect:
     playerId :
@@ -46,10 +54,3 @@ user-gameLoop:
 scenario-SimpleGame:
  - user-logs-on
  - user-gameLoop`;
-
-export const defaultEditorState: types.DefaultWorkBenchStateType = {
-  currentScenario: defaultScenario,
-  scenarioUpdated: false,
-  pendingRequestExecutions: {},
-  applicationActionsHistory: [],
-};

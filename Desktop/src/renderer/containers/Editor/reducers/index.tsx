@@ -7,8 +7,6 @@ const EditorReducer = (state: any, action: any) => {
       return { ...state };
     case ACTIONS_IDS.scenarioUpdated:
       return { ...state, scenarioUpdated: true };
-    case ACTIONS_IDS.setCurrentVisualization:
-      return { ...state, visualization: action.payload };
     case ACTIONS_IDS.executeScenario:
       return { ...state };
     case ACTIONS_IDS.executeOperation:
