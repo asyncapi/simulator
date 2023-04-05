@@ -6,6 +6,7 @@ export const ACTIONS_IDS = {
   executeScenario: 3,
   cancelExecution: 4,
   setCurrentScenarioFile: 5,
+  setCurrentVisualization: 7,
   scenarioUpdated: 6,
 };
 
@@ -52,4 +53,5 @@ export const defaultEditorState: types.DefaultWorkBenchStateType = {
   scenarioUpdated: false,
   pendingRequestExecutions: {},
   applicationActionsHistory: [],
+  visualization: ``,
 };

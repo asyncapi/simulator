@@ -27,7 +27,7 @@ function ScenarioEditor({ EditorState, dispatch }): JSX.Element {
     }
     function updateVisualizationObj(_event: any, obj: any) {
       dispatch({
-        type: ACTIONS_IDS.setCurrentScenarioFile,
+        type: ACTIONS_IDS.setCurrentVisualization,
         payload: obj,
       });
     }
