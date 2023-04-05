@@ -20,7 +20,6 @@ interface ApplicationAction {
 }
 
 export type DefaultWorkBenchStateType = {
-  visualization: string;
   currentScenario: ScenarioObject;
   scenarioUpdated: boolean;
   pendingRequestExecutions: RequestCollection;

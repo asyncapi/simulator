@@ -12,15 +12,13 @@ import path from 'path';
 import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import yamlParser from 'js-yaml';
-import { desktopAppInterface } from '../../../src/parser/index';
+import { requestManager, parserAndGenerator } from '@asyncapi/simulator';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 // eslint-disable-next-line import/extensions
 import autoSave from './tempScenarioSave';
-import { requestManager } from "@asyncapi/simulator";
 
 export default class AppUpdater {
   constructor() {
@@ -36,7 +34,6 @@ const tempScenarioSave = autoSave('temp.json');
 let mainWindow: BrowserWindow | null = null;
 
 let dataFromParser = {};
-var appInterface;
 
 console.log('---------------------------');
 console.log(path.resolve(__dirname, 'test.yaml'));
@@ -48,7 +45,7 @@ ipcMain.handle('editor/visualizeRequest', (event, scenario, format) => {
 
   console.log(scenarioParsed);
   Object.assign(tempScenarioSave, { ...scenarioParsed });
-  desktopAppInterface.(
+  parserAndGenerator(
     path.resolve(__dirname, 'save.yaml'),
     path.resolve(__dirname, 'save.json')
   )

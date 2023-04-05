@@ -68,16 +68,27 @@ function generateScenarios(scenarioParsed,operations) {
   return scenarios;
 }
 
-function getParameterDefinitions(channels) {
-  const paramDefinitions = {};
-  for (const [channel,channelDetails] of Object.entries(channels)) {
-    Object.assign(paramDefinitions,{[channel]: {}});
-    for (const [paramName,paramValue] of Object.entries(channelDetails._json.parameters)) {
-      // eslint-disable-next-line security/detect-object-injection
-      Object.assign(paramDefinitions[channel],{[paramName]: paramValue});
-    }
-  }
-  return paramDefinitions;
-}
+/**
+ * Take a parsed asyncApi and scenario file and generates two objects that describe
+ * publish and subscribe operations with the needed details for the request handler
+ * be able to make requests.
+ * @param asyncApiParsed
+ * @param scenarioParsed
+ * @returns {{}[]}
+ */
+const generateOperationsAndScenarios = (asyncApiParsed, scenarioParsed) => {
+  const channels = {
+    publish: {},
+    subscribe: {}
+  };
 
-module.exports = {generateOperations,generateScenarios,getDefinedChannels,getParameterDefinitions};
+  [channels.publish,channels.subscribe] = getDefinedChannels(asyncApiParsed.channels());
+
+  const operations = generateOperations(scenarioParsed);
+
+  const scenarios = generateScenarios(scenarioParsed,operations);
+
+  return [operations,scenarios];
+};
+
+module.exports = {generateOperationsAndScenarios};

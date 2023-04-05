@@ -1,21 +1,22 @@
-const {getParameterDefinitions, getDefinedChannels, generateOperations, generateScenarios } = require('./GenerateOperationsAndScenarios');
-const { parseAsyncApi, parseScenario } = require('./parseFiles');
+const {generateOperationsAndScenarios}= require('./GenerateOperationsAndScenarios');
+const {parseFiles} = require('./parseFiles');
 
-/**
- *
- * @returns {{updateCliData: updateCliData, channels: {subscribe: {}, publish: {}}, operationsData: {servers: {}, operations: {}, parameterDefinitions: {}, scenarios: {}}}}
- * @param asyncApiContent
- * @param scenarioContent
- * @param basedir
- */
-const cliInterface =  (asyncApiContent,scenarioContent,basedir) => {
-  const channels = {
-    publish: {},
-    subscribe: {}
-  };
+function getParameterDefinitions(channels) {
+  const paramDefinitions = {};
+  for (const [channel,channelDetails] of Object.entries(channels)) {
+    Object.assign(paramDefinitions,{[channel]: {}});
+    for (const [paramName,paramValue] of Object.entries(channelDetails._json.parameters)) {
+      // eslint-disable-next-line security/detect-object-injection
+      Object.assign(paramDefinitions[channel],{[paramName]: paramValue});
+    }
+  }
+  return paramDefinitions;
+}
 
+const parserAndGenerator = async (asyncApiFilepath,scenarioFilepath) => {
+  const [asyncApiContent,scenarioContent] = await parseFiles(asyncApiFilepath,scenarioFilepath);
   const operationsData = {
-    servers: {},
+    servers: asyncApiContent._json.servers,
     parameterDefinitions: {},
     operations: {
 
@@ -24,79 +25,13 @@ const cliInterface =  (asyncApiContent,scenarioContent,basedir) => {
 
     }
   };
-  
-  function updateCliData (asyncApiContent,scenarioContent) {
-    [channels.publish,channels.subscribe] = getDefinedChannels(asyncApiContent.channels());
+  [operationsData.operations,operationsData.scenarios] = generateOperationsAndScenarios(asyncApiContent,scenarioContent);
 
-    operationsData.operations = generateOperations(scenarioContent);
+  operationsData.parameterDefinitions = getParameterDefinitions(asyncApiContent.channels());
 
-    operationsData.servers = asyncApiContent._json.servers;
-
-    operationsData.scenarios = generateScenarios(scenarioContent,operationsData.operations);
-
-    operationsData.parameterDefinitions = getParameterDefinitions(asyncApiContent.channels());
-
-    console.log(`\nFound ${Object.keys(operationsData.scenarios).length} executable scenario/s`);
-  }
-
-  return {
-    channels,operationsData,updateCliData
-  };
+  console.log(`\nFound ${Object.keys(operationsData.scenarios).length} executable scenario/s`);
+  return operationsData;
 };
 
-/**
- *
- * @param asyncApiContent
- * @param scenarioContent
- * @param basedir
- * @returns {Promise<{channels: {subscribe: {}, publish: {}}, updateAppData: updateAppData, operationsData: {servers: {}, operations: {}, parameterDefinitions: {}, scenarios: {}}, checkSyntax: ((function(): (*|string))|*)}>}
- */
-const desktopAppInterface = async (asyncApiContent,scenarioContent,basedir) => {
-  const channels = {
-    publish: {},
-    subscribe: {}
-  };
+module.exports = parserAndGenerator;
 
-  const operationsData = {
-    servers: {},
-    parameterDefinitions: {},
-    operations: {
-
-    },
-    scenarios: {
-
-    }
-  };
-
-  function checkSyntax () {
-    try {
-      parseScenario(scenarioContent);
-    } catch (err) {
-      return err;
-    }
-    return 'ok';
-  }
-  
-  function updateAppData (asyncApiContent,scenarioContent) {
-    const parsedAsyncApi = parseAsyncApi(asyncApiContent);
-      
-    [channels.publish,channels.subscribe] = getDefinedChannels(parsedAsyncApi.channels());
-
-    const scenarioParsed = parseScenario(scenarioContent);
-    operationsData.operations = generateOperations(scenarioParsed);
-
-    operationsData.servers = parsedAsyncApi._json.servers;
-
-    operationsData.scenarios = generateScenarios(scenarioParsed,operationsData.operations);
-
-    operationsData.parameterDefinitions = getParameterDefinitions(asyncApiContent.channels());
-
-    console.log(`\nFound ${Object.keys(operationsData.scenarios).length} executable scenario/s`);
-  }
-
-  return {
-    channels,operationsData,updateAppData,checkSyntax
-  };
-};
-
-module.exports = {cliInterface,desktopAppInterface};
