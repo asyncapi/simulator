@@ -73,6 +73,19 @@ const template = [
       },
     ],
   },
+  {
+    label: 'Async',
+    submenu: [
+      {
+        label: 'Load Files',
+        click: () => {
+          openExternal(
+            'https://github.com/KochiyaOcean/electron-react-titlebar'
+          );
+        },
+      },
+    ],
+  },
 ];
 
 export default template;
