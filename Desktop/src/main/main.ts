@@ -168,7 +168,7 @@ function handleSetTitle (_event: any) {
   console.log('hello_form_main')
 }
 
-function handleFileLoad () {
+async function handleFileLoad () {
   const options = {
     title: 'Open File',
     defaultPath: app.getPath('documents'),
@@ -179,27 +179,38 @@ function handleFileLoad () {
     properties: ['openFile']
   };
 
+  let filePath;
+
   dialog.showOpenDialog(options).then(result => {
     if (!result.canceled && result.filePaths.length > 0) {
-      const filePath = result.filePaths[0];
+      filePath = result.filePaths[0];
       console.log('Selected File:', filePath);
-      parseYamlFile(filePath);
+      // event.returnValuereturn  =  parseYamlFile(filePath);
+      // parseYamlFile(filePath)
+      // return filePath;
+      // console.log('reply has been sent')
+      mainWindow.webContents.send('asynchronous-message', filePath);
     }
   }).catch(err => {
     console.error('Error:', err);
   });
+
 }
 
-async function parseYamlFile(filePath: string): Promise<void> {
-  try {
-    const yamlContent: string = readFileSync(filePath, 'utf8');
-    const parsedAsyncAPI: AsyncAPIDocument = await parse(yamlContent);
-    console.log('Parsed AsyncAPI:', parsedAsyncAPI);
-    // Process the parsed AsyncAPI object as needed
-  } catch (error) {
-    console.error('Error parsing YAML file:', error);
-  }
-}
+// async function parseYamlFile(filePath: string): Promise<AsyncAPIDocument | void> {
+//   try {
+//     const yamlContent: string = readFileSync(filePath, 'utf8');
+//     const parsedAsyncAPI: AsyncAPIDocument = await parse(yamlContent);
+//     console.log('Parsed AsyncAPI:', parsedAsyncAPI);
+//     console.log(parsedAsyncAPI.info().version())
+//     // Process the parsed AsyncAPI object as needed
+//     console.log('first sending from here')
+//     // return parsedAsyncAPI;
+    
+//   } catch (error) {
+//     console.error('Error parsing YAML file:', error);
+//   }
+// }
 
 app
   .whenReady()
