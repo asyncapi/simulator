@@ -19,8 +19,6 @@ import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 // eslint-disable-next-line import/extensions
 import autoSave from './tempScenarioSave';
-import { parse, AsyncAPIDocument } from '@asyncapi/parser';
-import { readFileSync } from 'fs';
 
 
 
@@ -164,9 +162,6 @@ app.on('window-all-closed', () => {
   }
 });
 
-function handleSetTitle (_event: any) {
-  console.log('hello_form_main')
-}
 
 async function handleFileLoad () {
   const options = {
@@ -185,10 +180,6 @@ async function handleFileLoad () {
     if (!result.canceled && result.filePaths.length > 0) {
       filePath = result.filePaths[0];
       console.log('Selected File:', filePath);
-      // event.returnValuereturn  =  parseYamlFile(filePath);
-      // parseYamlFile(filePath)
-      // return filePath;
-      // console.log('reply has been sent')
       mainWindow.webContents.send('asynchronous-message', filePath);
     }
   }).catch(err => {
@@ -197,20 +188,6 @@ async function handleFileLoad () {
 
 }
 
-// async function parseYamlFile(filePath: string): Promise<AsyncAPIDocument | void> {
-//   try {
-//     const yamlContent: string = readFileSync(filePath, 'utf8');
-//     const parsedAsyncAPI: AsyncAPIDocument = await parse(yamlContent);
-//     console.log('Parsed AsyncAPI:', parsedAsyncAPI);
-//     console.log(parsedAsyncAPI.info().version())
-//     // Process the parsed AsyncAPI object as needed
-//     console.log('first sending from here')
-//     // return parsedAsyncAPI;
-    
-//   } catch (error) {
-//     console.error('Error parsing YAML file:', error);
-//   }
-// }
 
 app
   .whenReady()
@@ -220,16 +197,7 @@ app
       if (mainWindow === null) createWindow();
     });
 
-    ipcMain.on('set-title', handleSetTitle)
-
-    ipcMain.handle('fetch-user-data', (_event) => {
-      // Perform operations in the main process
-      // For example, fetch user data from a database or perform other tasks
-      const userData = { name: 'John Doe', age: 30 };
-    
-      return userData; // Return the data to the renderer process
-    });
-    //We will handle loading of the file when the button is clicked.
     ipcMain.on('button-click', handleFileLoad)
+
   })
   .catch(console.log);

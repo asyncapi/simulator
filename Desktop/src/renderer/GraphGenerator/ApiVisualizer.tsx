@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { ipcRenderer} from 'electron';
+import { ipcRenderer } from 'electron';
 import { readFileSync } from 'fs';
-import { parse, AsyncAPIDocument} from '@asyncapi/parser';
+import { parse, AsyncAPIDocument } from '@asyncapi/parser';
 import ReactFlow, { Background, Panel, useNodesState, useEdgesState, useReactFlow, useStore, useNodes, isNode } from 'reactflow';
 import 'reactflow/dist/style.css';
 import NodeTypes from '../Nodes';
 import { calculateNodesForDynamicLayout } from '../../parser/utils/layout';
-import { generateFromSpecs } from '../../parser/parser';
+import { generateFromSpecs } from '../../parser/flowGenerator';
 
 
 
-interface AutoLayoutProps {}
+interface AutoLayoutProps { }
 
 
 const AutoLayout: FunctionComponent<AutoLayoutProps> = () => {
@@ -37,23 +37,19 @@ const AutoLayout: FunctionComponent<AutoLayoutProps> = () => {
 
 
 const divStyle = {
-width: '100%',
-height: '100%',
-backgroundColor: '#f0f0f0',
+  width: '100%',
+  height: '100%',
+  backgroundColor: '#f0f0f0',
 };
 
 const reactFlowStyle = {
-background: '#1a365d',
-width: '100%',
-height: 300,
+  background: '#1a365d',
+  width: '100%',
+  height: 300,
 };
 
-function handleClick() {
-  ipcRenderer.send('button-click');
-}
 
-
-export default function Flow() {
+export default function ApiVisualizer() {
 
   const [document, setDocument] = useState<AsyncAPIDocument | null>(null);
 
@@ -61,9 +57,9 @@ export default function Flow() {
     try {
       const yamlContent: string = readFileSync(filePath, 'utf8');
       const parsedAsyncAPI: AsyncAPIDocument = await parse(yamlContent);
-  
+
       setDocument(parsedAsyncAPI)
-      
+
     } catch (error) {
       console.error('Error parsing YAML file:', error);
     }
@@ -73,7 +69,7 @@ export default function Flow() {
   useEffect(() => {
     // Define the event listener for the 'asynchronous-message' event
     const handleIPCMessage = (_event: any, message: string) => {
-      console.log(message); 
+      console.log(message);
       parseYamlFile(message)
     };
 
@@ -85,38 +81,37 @@ export default function Flow() {
       ipcRenderer.removeListener('asynchronous-message', handleIPCMessage);
     };
   }, []); // Empty dependency array ensures that the effect runs only once, on mount
-  
-
-const [nodes, setNodes, onNodesChange] = useNodesState([]);
-const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
 
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
-useEffect(() => {
-  if (document !== null) {
-    const elements = generateFromSpecs(document);
-    console.log('generated elements1', elements);
 
-    //new entities....
 
-    const newNodes = elements.map(el => el.node).filter(Boolean);
-    const newEdges = elements.map(el => el.edge).filter(Boolean);
-    console.log('newNodes',newNodes);
-    console.log('newEdges',newEdges);
+  useEffect(() => {
+    if (document !== null) {
+      const elements = generateFromSpecs(document);
+      console.log('generated elements1', elements);
 
-    //so we have been successfully be able to generate the newNodes and newEdges
+      //new entities....
 
-    setNodes(newNodes);
-    setEdges(newEdges);
+      const newNodes = elements.map(el => el.node).filter(Boolean);
+      const newEdges = elements.map(el => el.edge).filter(Boolean);
+      console.log('newNodes', newNodes);
+      console.log('newEdges', newEdges);
 
-  } else {
-    console.log('it is still null');
-  }
-}, [document]); 
+      //so we have been successfully be able to generate the newNodes and newEdges
+
+      setNodes(newNodes);
+      setEdges(newEdges);
+
+    } else {
+      console.log('it is still null');
+    }
+  }, [document]);
 
   return (
     <>
-      <input type="button" value="Select AsyncAPI file" id='btn-readfile' onClick={handleClick} />
       <div style={divStyle}>
 
         <ReactFlow

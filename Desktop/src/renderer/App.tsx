@@ -1,10 +1,15 @@
 import React from 'react'
 import './App.global.css';
-import Flow from './GraphGenerator/Flow'
+import { MemoryRouter as Router, Switch, Route } from 'react-router-dom';
+import { Editor } from './containers/Editor';
 
 const App = () => {
   return (
-    <Flow/>
+    <Router>
+      <Switch>
+        <Route path="/" component={Editor} />
+      </Switch>
+    </Router>
   )
 }
 
