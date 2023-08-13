@@ -249,7 +249,6 @@
     "react-icons": "^4.3.1",
     "react-router-dom": "^5.3.0",
     "react-virtualized": "^9.22.3",
-    "reactflow": "^11.7.4",
     "regenerator-runtime": "^0.13.9"
   },
   "devEngines": {

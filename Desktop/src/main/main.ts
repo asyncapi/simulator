@@ -9,7 +9,7 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, BrowserWindow, shell, ipcMain, dialog } from 'electron';
+import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 // @ts-ignore
@@ -19,8 +19,6 @@ import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 // eslint-disable-next-line import/extensions
 import autoSave from './tempScenarioSave';
-
-
 
 export default class AppUpdater {
   constructor() {
@@ -94,8 +92,6 @@ const installExtensions = async () => {
     .catch(console.log);
 };
 
-//------------------------------------------*******---------------------------------
-
 const createWindow = async () => {
   if (isDevelopment) {
     await installExtensions();
@@ -162,33 +158,6 @@ app.on('window-all-closed', () => {
   }
 });
 
-
-async function handleFileLoad () {
-  const options = {
-    title: 'Open File',
-    defaultPath: app.getPath('documents'),
-    filters: [
-      { name: 'Text Files', extensions: ['yaml'] },
-      { name: 'All Files', extensions: ['*'] }
-    ],
-    properties: ['openFile']
-  };
-
-  let filePath;
-
-  dialog.showOpenDialog(options).then(result => {
-    if (!result.canceled && result.filePaths.length > 0) {
-      filePath = result.filePaths[0];
-      console.log('Selected File:', filePath);
-      mainWindow.webContents.send('asynchronous-message', filePath);
-    }
-  }).catch(err => {
-    console.error('Error:', err);
-  });
-
-}
-
-
 app
   .whenReady()
   .then(() => {
@@ -196,8 +165,5 @@ app
     app.on('activate', () => {
       if (mainWindow === null) createWindow();
     });
-
-    ipcMain.on('button-click', handleFileLoad)
-
   })
   .catch(console.log);
