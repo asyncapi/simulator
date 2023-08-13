@@ -1,14 +1,16 @@
-import React from 'react';
-import { MemoryRouter as Router, Switch, Route } from 'react-router-dom';
+import React from 'react'
 import './App.global.css';
+import { MemoryRouter as Router, Switch, Route } from 'react-router-dom';
 import { Editor } from './containers/Editor';
 
-export default function App() {
+const App = () => {
   return (
     <Router>
       <Switch>
         <Route path="/" component={Editor} />
       </Switch>
     </Router>
-  );
+  )
 }
+
+export default App

@@ -3,6 +3,7 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
 const { shell } = require('electron');
+const { ipcRenderer } = require('electron');
 
 const { openExternal } = shell;
 
@@ -44,19 +45,19 @@ const template = [
         label: 'Light',
         type: 'radio',
         checked: false,
-        click: (item, e) => {},
+        click: (item, e) => { },
       },
       {
         label: 'Dark',
         type: 'radio',
         checked: true,
-        click: (item, e) => {},
+        click: (item, e) => { },
       },
       {
         label: 'Black',
         type: 'radio',
         checked: false,
-        click: (item, e) => {},
+        click: (item, e) => { },
       },
     ],
   },
@@ -69,6 +70,17 @@ const template = [
           openExternal(
             'https://github.com/KochiyaOcean/electron-react-titlebar'
           );
+        },
+      },
+    ],
+  },
+  {
+    label: 'Async',
+    submenu: [
+      {
+        label: 'Load Files',
+        click: () => {
+          ipcRenderer.send('button-click');
         },
       },
     ],
