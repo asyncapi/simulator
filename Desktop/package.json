@@ -1,5 +1,6 @@
 {
   "name": "async-api-simulator",
+  "version": "0.2.0",
   "productName": "AsyncApi Simulator",
   "description": "Desktop application to generate asynchronous protocol traffic",
   "scripts": {
