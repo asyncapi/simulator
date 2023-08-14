@@ -7,9 +7,12 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-Ever wondered what it would feel like your application to be the center of interest?
+- Command line library and desktop application for generating asynchronous traffic.
 
-Does it seem distant or difficult to switch from development mode to production mode?
+- Visualize your asyncApi files and test your asynchronous networks.
+
+![Image Alt Text](https://github.com/asyncapi/simulator/blob/master/simulator_screenshot.JPG?raw=true)
+
 
 ---
 
