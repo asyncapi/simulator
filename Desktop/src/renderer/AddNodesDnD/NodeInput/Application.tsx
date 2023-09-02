@@ -17,19 +17,6 @@ export default function Application({ nodes, setNodes }) {
     setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
   };
 
-  // const handleSubmit = (event) => {
-  //   event.preventDefault();
-  //   alert(
-  //     `Description: ${formData.description}\n` +
-  //     `Title: ${formData.title}\n` +
-  //     `Version: ${formData.version}\n` +
-  //     `License: ${formData.license}\n` +
-  //     `External Docs: ${formData.externalDocs}\n` +
-  //     `Servers: ${formData.servers}\n` +
-  //     `Default Content Type: ${formData.defaultContentType}`
-  //   );
-  // };
-
   const onDragStart = (event, nodeType) => {
     event.dataTransfer.setData('application/reactflow', nodeType);
     event.dataTransfer.effectAllowed = 'move';
@@ -100,8 +87,6 @@ export default function Application({ nodes, setNodes }) {
           value={formData.defaultContentType}
           onChange={handleChange}
         />
-
-        {/* <button type="submit">Submit</button> */}
       </form>
     </div>
   );

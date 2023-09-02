@@ -11,7 +11,6 @@ const AddButton = ({ nodes, setNodes }) => {
 
     return (
         <Navbar>
-            {/* <NavItem icon={<MessengerIcon />} /> */}
 
             <NavItem icon={<BsPlayFill />} />
 
@@ -112,10 +111,6 @@ function DropdownMenu({ nodes, setNodes }) {
                     <DropdownItem goToMenu="main" leftIcon={<BsArrowLeft/>}>
                         <h3>Create Application Node</h3>
                     </DropdownItem>
-                    {/* <DropdownItem leftIcon={<BsArrowLeft/>}>HTML</DropdownItem>
-                    <DropdownItem leftIcon={<BsArrowLeft/>}>CSS</DropdownItem>
-                    <DropdownItem leftIcon={<BsArrowLeft/>}>JavaScript</DropdownItem>
-                    <DropdownItem leftIcon={<BsArrowLeft/>}>Awesome!</DropdownItem> */}
                     <Application nodes={nodes} setNodes={setNodes}/>
                 </div>
             </CSSTransition>
@@ -130,10 +125,6 @@ function DropdownMenu({ nodes, setNodes }) {
                     <DropdownItem goToMenu="main" leftIcon={<BsArrowLeft/>}>
                         <h3>Create Publish Node</h3>
                     </DropdownItem>
-                    {/* <DropdownItem leftIcon="🦘">Kangaroo</DropdownItem>
-                    <DropdownItem leftIcon="🐸">Frog</DropdownItem>
-                    <DropdownItem leftIcon="🦋">Horse?</DropdownItem>
-                    <DropdownItem leftIcon="🦔">Hedgehog</DropdownItem> */}
                     <Publish nodes={nodes} setNodes={setNodes} />
                 </div>
             </CSSTransition>
@@ -148,10 +139,6 @@ function DropdownMenu({ nodes, setNodes }) {
                     <DropdownItem goToMenu="main" leftIcon={<BsArrowLeft/>}>
                         <h3>Create Subscribe Node</h3>
                     </DropdownItem>
-                    {/* <DropdownItem leftIcon="🦘">Kangaroo</DropdownItem>
-                    <DropdownItem leftIcon="🐸">Frog</DropdownItem>
-                    <DropdownItem leftIcon="🦋">Horse?</DropdownItem>
-                    <DropdownItem leftIcon="🦔">Hedgehog</DropdownItem> */}
                     <Subscribe nodes={nodes} setNodes={setNodes}/>
                 </div>
             </CSSTransition>

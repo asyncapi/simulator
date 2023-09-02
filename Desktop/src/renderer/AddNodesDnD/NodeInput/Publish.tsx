@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import "./index.css"; // Assuming you save the provided CSS in a file named "Subscribe.css"
+import "./index.css"; 
 
 export default function Publish({ nodes, setNodes }) {
   const [formData, setFormData] = useState({ channel: "", description: "", message: "" });
@@ -10,13 +10,6 @@ export default function Publish({ nodes, setNodes }) {
     setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
   };
 
-  // const handleSubmit = (event) => {
-  //   event.preventDefault();
-  //   alert(
-  //     `Name: ${formData.channel}, Email: ${formData.description}, Message: ${formData.message}`
-  //   );
-  // };
-
   const onDragStart = (event, nodeType) => {
     event.dataTransfer.setData('application/reactflow', nodeType);
     event.dataTransfer.effectAllowed = 'move';
@@ -25,7 +18,6 @@ export default function Publish({ nodes, setNodes }) {
 
   return (
     <div onDragStart={(event) => onDragStart(event, 'publishNode')} draggable>
-      {/* <form className="custom-form" onSubmit={handleSubmit}> */}
       <form className="custom-form">
         <label htmlFor="channel">Channel:</label>
         <input
@@ -52,8 +44,6 @@ export default function Publish({ nodes, setNodes }) {
           value={formData.message}
           onChange={handleChange}
         />
-
-        {/* <button type="submit">Submit</button> */}
       </form>
     </div>
   );

@@ -31,7 +31,6 @@ const buildNodeData = (spec: AsyncAPIDocument, extraData?: any) => {
 
   const servers = spec.servers();
 
-  console.log('servers which does not exists',servers)
 
   const mappedServers = Object.keys(servers).reduce((newMappedServers: any[], serverKey) => {
     const server = servers[String(serverKey)];
@@ -76,14 +75,6 @@ export const ApplicationNode: FunctionComponent<ApplicationNodeProps> = ({
   },
 }) => {
 
-  console.log('aa gaya data', description,
-  title,
-  version,
-  license,
-  externalDocs,
-  servers,
-  defaultContentType,)
-
   let combinedData;
 
   if (spec) {
@@ -100,99 +91,6 @@ export const ApplicationNode: FunctionComponent<ApplicationNodeProps> = ({
       defaultContentType,
     };
   }
-
-  console.log('combined wala deta',combinedData)
-
-  // const { description, title, version, license, externalDocs, servers, defaultContentType } = buildNodeData(spec as AsyncAPIDocument);
-
-  // return (
-  //   <div style={{ backgroundColor: 'white', padding: '10px' }}>
-  //     <Handle
-  //       type="target"
-  //       position={Position.Left}
-  //       style={{ background: 'gray' }}
-  //     />
-  //     <div>
-  //       <div>
-  //         <div>
-  //           <span>
-  //             application
-  //           </span>
-  //         </div>
-
-  //         <div>
-  //           <h3>{combinedData.title}</h3>
-  //           <span>
-  //             v{combinedData.version}
-  //           </span>
-  //         </div>
-  //         {combinedData.description && (
-  //           <div>
-  //               {combinedData.description}
-  //           </div>
-  //         )}
-  //         {combinedData.defaultContentType && (
-  //           <p>
-  //             Default ContentType:{' '}
-  //             <span>
-  //               {combinedData.defaultContentType}
-  //             </span>
-  //           </p>
-  //         )}
-  //       </div>
-
-  //       {combinedData.servers.length > 0 && (
-  //         <div>
-  //           <h3>Servers</h3>
-  //           <dl>
-  //             {combinedData.servers.map((server) => {
-  //               return (
-  //                 <div key={server.name}>
-  //                   <dt>
-  //                     {server.name}
-  //                     <span>
-  //                       {server.protocolVersion
-  //                         ? `${server.protocol} ${server.protocolVersion}`
-  //                         : server.protocol}
-  //                     </span>
-  //                   </dt>
-  //                   <dd>
-  //                     {/* <Markdown> */}
-  //                       {server.description}
-  //                     {/* </Markdown> */}
-  //                   </dd>
-  //                   <dd>url: {server.url}</dd>
-  //                 </div>
-  //               );
-  //             })}
-  //           </dl>
-  //         </div>
-  //       )}
-
-  //       <div>
-  //         {combinedData.externalDocs && (
-  //           <a
-  //             href={combinedData.externalDocs}
-  //             target="_blank"
-  //             rel="noreferrer"
-  //           >
-  //             {combinedData.externalDocs}
-  //           </a>
-  //         )}
-  //         {combinedData.license.name && (
-  //           <a
-  //             href={combinedData.license.url as string}
-  //             target="_blank"
-  //             rel="noreferrer"
-  //           >
-  //             License: {combinedData.license.name}
-  //           </a>
-  //         )}
-  //       </div>
-  //     </div>
-  //     <Handle type="source" position={Position.Right} style={{ background: 'gray' }} />
-  //   </div>
-  // );
 
   return (
     <div style={{ backgroundColor: 'white', padding: '10px' }}>
@@ -229,9 +127,6 @@ export const ApplicationNode: FunctionComponent<ApplicationNodeProps> = ({
             </p>
           )}
         </div>
-
-       
-
         <div>
           {combinedData.externalDocs && (
             <a
