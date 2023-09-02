@@ -1,0 +1,45 @@
+/* Custom CSS for Subscribe Form */
+.custom-form {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-accent);
+    padding: 20px;
+    border: var(--border);
+    border-radius: var(--border-radius);
+    margin: 20px;
+  }
+  
+  .custom-form label {
+    color: var(--text-color);
+    margin-bottom: 8px;
+  }
+  
+  .custom-form input,
+  .custom-form textarea {
+    background-color: var(--bg);
+    border: var(--border);
+    border-radius: var(--border-radius);
+    color: var(--text-color);
+    padding: 8px;
+    margin-bottom: 12px;
+  }
+  
+  .custom-form textarea {
+    resize: vertical;
+  }
+  
+  .custom-form button {
+    background-color: var(--bg-accent);
+    border: var(--border);
+    border-radius: var(--border-radius);
+    color: var(--text-color);
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: filter var(--speed);
+  }
+  
+  .custom-form button:hover {
+    filter: brightness(1.2);
+  }
+  
+  

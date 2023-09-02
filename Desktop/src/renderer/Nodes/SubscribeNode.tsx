@@ -16,6 +16,8 @@ interface PublishNodeProps {
 
 export const SubscribeNode: FunctionComponent<PublishNodeProps> = ({ data: { channel, description, messages } }) => {
 
+  console.log('yaha pe nahi aaya not defined', channel, description, messages)
+
   return (
     <div style={{ backgroundColor: 'white', padding: '10px' }}>
       <Handle
