@@ -1,39 +1,14 @@
-import React, { useState, useEffect, useCallback, useRef, FunctionComponent } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { ipcRenderer } from 'electron';
 import { readFileSync } from 'fs';
 import { parse, AsyncAPIDocument } from '@asyncapi/parser';
-import ReactFlow, { Background, Panel, useNodesState, useEdgesState, useReactFlow, useStore, useNodes, ReactFlowProvider } from 'reactflow';
+import ReactFlow, { Background, Panel, useNodesState, useEdgesState, ReactFlowProvider } from 'reactflow';
 import 'reactflow/dist/style.css';
 import NodeTypes from '../Nodes';
-import { calculateNodesForDynamicLayout } from '../../parser/utils/layout';
+import { AutoLayout } from '../../parser/utils/layout';
 import { generateFromSpecs } from '../../parser/flowGenerator';
 import AddButton from 'renderer/AddNodesDnD/AddButton';
 import './index.css';
-
-interface AutoLayoutProps { }
-
-
-const AutoLayout: FunctionComponent<AutoLayoutProps> = () => {
-  const { fitView } = useReactFlow();
-  const nodes = useNodes();
-  const setNodes = useStore(state => state.setNodes);
-
-  useEffect(() => {
-    if (nodes.length === 0 || !nodes[0].width) {
-      return;
-    }
-
-    const nodesWithOrginalPosition = nodes.filter(node => node.position.x === 0 && node.position.y === 0);
-    if (nodesWithOrginalPosition.length > 1) {
-      const calculatedNodes = calculateNodesForDynamicLayout(nodes);
-      setNodes(calculatedNodes);
-      fitView();
-    }
-  }, [nodes]);
-
-  return null;
-};
-
 
 
 const divStyle = {
@@ -67,20 +42,17 @@ export default function ApiVisualizer() {
 
 
   useEffect(() => {
-    // Define the event listener for the 'asynchronous-message' event
     const handleIPCMessage = (_event: any, message: string) => {
       console.log(message);
       parseYamlFile(message)
     };
 
-    // Attach the event listener when the component mounts
     ipcRenderer.on('asynchronous-message', handleIPCMessage);
 
-    // Clean up the event listener when the component unmounts
     return () => {
       ipcRenderer.removeListener('asynchronous-message', handleIPCMessage);
     };
-  }, []); // Empty dependency array ensures that the effect runs only once, on mount
+  }, []);
 
 
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
@@ -92,12 +64,10 @@ export default function ApiVisualizer() {
     if (document !== null) {
       const elements = generateFromSpecs(document);
 
-      //new entities....
 
       const newNodes = elements.map(el => el.node).filter(Boolean);
       const newEdges = elements.map(el => el.edge).filter(Boolean);
 
-      //so we have been successfully be able to generate the newNodes and newEdges
 
       setNodes(newNodes);
       setEdges(newEdges);
@@ -110,9 +80,8 @@ export default function ApiVisualizer() {
 
 
   const onConnect = useCallback((connection) => {
-    // Create a new edge object based on the customEdge template
     const newEdge = {
-      id: `${connection.source}-to-application-${connection.target}`, // Generate a unique ID
+      id: `${connection.source}-to-application-${connection.target}`,
       source: connection.source,
       target: connection.target,
       animated: true,
@@ -120,7 +89,6 @@ export default function ApiVisualizer() {
       style: { stroke: '#7ee3be', strokeWidth: 4 },
     };
 
-    // Add the new edge to the edges list
     setEdges((eds) => [...eds, newEdge]);
   }, [setEdges]);
 
@@ -143,7 +111,6 @@ export default function ApiVisualizer() {
       const Data = JSON.parse(event.dataTransfer.getData('application/json'));
 
 
-      // check if the dropped element is valid
       if (typeof type === 'undefined' || !type) {
         return;
       }

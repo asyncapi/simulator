@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./index.css"; // Import the custom CSS file
+import "./index.css"; 
 
 export default function Application({ nodes, setNodes }) {
   const [formData, setFormData] = useState({

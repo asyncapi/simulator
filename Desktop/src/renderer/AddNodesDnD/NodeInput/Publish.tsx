@@ -15,7 +15,6 @@ export default function Publish({ nodes, setNodes }) {
     event.dataTransfer.effectAllowed = 'move';
     event.dataTransfer.setData('application/json', JSON.stringify(formData));
   };
-
   return (
     <div onDragStart={(event) => onDragStart(event, 'publishNode')} draggable>
       <form className="custom-form">

@@ -14,19 +14,13 @@
     padding: 0;
   }
   
-  a {
-    color: var(--text-color);
-    text-decoration: none;;
-  }
   
   /* Top Navigation Bar */
   
   /* <nav> */
   .navbar {
     height: var(--nav-size);
-    /* background-color: var(--bg); */
     padding: 0 1rem;
-    /* border-bottom: var(--border); */
   }
   
   /* <ul> */
@@ -91,6 +85,9 @@
   }
   
   .menu-item {
+    user-select: none;
+    color: var(--text-color);
+    text-decoration: none;
     height: 50px;
     display: flex;
     align-items: center;

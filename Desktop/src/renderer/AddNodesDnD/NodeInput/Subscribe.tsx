@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import "./index.css"; 
+import "./index.css";
 
 export default function Subscribe({ nodes, setNodes }) {
-  
+
   const [formData, setFormData] = useState({ channel: "", description: "", message: "" });
 
   const handleChange = (event) => {
@@ -18,8 +18,8 @@ export default function Subscribe({ nodes, setNodes }) {
   };
 
   return (
-      <div onDragStart={(event) => onDragStart(event, 'subscribeNode')} draggable>
-      <form className="custom-form">
+    <div onDragStart={(event) => onDragStart(event, 'subscribeNode')} draggable>
+      <form className="custom-form" >
         <label htmlFor="channel">Channel:</label>
         <input
           type="text"
