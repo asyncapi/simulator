@@ -2,13 +2,14 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { ipcRenderer } from 'electron';
 import { readFileSync } from 'fs';
 import { parse, AsyncAPIDocument } from '@asyncapi/parser';
-import ReactFlow, { Background, Panel, useNodesState, useEdgesState, ReactFlowProvider } from 'reactflow';
+import ReactFlow, { Background, Panel, useNodesState, useEdgesState} from 'reactflow';
 import 'reactflow/dist/style.css';
 import NodeTypes from '../Nodes';
 import { AutoLayout } from '../../parser/utils/layout';
 import { generateFromSpecs } from '../../parser/flowGenerator';
 import AddButton from 'renderer/AddNodesDnD/AddButton';
 import './index.css';
+import { connect } from 'mqtt';
 
 
 const divStyle = {
@@ -43,7 +44,6 @@ export default function ApiVisualizer() {
 
   useEffect(() => {
     const handleIPCMessage = (_event: any, message: string) => {
-      console.log(message);
       parseYamlFile(message)
     };
 
@@ -57,7 +57,6 @@ export default function ApiVisualizer() {
 
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-
 
 
   useEffect(() => {
@@ -80,6 +79,7 @@ export default function ApiVisualizer() {
 
 
   const onConnect = useCallback((connection) => {
+
     const newEdge = {
       id: `${connection.source}-to-application-${connection.target}`,
       source: connection.source,
@@ -90,7 +90,29 @@ export default function ApiVisualizer() {
     };
 
     setEdges((eds) => [...eds, newEdge]);
-  }, [setEdges]);
+
+    const sourceNode = nodes.find((node) => node.id === connection.source);
+    const targetNode = nodes.find((node) => node.id === connection.target);
+
+
+
+    if(sourceNode?.type === 'publishNode' || sourceNode?.type === 'subscribeNode'){
+      sourceNode?.data.mqttClient.connect();
+
+      sourceNode?.data.mqttClient.on('connect', () => {
+        console.log('Connected to MQTT broker as source node');
+      });
+    }
+
+    if(targetNode?.type === 'publishNode' || targetNode?.type === 'subscribeNode'){
+      targetNode?.data.mqttClient.connect();
+
+      targetNode?.data.mqttClient.on('connect', () => {
+        console.log('Connected to MQTT broker as target node ');
+      });
+    }
+
+  }, [setEdges,nodes]);
 
 
   const reactFlowWrapper = useRef(null);
@@ -101,6 +123,16 @@ export default function ApiVisualizer() {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
   }, []);
+
+  function createMqttClient() {
+    
+    const client = connect('mqtt://localhost:1883', {
+      manualConnect: true,
+    });
+
+    return client;
+
+  }
 
   const onDrop = useCallback(
     (event) => {
@@ -121,10 +153,13 @@ export default function ApiVisualizer() {
       });
 
       let newNode
-
+      
       if(type === 'subscribeNode'){
+
+        const mqttClient = createMqttClient();
+
         newNode = {
-          data: {title: undefined, channel: `${Data.channel}`, tags: Array(0), messages: Array(1), spec: AsyncAPIDocument, },
+          data: {title: undefined, channel: `${Data.channel}`, tags: Array(0), messages: Array(1), spec: AsyncAPIDocument, mqttClient},
           dragging: true,
           height: 143,
           id: `subscribe-${Data.channel}`,
@@ -135,8 +170,12 @@ export default function ApiVisualizer() {
           width: 394
         }
       }else if(type === 'publishNode'){
+
+        const mqttClient = createMqttClient();
+
         newNode = {
-          data: {title: 'receiveLightMeasurement', channel: `${Data.channel}`, tags: Array(0), messages: Array(1), spec: AsyncAPIDocument,},
+          data: {title: 'receiveLightMeasurement', channel: `${Data.channel}`, tags: Array(0), messages: Array(1), spec: AsyncAPIDocument, mqttClient},
+          ref: 'apple',
           id: `publish-${Data.channel}`,
           position: position,
           type: "publishNode"
@@ -157,34 +196,51 @@ export default function ApiVisualizer() {
   );
 
 
+  const onEdgesDelete = (edges) => {
+    edges.forEach((edge) => {
+      const sourceNode = nodes.find((node) => node.id === edge.source);
+      const targetNode = nodes.find((node) => node.id === edge.target);
+
+      if(sourceNode?.type === 'publishNode' || sourceNode?.type === 'subscribeNode'){
+        sourceNode?.data.mqttClient.end();
+      }
+  
+      if(targetNode?.type === 'publishNode' || targetNode?.type === 'subscribeNode'){
+        targetNode?.data.mqttClient.end();
+      }
+
+    });
+  };
+
   return (
     <>
       <div className="dndflow">
         <div style={divStyle}>
-          <ReactFlowProvider>
-            <div className="reactflow-wrapper" ref={reactFlowWrapper}>
-              <ReactFlow
-                nodeTypes={NodeTypes}
-                nodes={nodes}
-                edges={edges}
-                onNodesChange={onNodesChange}
-                onEdgesChange={onEdgesChange}
-                onConnect={onConnect}
-                fitView
-                style={reactFlowStyle}
-                onInit={setReactFlowInstance}
-                onDrop={onDrop}
-                onDragOver={onDragOver}
-              >
-                <Background />
-                <AutoLayout />
 
-                <Panel position="top-right">
-                  <AddButton nodes={nodes} setNodes={setNodes} />
-                </Panel>
-              </ReactFlow>
-            </div>
-          </ReactFlowProvider>
+          <div className="reactflow-wrapper" ref={reactFlowWrapper}>
+            <ReactFlow
+              nodeTypes={NodeTypes}
+              nodes={nodes}
+              edges={edges}
+              onNodesChange={onNodesChange}
+              onEdgesChange={onEdgesChange}
+              onEdgesDelete={onEdgesDelete}
+              onConnect={onConnect}
+              fitView
+              style={reactFlowStyle}
+              onInit={setReactFlowInstance}
+              onDrop={onDrop}
+              onDragOver={onDragOver}
+            >
+              <Background />
+              <AutoLayout />
+
+              <Panel position="top-right">
+                <AddButton nodes={nodes} setNodes={setNodes} />
+              </Panel>
+            </ReactFlow>
+          </div>
+
         </div>
       </div>
     </>
