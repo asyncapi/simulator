@@ -159,10 +159,10 @@ export default function ApiVisualizer() {
         const mqttClient = createMqttClient();
 
         newNode = {
-          data: {title: undefined, channel: `${Data.channel}`, tags: Array(0), messages: Array(1), spec: AsyncAPIDocument, mqttClient},
+          data: {topic: `${Data.topic}`,QOS: Data.qos, id: Data.id, tags: Array(0), messages: Array(1), spec: AsyncAPIDocument, mqttClient},
           dragging: true,
           height: 143,
-          id: `subscribe-${Data.channel}`,
+          id: `subscribe-${Data.id}`,
           position: position,
           positionAbsolute: position,
           selected: false,
@@ -174,7 +174,7 @@ export default function ApiVisualizer() {
         const mqttClient = createMqttClient();
 
         newNode = {
-          data: {title: 'receiveLightMeasurement', channel: `${Data.channel}`, tags: Array(0), messages: Array(1), spec: AsyncAPIDocument, mqttClient},
+          data: {title: 'receiveLightMeasurement',message: Data.message, channel: `${Data.channel}`, tags: Array(0), messages: Array(1), spec: AsyncAPIDocument, mqttClient},
           ref: 'apple',
           id: `publish-${Data.channel}`,
           position: position,

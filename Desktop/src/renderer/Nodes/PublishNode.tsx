@@ -3,7 +3,7 @@ import { Handle, Position } from 'reactflow';
 
 
 interface IData {
-  messages: any[];
+  message: string;
   channel: string
   description: string
   mqttClient?: any;
@@ -14,11 +14,11 @@ interface PublishNodeProps {
 }
 
 export const PublishNode: React.FunctionComponent<PublishNodeProps> = ({
-  data: { messages = [], channel, description, mqttClient },
+  data: { message , channel, description, mqttClient },
 }) => {
 
-  const [topic, setTopic] = useState('');
-  const [payload, setPayload] = useState('');
+  const [topic, setTopic] = useState(channel || '');
+  const [payload, setPayload] = useState(message || '');
   const [qos, setQos] = useState(0);
 
 
@@ -28,6 +28,7 @@ export const PublishNode: React.FunctionComponent<PublishNodeProps> = ({
 
     if (client) {
       client.publish(topic, payload, { qos: qos }, function (err) {
+        console.log(topic,payload,"T&Pwhild publishing")
         if (err) {
           console.error(err);
         }
@@ -53,24 +54,9 @@ export const PublishNode: React.FunctionComponent<PublishNodeProps> = ({
           <span>
             Messages
           </span>
-          <span>// Blue border
+          <span>
             Payloads you can publish using this channel
           </span>
-          <div>
-            {messages.map((message) => {
-              return (
-                <div
-                  key={message.title}
-                >
-                  <div>
-                    <div>
-                      {message.title}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
         </div>
         <Handle
           type="source"

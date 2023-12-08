@@ -1,13 +1,14 @@
 import { Handle, Position } from 'reactflow';
-import type { FunctionComponent } from 'react';
+import { FunctionComponent, useEffect } from 'react';
 import React, { useState } from 'react';
 
 
 
 interface IData {
   messages: any[]
-  channel: string
+  topic: string
   description: string
+  id: string
   mqttClient?: any;
 }
 
@@ -15,15 +16,14 @@ interface PublishNodeProps {
   data: IData
 }
 
-export const SubscribeNode: FunctionComponent<PublishNodeProps> = ({ data: { channel, description, messages, mqttClient } }) => {
+export const SubscribeNode: FunctionComponent<PublishNodeProps> = ({ data: { topic, description, messages, mqttClient, id, QOS } }) => {
 
-  const [subTopic, setSubTopic] = useState('');
-  const [qos, setQos] = useState(0);
+  const [subTopic, setSubTopic] = useState(topic || '');
+  const [qos, setQos] = useState(QOS || 0);
+
+  const client = mqttClient
 
   const handleClick = () => {
-
-    const client = mqttClient
-
     if (client) {
       client.subscribe(subTopic, { qos: qos }, function (err) {
         if (err) {
@@ -31,13 +31,15 @@ export const SubscribeNode: FunctionComponent<PublishNodeProps> = ({ data: { cha
         }
       });
     }
+  };
 
+  useEffect(() => {
     client.on('message', function (topic, message) {
       console.log(message.toString())
-      handleAddMessage(message.toString())
+      handleAddMessage(message.toString()+ "--/" + topic.toString())
     })
-
-  };
+  }, [])
+  
 
   const [message, setMessage] = useState([]);
 
@@ -68,10 +70,9 @@ export const SubscribeNode: FunctionComponent<PublishNodeProps> = ({ data: { cha
           <span style={{ letterSpacing: '0.05em', fontSize: '1rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>
             YOU CAN SUBSCRIBE
           </span>
-
         </div>
         <div>
-          <h3>{channel}</h3>
+          <h3>{id}</h3>
           {description && (
             <div>
               {description}
