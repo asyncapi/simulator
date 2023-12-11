@@ -21,6 +21,11 @@ import { resolveHtmlPath } from './util';
 import autoSave from './tempScenarioSave';
 
 
+const aedes = require('aedes')()
+const httpServer = require('http').createServer()
+const ws = require('websocket-stream')
+
+
 
 export default class AppUpdater {
   constructor() {
@@ -188,6 +193,24 @@ async function handleFileLoad () {
 
 }
 
+function startServer() {
+  
+  const port = 1883
+
+  ws.createServer({ server: httpServer }, aedes.handle)
+
+  httpServer.listen(port, function () {
+    console.log('websocket server listening on port ', port)
+  })
+
+}
+
+function stopServer() {
+  httpServer.close(function () {
+    console.log('websocket server stopped')
+  })
+ }
+
 
 app
   .whenReady()
@@ -198,6 +221,8 @@ app
     });
 
     ipcMain.on('button-click', handleFileLoad)
+    ipcMain.on('start-aedes', startServer)
+    ipcMain.on('stop-aedes', stopServer)
 
   })
   .catch(console.log);

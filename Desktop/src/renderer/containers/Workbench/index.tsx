@@ -8,6 +8,7 @@ import ReactFlow, { Background, Controls } from 'reactflow';
 import ApiVisualizer from 'renderer/GraphGenerator/ApiVisualizer';
 
 function ScenarioWorkbench({ EditorState, dispatch }): JSX.Element {
+
   return (
     <>
       <SideBar EditorState={EditorState} dispatch={dispatch} />
