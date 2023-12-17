@@ -31,6 +31,11 @@ Usage
 ```
 npm run desktop
 ```
+[Dowload mqtt.zip](https://github.com/asyncapi/simulator/files/13696873/mqtt.zip)
+
+https://github.com/SumantxD/simulator/assets/65810424/a8f143b8-1ba5-4b8e-bb2a-5e2f4a91c1e1
+
+
 
 #### Throught command line:
 
