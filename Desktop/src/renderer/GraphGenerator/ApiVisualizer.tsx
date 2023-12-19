@@ -202,11 +202,11 @@ export default function ApiVisualizer() {
       const targetNode = nodes.find((node) => node.id === edge.target);
 
       if(sourceNode?.type === 'publishNode' || sourceNode?.type === 'subscribeNode'){
-        sourceNode?.data.mqttClient.end();
+        sourceNode?.data.mqttClient?.end();
       }
   
       if(targetNode?.type === 'publishNode' || targetNode?.type === 'subscribeNode'){
-        targetNode?.data.mqttClient.end();
+        targetNode?.data.mqttClient?.end();
       }
 
     });

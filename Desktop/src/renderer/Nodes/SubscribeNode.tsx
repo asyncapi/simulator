@@ -10,18 +10,19 @@ interface IData {
   description: string
   id: string
   mqttClient?: any;
+  autoClient?: any;
 }
 
 interface PublishNodeProps {
   data: IData
 }
 
-export const SubscribeNode: FunctionComponent<PublishNodeProps> = ({ data: { topic, description, messages, mqttClient, id, QOS } }) => {
+export const SubscribeNode: FunctionComponent<PublishNodeProps> = ({ data: { topic, description, messages, mqttClient, id, QOS, autoClient } }) => {
 
   const [subTopic, setSubTopic] = useState(topic || '');
   const [qos, setQos] = useState(QOS || 0);
 
-  const client = mqttClient
+  const client = mqttClient || autoClient
 
   const handleClick = () => {
     if (client) {
@@ -34,10 +35,17 @@ export const SubscribeNode: FunctionComponent<PublishNodeProps> = ({ data: { top
   };
 
   useEffect(() => {
-    client.on('message', function (topic, message) {
-      console.log(message.toString())
-      handleAddMessage(message.toString()+ "--/" + topic.toString())
-    })
+
+    if(autoClient){
+      autoClient.connect()
+    }
+
+    if (client) {
+      client.on('message', function (topic, message) {
+        console.log(message.toString())
+        handleAddMessage(message.toString()+ "--/" + topic.toString())
+      })
+    }
   }, [])
   
 

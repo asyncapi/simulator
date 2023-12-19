@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Handle, Position } from 'reactflow';
 
 
@@ -7,6 +7,7 @@ interface IData {
   channel: string
   description: string
   mqttClient?: any;
+  autoClient?: any;
 }
 
 interface PublishNodeProps {
@@ -14,18 +15,16 @@ interface PublishNodeProps {
 }
 
 export const PublishNode: React.FunctionComponent<PublishNodeProps> = ({
-  data: { message , channel, description, mqttClient },
+  data: { message , channel, description, mqttClient, autoClient },
 }) => {
 
   const [topic, setTopic] = useState(channel || '');
   const [payload, setPayload] = useState(message || '');
   const [qos, setQos] = useState(0);
 
+  const client = mqttClient || autoClient
 
   const handleClick = () => {
-
-    const client = mqttClient
-
     if (client) {
       client.publish(topic, payload, { qos: qos }, function (err) {
         console.log(topic,payload,"T&Pwhild publishing")
@@ -36,6 +35,14 @@ export const PublishNode: React.FunctionComponent<PublishNodeProps> = ({
     }
 
   };
+
+
+  useEffect(() => {
+    if(autoClient){
+      autoClient.connect()
+    }
+  }, [])
+  
 
   return (
     <div style={{ margin: '0.7rem', padding: '1rem', border: '1px solid #3498db', borderRadius: '0.5rem', fontFamily: 'Arial, sans-serif', backgroundColor: 'rgba(173, 216, 230, 0.32)' }}>
