@@ -10,7 +10,6 @@
   "scripts": {
     "test": "cross-env mocha src/**/*.test.js",
     "desktop": "cd Desktop && cross-env npm run-script start",
-    "release": "semantic-release",
     "docker:build": "docker build -t asyncapi/simulator:latest .",
     "get:version": "echo $npm_package_version",
     "get:name": "echo $npm_package_name",
@@ -44,44 +43,17 @@
     "run-script": "^0.1.1"
   },
   "devDependencies": {
-    "@semantic-release/commit-analyzer": "^8.0.1",
-    "@semantic-release/github": "^7.0.4",
-    "@semantic-release/npm": "^7.0.6",
-    "@semantic-release/release-notes-generator": "^9.0.1",
     "all-contributors-cli": "^6.14.2",
     "chai": "^4.3.4",
     "chai-as-promised": "^7.1.1",
-    "conventional-changelog-conventionalcommits": "^4.4.0",
     "eslint": "^7.31.0",
     "eslint-plugin-mocha": "^9.0.0",
     "eslint-plugin-security": "^1.4.0",
     "eslint-plugin-sonarjs": "^0.8.0-125",
     "mocha": "^9.0.3",
-    "prettier": "^2.2.1",
-    "semantic-release": "^17.2.2"
+    "prettier": "^2.2.1"
   },
   "bin": {
     "simulator": "src/bin/cli.js"
-  },
-  "release": {
-    "branches": [
-      "master"
-    ],
-    "plugins": [
-      [
-        "@semantic-release/commit-analyzer",
-        {
-          "preset": "conventionalcommits"
-        }
-      ],
-      [
-        "@semantic-release/release-notes-generator",
-        {
-          "preset": "conventionalcommits"
-        }
-      ],
-      "@semantic-release/npm",
-      "@semantic-release/github"
-    ]
   }
 }
