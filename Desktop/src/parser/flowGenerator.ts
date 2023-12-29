@@ -1,11 +1,22 @@
 import { AsyncAPIDocument, Channel, Operation, Message } from '@asyncapi/parser';
 import { Edge, Node } from 'reactflow';
+import { connect } from 'mqtt';
 
 interface FileredChannel {
   channel: string;
   channelModel: Channel; 
   operationModel: Operation; 
   messagesModel: Message[]; 
+}
+
+function createMqttClient() {
+    
+  const client = connect('mqtt://localhost:1883', {
+    manualConnect: true,
+  });
+
+  return client;
+
 }
 
 //given the operation publish/subscribe we will extract the channels realted to it from the spec
@@ -30,6 +41,8 @@ function getChannelsByOperation(operation: string, spec: AsyncAPIDocument) {
   function buildFlowElementsForOperation({ operation, spec, applicationLinkType, data }: { operation: 'publish' | 'subscribe'; spec: AsyncAPIDocument; applicationLinkType: string, data: any }): Array<{ node: Node, edge: Edge }> {
     return getChannelsByOperation(operation, spec).reduce((nodes: any, channel) => {
       const { channelModel, operationModel, messagesModel } = channel;
+
+      const mqttClient = createMqttClient();
   
       const node: Node = {
         id: `${operation}-${channel.channel}`,
@@ -42,7 +55,7 @@ function getChannelsByOperation(operation: string, spec: AsyncAPIDocument) {
             title: message.uid(),
             description: message.description(),
           })),
-  
+          autoClient: mqttClient,
           spec,
           description: channelModel.description(),
           operationId: operationModel.id(),
