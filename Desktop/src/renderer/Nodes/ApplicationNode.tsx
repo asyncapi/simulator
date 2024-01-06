@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Handle, Position } from 'reactflow';
 import { AsyncAPIDocument } from '@asyncapi/parser';
 import type { FunctionComponent } from 'react';
@@ -94,7 +94,6 @@ export const ApplicationNode: FunctionComponent<ApplicationNodeProps> = ({
   }
 
   const handleClick = () => {
-    console.log('the button was clicked')
     ipcRenderer.send('start-aedes');
   };
 
@@ -102,10 +101,16 @@ export const ApplicationNode: FunctionComponent<ApplicationNodeProps> = ({
     ipcRenderer.send('stop-aedes');
   }
 
+  useEffect(() => {
+    return () => {
+      ipcRenderer.send('stop-aedes');
+    }
+  }, [])
+
   const [isConnected, setIsConnected] = useState(false);
 
   return (
-    <div style={{ margin: '0.7rem', padding: '1rem', border: '1px solid #F0E68C', borderRadius: '0.5rem', fontFamily: 'Arial, sans-serif', backgroundColor: 'rgba(255, 255, 153, 0.32)' }}>
+    <div style={{ margin: '0.7rem', maxWidth: '500px', padding: '1rem', border: '1px solid #F0E68C', borderRadius: '0.5rem', fontFamily: 'Arial, sans-serif', backgroundColor: 'rgba(255, 255, 153, 0.32)' }}>
       <Handle
         type="target"
         position={Position.Left}

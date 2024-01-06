@@ -29,6 +29,10 @@ export const MenuBar: React.FC<MenuBarProps> = ({ menu: propMenu }) => {
     [clicked]
   );
 
+  useEffect(() => {
+    setMenu(propMenu);
+  }, [propMenu]);
+
   const onButtonClick = useCallback(
     (i) => {
       if (lock.current) {
@@ -39,6 +43,25 @@ export const MenuBar: React.FC<MenuBarProps> = ({ menu: propMenu }) => {
     },
     [clicked, focusing]
   );
+
+  // const onButtonClick = useCallback(
+  //   (i) => {
+  //     if (lock.current) {
+  //       lock.current = false;
+  //       return;
+  //     }
+
+  //     // Use the previous state when updating based on the current state
+  //     setClicked((prevClicked) => {
+  //       const newClicked = !(focusing === i && prevClicked);
+  //       if (newClicked) {
+  //         setFocusing(i);
+  //       }
+  //       return newClicked;
+  //     });
+  //   },
+  //   [focusing,clicked]
+  // );
 
   const onTouchStart = useCallback(
     (i) => {
